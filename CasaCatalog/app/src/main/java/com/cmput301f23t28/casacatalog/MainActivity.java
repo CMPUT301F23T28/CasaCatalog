@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
-    private CollectionReference itemsRef;
+    private CollectionReference itemList;
     private ArrayList<String> dataList;
     private ArrayAdapter<String> itemAdapter;
 
@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         db = FirebaseFirestore.getInstance();
 
-        itemsRef = db.collection("items");
+        itemList = db.collection("items");
 
         dataList = new ArrayList<>();  // Other code omitted }
-
-        dataList.add("Test");
-        itemAdapter.notifyDataSetChanged();
+        String test = "Test";
+        dataList.add(test);
+//        itemAdapter.notifyDataSetChanged();
 
 
     }
