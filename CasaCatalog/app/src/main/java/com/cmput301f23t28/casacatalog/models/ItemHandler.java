@@ -7,7 +7,7 @@ public class ItemHandler
     private ArrayList<Item> itemList;
     private ArrayList<String> sorts;
 
-    private ArrayList<String> filter;
+    private ArrayList<String> filters;
 
     public void addItem(Item item){
         itemList.add(item);
@@ -38,5 +38,9 @@ public class ItemHandler
     public Item getItem(int i){
         Item item = itemList.get(i);
         return item;
+    }
+
+    public ArrayList<Item> getItemList() {
+        return itemList;
     }
 }
