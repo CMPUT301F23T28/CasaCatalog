@@ -1,16 +1,27 @@
 package com.cmput301f23t28.casacatalog.models;
 
+import com.cmput301f23t28.casacatalog.database.DatabaseHandler;
+
 import java.util.ArrayList;
 
 public class ItemHandler
 {
+    DatabaseHandler db;
+
+
     private ArrayList<Item> itemList;
     private ArrayList<String> sorts;
 
     private ArrayList<String> filters;
 
+    public ItemHandler() {
+        this.db = new DatabaseHandler();
+        itemList = new ArrayList<Item>();
+    }
+
     public void addItem(Item item){
         itemList.add(item);
+        db.addItem(item);
     }
 
     public void setItem(Item item, int i){
