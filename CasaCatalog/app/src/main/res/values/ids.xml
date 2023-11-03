@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="userProfileImage" type="id" />
+    <item name="backButton" type="id" />
+    <item name="usernameTextView" type="id" />
+</resources>
