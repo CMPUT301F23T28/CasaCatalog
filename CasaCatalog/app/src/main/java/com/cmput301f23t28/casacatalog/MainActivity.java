@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,11 +31,15 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
     private ListView itemListView;
 
+    private ItemHandler itemHandler;
+
     private ArrayAdapter<Item> itemAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        itemHandler = new ItemHandler();
 
         itemList = new ArrayList<Item>();
         String[] items = {
@@ -50,17 +55,11 @@ public class MainActivity extends AppCompatActivity {
             item.setName(items[i]);
             item.setPrice(amounts[i]);
             itemList.add(item);
+            itemHandler.addItem(item);
         }
         itemAdapter = new ItemListAdapter(this, itemList);
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
 
-//        final FloatingActionButton addButton = findViewById(R.id.add_city_button);
-//        addButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new AddCityFragment().show(getSupportFragmentManager(), "ADD_CITY");
-//            }
-//        });
     }
 }
