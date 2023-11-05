@@ -1,8 +1,10 @@
-package com.cmput301f23t28.casacatalog;
+package com.cmput301f23t28.casacatalog.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.cmput301f23t28.casacatalog.R;
 
 public class MainActivity extends AppCompatActivity {
 
