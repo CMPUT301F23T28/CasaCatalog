@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         itemHandler = new ItemHandler();
 
-        itemList = new ArrayList<Item>();
+//        itemList = new ArrayList<Item>();
         String[] items = {
                 "Chair", "Table"
         };
@@ -50,14 +50,18 @@ public class MainActivity extends AppCompatActivity {
                 22.0, 40.0
         };
 
-        for (int i = 0; i < items.length; i++) {
-            Item item = new Item();
-            item.setName(items[i]);
-            item.setPrice(amounts[i]);
-            itemList.add(item);
-            itemHandler.addItem(item);
-        }
-        itemAdapter = new ItemListAdapter(this, itemList);
+
+        String itemS =  "TV";
+        Double amount = 50.0;
+        Item itemTest = new Item();
+        itemTest.setName(itemS);
+        itemTest.setPrice(amount);
+        itemHandler.addItem(itemTest);
+        itemHandler.deleteItem(itemTest);
+
+
+
+        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
 
