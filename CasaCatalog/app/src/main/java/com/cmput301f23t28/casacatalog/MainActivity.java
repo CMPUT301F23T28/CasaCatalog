@@ -31,7 +31,6 @@ import com.cmput301f23t28.casacatalog.views.AddItemActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Item> itemList;
     private ListView itemListView;
 
     private ItemHandler itemHandler;
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         itemHandler = new ItemHandler();
         itemList = new ArrayList<Item>();
 
-//        itemList = new ArrayList<Item>();
         String[] items = {
                 "Chair", "Table"
         };
@@ -65,7 +63,10 @@ public class MainActivity extends AppCompatActivity {
         itemTest.setName(itemS);
         itemTest.setPrice(amount);
         itemHandler.addItem(itemTest);
-        itemHandler.deleteItem(itemTest);
+
+//        Test delete method (won't work due to delay?)
+//        Log.e("TEst id", itemTest.getId());
+//        itemHandler.deleteItem(itemTest);
 
 
 
