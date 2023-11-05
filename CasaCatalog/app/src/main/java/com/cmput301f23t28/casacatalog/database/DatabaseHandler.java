@@ -30,17 +30,16 @@ public class DatabaseHandler {
         itemsRef = db.collection("itemList");
     }
 
-    public void addItemDatabase(Item item) {
-        UUID uuid = UUID.randomUUID();
-        String uuidAsString = uuid.toString();
-        item.setId(uuidAsString);
+    public CollectionReference getItemsRef() {
+        return itemsRef;
+    }
 
-        Log.e("FireStore", "db write failure");
+    public void addItemDatabase(Item item) {
+
         HashMap<String, Object> data = new HashMap<>();
-        data.put("Id", item.getId());
         data.put("name", item.getName());
-//        data.put("date", item.getDate());
         data.put("price", item.getPrice());
+//        data.put("date", item.getDate());
 //        data.put("make", item.getMake());
 //        data.put("model", item.getModel());
 //        data.put("description", item.getDescription());
@@ -48,15 +47,29 @@ public class DatabaseHandler {
 //        data.put("tags", item.getTags());
 
         itemsRef
-                .add(data) // Use .add(data) to add a new document and get the auto-generated ID
+                .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         String generatedDocumentId = documentReference.getId();
                         Log.i("Firestore", "Item added with ID: " + generatedDocumentId);
-                        // Set the generated ID in your Item object
+
                         item.setId(generatedDocumentId);
-                        // You can perform further operations with the ID or the item as needed.
+                        data.put("Id", item.getId());
+                        documentReference.set(data)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.i("Firestore", "ID field updated in Firestore document");
+                                        Log.i("Test fb", "Set ID to " + item.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e("Firestore", "Failed to update ID field in Firestore document: " + e.getMessage());
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -78,7 +91,6 @@ public class DatabaseHandler {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                // The item exists; you can delete it
                                 itemsRef
                                         .document(itemId)
                                         .delete()
@@ -95,7 +107,7 @@ public class DatabaseHandler {
                                             }
                                         });
                             } else {
-                                Log.w("Firestore", "Item does not exist in the database");
+                                Log.w("Firestore", "Item does not exist in the database" + itemId);
                             }
                         } else {
                             Log.e("Firestore", "Error checking item existence: " + task.getException());
