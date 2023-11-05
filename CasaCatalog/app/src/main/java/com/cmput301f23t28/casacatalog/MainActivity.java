@@ -13,6 +13,7 @@ import java.util.Date;
 
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.views.AddItemActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -20,12 +21,14 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
     private ListView itemListView;
 
+    private ItemHandler itemHandler;
     private ArrayAdapter<Item> itemAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        itemHandler = new ItemHandler();
         itemList = new ArrayList<Item>();
         String[] items = {
                 "Chair", "Table"
@@ -39,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
             Item item = new Item();
             item.setName(items[i]);
             item.setPrice(amounts[i]);
-            itemList.add(item);
+            itemHandler.addItem(item);
         }
-        itemAdapter = new ItemListAdapter(this, itemList);
+        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
 
