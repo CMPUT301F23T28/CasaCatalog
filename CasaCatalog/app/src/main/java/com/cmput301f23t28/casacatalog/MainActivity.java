@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         itemTest.setName(itemS);
         itemTest.setPrice(amount);
         itemHandler.addItem(itemTest);
+
+//        Test delete method (won't work due to delay?)
 //        Log.e("TEst id", itemTest.getId());
 //        itemHandler.deleteItem(itemTest);
 
