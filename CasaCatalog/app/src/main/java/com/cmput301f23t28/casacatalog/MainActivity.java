@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.views.AddItemActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
 
-//        final FloatingActionButton addButton = findViewById(R.id.add_city_button);
-//        addButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new AddCityFragment().show(getSupportFragmentManager(), "ADD_CITY");
-//            }
-//        });
+        final FloatingActionButton addButton = findViewById(R.id.add_item_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
