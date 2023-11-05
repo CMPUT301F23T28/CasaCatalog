@@ -21,7 +21,7 @@ public class ItemHandler
 
     public void addItem(Item item){
         itemList.add(item);
-        db.addItem(item);
+        db.addItemDatabase(item);
     }
 
     public void setItem(Item item, int i){
@@ -29,7 +29,9 @@ public class ItemHandler
     }
 
     public void deleteItem(Item item){
+
         itemList.remove(item);
+        db.deleteItemDatabase(item.getId());
     }
 
     public void deleteItem(int i){
