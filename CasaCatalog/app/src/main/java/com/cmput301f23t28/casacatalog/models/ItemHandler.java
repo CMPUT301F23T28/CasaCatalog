@@ -9,6 +9,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.CollectionReference;
+
 
 import java.util.ArrayList;
 
@@ -62,6 +64,7 @@ public class ItemHandler
     public ArrayList<Item> getItemList() {
         return itemList;
     }
+
 
     public DatabaseHandler getDb() {
         return db;
