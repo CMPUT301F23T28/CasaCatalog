@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Casa Catalog</string>
+    <string name="user_profile_picture">User profile picture</string>
+    <string name="back_button">Back button</string>
 </resources>
