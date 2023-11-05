@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 //                newItem.setPrice(44.8);
 //                newItem.setName("Whiteboard");
 //                itemHandler.addItem(newItem);
-                itemHandler.deleteItem(itemHandler.getItem(0));
+                itemHandler.deleteItem(0);
 
                 Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(intent);
