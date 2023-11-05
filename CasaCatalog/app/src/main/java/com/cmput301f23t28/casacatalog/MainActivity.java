@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 22.0, 40.0
         };
 
-
         String itemS =  "TV";
         Double amount = 50.0;
         Item itemTest = new Item();
