@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView itemListView;
 
     private ItemHandler itemHandler;
-    private ArrayAdapter<Item> itemAdapter;
+    private ItemListAdapter itemAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList());
+        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList(), itemHandler.getDbReference());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
 
