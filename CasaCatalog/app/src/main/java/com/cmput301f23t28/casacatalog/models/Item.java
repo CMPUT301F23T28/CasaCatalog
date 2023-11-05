@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 
 public class Item {
+
+    private String id;
     private String name;
     private Date date;
     private Double price;
@@ -16,6 +18,13 @@ public class Item {
     private Boolean selected;
     public Item(){
 
+    }
+    public  String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
