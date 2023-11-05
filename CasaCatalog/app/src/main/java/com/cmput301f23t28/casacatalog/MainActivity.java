@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         itemHandler = new ItemHandler();
-        itemList = new ArrayList<Item>();
 
         String[] items = {
                 "Chair", "Table"
@@ -69,18 +68,53 @@ public class MainActivity extends AppCompatActivity {
 //        itemHandler.deleteItem(itemTest);
 
 
-
         itemAdapter = new ItemListAdapter(this, itemHandler.getItemList());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
+
+
+        itemHandler.getDb().getItemsRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null){
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (value != null){
+                    itemHandler.getItemList().clear();
+                    for (QueryDocumentSnapshot doc : value){
+                        String itemname = doc.getString("name");
+                        Double pricename = doc.getDouble("price");
+                        Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname,
+                                pricename));
+                        Item addItem = new Item();
+                        addItem.setName(itemname);
+                        addItem.setPrice(pricename);
+                        itemHandler.getItemList().add(addItem);
+                    }
+                    itemAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+
 
         final FloatingActionButton addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+//                Item newItem = new Item();
+//                newItem.setPrice(44.8);
+//                newItem.setName("Whiteboard");
+//                itemHandler.addItem(newItem);
+                itemHandler.deleteItem(itemHandler.getItem(0));
+
                 Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(intent);
             }
         });
+
+
     }
 }
