@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog.views;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ import com.cmput301f23t28.casacatalog.R;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
-    private ListView itemListView;
+    private RecyclerView itemListView;
 
     private ItemHandler itemHandler;
     private ArrayAdapter<Item> itemAdapter;

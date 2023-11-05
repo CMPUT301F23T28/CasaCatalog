@@ -28,12 +28,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ProfilePic"
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@id/userProfileImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_marginTop="32dp"
+            android:contentDescription="@string/user_profile_picture"
+            android:src="@drawable/profile"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"  />
+
+<!--        <com.google.android.material.imageview.ShapeableImageView-->
+<!--            android:id="@+id/ProfilePic"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="80dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <LinearLayout
             android:id="@+id/TopBarLeft"
@@ -78,7 +89,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintStart_toStartf="parent"
         app:layout_constraintTop_toBottomOf="@id/TopBar">
 
         <Button
