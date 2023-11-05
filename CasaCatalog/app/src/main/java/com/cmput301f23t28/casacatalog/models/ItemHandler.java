@@ -1,6 +1,7 @@
 package com.cmput301f23t28.casacatalog.models;
 
 import com.cmput301f23t28.casacatalog.database.DatabaseHandler;
+import com.google.firebase.firestore.CollectionReference;
 
 import java.util.ArrayList;
 
@@ -55,5 +56,9 @@ public class ItemHandler
 
     public ArrayList<Item> getItemList() {
         return itemList;
+    }
+
+    public CollectionReference getDbReference() {
+        return db.getReference();
     }
 }

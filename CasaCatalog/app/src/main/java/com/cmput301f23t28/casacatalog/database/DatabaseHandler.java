@@ -104,4 +104,8 @@ public class DatabaseHandler {
                 });
     }
 
+    public CollectionReference getReference() {
+        return this.itemsRef;
+    }
+
 }
