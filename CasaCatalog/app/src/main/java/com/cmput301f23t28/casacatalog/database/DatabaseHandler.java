@@ -30,6 +30,10 @@ public class DatabaseHandler {
         itemsRef = db.collection("itemList");
     }
 
+    public CollectionReference getItemsRef() {
+        return itemsRef;
+    }
+
     public void addItemDatabase(Item item) {
         UUID uuid = UUID.randomUUID();
         String uuidAsString = uuid.toString();
