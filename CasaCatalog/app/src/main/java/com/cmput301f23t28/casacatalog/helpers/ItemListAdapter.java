@@ -1,6 +1,7 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
     private CollectionReference itemsRef;
 
     public ItemListAdapter(Context context, ArrayList<Item> itemList, CollectionReference itemsRef) {
+        super();
         this.context = context;
         this.itemList = itemList;
         this.itemsRef = itemsRef;
@@ -29,7 +31,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
     @NonNull
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.content, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_row, parent, false);
+//        Log.e();
         return new ItemHolder(view);
     }
 
@@ -38,7 +41,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
         Item item = itemList.get(position);
         holder.setItemName(item.getName());
         holder.setItemPrice(item.getPrice().toString());
-        holder.setItemPurchaseDate(item.getDate().toString());
+//        holder.setItemPurchaseDate(item.getDate().toString());
         /// TODO:
         /// Need to implement setting the tags. Probably should receive some kind of collection of tags
         /// as setItemTags and then that method can attach them somehow to the ChipGroup in the ItemHolder

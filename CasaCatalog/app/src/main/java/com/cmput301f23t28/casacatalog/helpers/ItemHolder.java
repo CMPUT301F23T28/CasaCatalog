@@ -15,25 +15,34 @@ public class ItemHolder extends RecyclerView.ViewHolder{
 
     public ItemHolder(@NonNull View itemView) {
         super(itemView);
-        ItemName = itemView.findViewById(R.id.ItemPrice);
+        ItemName = itemView.findViewById(R.id.ItemName);
         ItemPurchaseDate = itemView.findViewById(R.id.ItemPurchaseDate);
         ItemPrice = itemView.findViewById(R.id.ItemPrice);
         ItemTags = itemView.findViewById(R.id.ItemTags);
     }
 
     public void setItemName(String itemName) {
-        ItemName.setText(itemName);
+        if (ItemName != null){
+            ItemName.setText(itemName);
+        }
     }
 
     public void setItemPurchaseDate(String itemPurchaseDate) {
-        ItemPurchaseDate.setText(itemPurchaseDate);
+        if (ItemPurchaseDate != null){
+            ItemPurchaseDate.setText(itemPurchaseDate);
+        }
+
     }
 
     public void setItemPrice(String itemPrice) {
-        ItemPrice.setText(itemPrice);
+        if (ItemPrice != null){
+            ItemPrice.setText(itemPrice);
+        }
+
     }
 
     public void setItemTags(ChipGroup itemTags) {
+
         ItemTags = itemTags;
     }
 }
