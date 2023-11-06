@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog.views;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter = new ItemListAdapter(this, itemHandler.getItemList(), itemHandler.getDb().getItemsRef());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
-
+        itemListView.setLayoutManager(new LinearLayoutManager(this));
 
         itemHandler.getDb().getItemsRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 //                newItem.setPrice(44.8);
 //                newItem.setName("Whiteboard");
 //                itemHandler.addItem(newItem);
-                itemHandler.deleteItem(0);
+//                itemHandler.deleteItem(0);
 
                 Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(intent);
