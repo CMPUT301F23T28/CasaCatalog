@@ -1,7 +1,9 @@
-package com.cmput301f23t28.casacatalog;
+package com.cmput301f23t28.casacatalog.views;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,11 +32,15 @@ import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.views.AddItemActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.cmput301f23t28.casacatalog.R;
+
 public class MainActivity extends AppCompatActivity {
-    private ListView itemListView;
+    private ArrayList<Item> itemList;
+    private RecyclerView itemListView;
+
 
     private ItemHandler itemHandler;
-    private ArrayAdapter<Item> itemAdapter;
+    private ItemListAdapter itemAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
 //        itemHandler.deleteItem(itemTest);
 
 
-        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList());
+        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList(), itemHandler.getDb().getItemsRef());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
-
+        itemListView.setLayoutManager(new LinearLayoutManager(this));
 
         itemHandler.getDb().getItemsRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -108,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 //                newItem.setPrice(44.8);
 //                newItem.setName("Whiteboard");
 //                itemHandler.addItem(newItem);
-                itemHandler.deleteItem(itemHandler.getItem(0));
+//                itemHandler.deleteItem(0);
 
                 Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(intent);
