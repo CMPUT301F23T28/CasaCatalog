@@ -2,4 +2,22 @@
     <string name="app_name">Casa Catalog</string>
     <string name="user_profile_picture">User profile picture</string>
     <string name="back_button">Back button</string>
+
+    <string name="item_details_text">Details</string>
+    <string name="item_name_label">Item Name</string>
+    <string name="item_value_label">Estimated Value</string>
+    <string name="item_purchase_date_label">Purchase Date</string>
+    <string name="item_description_label">Description</string>
+
+    <string name="item_specifics_text">Specifics</string>
+    <string name="item_make_label">Make</string>
+    <string name="item_model_label">Model</string>
+    <string name="item_serial_number_label">Serial Number</string>
+    <string name="camera_icon">Camera</string>
+
+    <string name="item_extras_text">Extras</string>
+    <string name="item_comments_label">Comments</string>
+    <string name="item_tag_label">Add a tag</string>
+
+    <string name="item_photos_text">Photos</string>
 </resources>
