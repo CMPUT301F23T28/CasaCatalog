@@ -103,15 +103,19 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                /**
+                 * Sends the user to the 'add item' activity, allowing them to input their item
+                 * and all of its relevant details.
+                 */
 //                Item newItem = new Item();
 //                newItem.setPrice(44.8);
 //                newItem.setName("Whiteboard");
 //                itemHandler.addItem(newItem);
-                itemHandler.deleteItem(itemHandler.getItem(0));
+//                itemHandler.deleteItem(itemHandler.getItem(0));
 
-                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
-                startActivity(intent);
+                Intent addItemActivityIntent = new Intent(MainActivity.this, AddItemActivity.class);
+                startActivity(addItemActivityIntent);
+
             }
         });
 

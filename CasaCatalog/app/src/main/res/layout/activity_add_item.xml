@@ -9,19 +9,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        tools:context="AddItemActivity">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/DetailsText"
+            android:id="@+id/detailsText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="30dp"
+            android:layout_marginStart="15dp"
             android:text="@string/item_details_text" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemName"
+            android:id="@+id/itemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_name_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -31,9 +37,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemEstimatedValue"
+            android:id="@+id/itemEstimatedValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_value_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -43,9 +50,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemPurchaseDate"
+            android:id="@+id/itemPurchaseDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_purchase_date_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -55,9 +63,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemDescription"
+            android:id="@+id/itemDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_description_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -71,16 +80,18 @@
             android:layout_height="30dp"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/SpecificsText"
+            android:id="@+id/specificsText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="30dp"
+            android:layout_marginStart="15dp"
             android:text="@string/item_specifics_text" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemMake"
+            android:id="@+id/itemMake"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_make_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -90,9 +101,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemModel"
+            android:id="@+id/itemModel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_model_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -102,9 +114,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemSerialNumber"
+            android:id="@+id/itemSerialNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_serial_number_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -117,8 +130,8 @@
             android:id="@id/backButton"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
             android:background="?android:selectableItemBackground"
             android:contentDescription="@string/camera_icon"
             android:src="@android:drawable/ic_menu_camera"
@@ -131,16 +144,18 @@
             android:layout_height="30dp"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/ExtrasText"
+            android:id="@+id/extrasText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="30dp"
+            android:layout_marginStart="15dp"
             android:text="@string/item_extras_text" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemComments"
+            android:id="@+id/itemComments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_comments_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -150,9 +165,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ItemTags"
+            android:id="@+id/itemTags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:hint="@string/item_tag_label">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -166,11 +182,25 @@
             android:layout_height="30dp"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/PhotosText"
+            android:id="@+id/photosText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="30dp"
+            android:layout_marginStart="15dp"
             android:text="@string/item_photos_text" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+        <Button
+            android:id="@+id/addItemToListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add item"
+            android:layout_marginStart="20dp"
+            style="?attr/materialButtonOutlinedStyle"
+            />
 
 
     </LinearLayout>
