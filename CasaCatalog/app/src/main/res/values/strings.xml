@@ -20,4 +20,6 @@
     <string name="item_tag_label">Add a tag</string>
 
     <string name="item_photos_text">Photos</string>
+
+    <string name="item_edit_button_text">Edit Item</string>
 </resources>

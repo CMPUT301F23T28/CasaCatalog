@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
+import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,6 +75,18 @@ public class MainActivity extends AppCompatActivity {
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
 
+        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Item item = (Item) itemListView.getItemAtPosition(position);
+
+                Intent addItemActivityIntent = new Intent(MainActivity.this, EditItemActivity.class);
+                addItemActivityIntent.putExtra("ITEM_LIST_POSITION", position);
+                addItemActivityIntent.putExtra("ITEM_NAME", item.getName());
+                addItemActivityIntent.putExtra("ITEM_PRICE", item.getPrice());
+                startActivity(addItemActivityIntent);
+
+            }
+        });
 
         itemHandler.getDb().getItemsRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -94,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     itemAdapter.notifyDataSetChanged();
                 }
-
             }
         });
 
