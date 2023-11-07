@@ -1,6 +1,7 @@
 package com.cmput301f23t28.casacatalog.models;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Item {
@@ -10,7 +11,7 @@ public class Item {
     private Date date;
     private Double price;
     private ByteBuffer photo;
-    private String tags;
+    private ArrayList<Tag> tags;
     private String make;
     private String model;
     private String Description;
@@ -59,12 +60,16 @@ public class Item {
         this.photo = photo;
     }
 
-    public String getTags() {
+    public ArrayList<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void addTag(Tag tag) {
+        if( !this.tags.contains(tag) ) this.tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        if( this.tags.contains(tag) ) this.tags.remove(tag);
     }
 
     public String getMake() {
