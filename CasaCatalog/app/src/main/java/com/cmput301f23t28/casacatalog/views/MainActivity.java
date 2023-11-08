@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -55,27 +56,6 @@ public class MainActivity extends AppCompatActivity {
         itemHandler = new ItemHandler();
         tagDatabase = new TagDatabase();
 
-        String[] items = {
-                "Chair", "Table"
-        };
-
-        Double[] amounts = {
-                22.0, 40.0
-        };
-
-        for (int i = 0; i < items.length; i++) {
-            Item item = new Item();
-            item.setName(items[i]);
-            item.setPrice(amounts[i]);
-            itemHandler.addItem(item);
-        }
-        String itemS =  "TV";
-        Double amount = 50.0;
-        Item itemTest = new Item();
-        itemTest.setName(itemS);
-        itemTest.setPrice(amount);
-        itemHandler.addItem(itemTest);
-
 //        Test delete method (won't work due to delay?)
 //        Log.e("TEst id", itemTest.getId());
 //        itemHandler.deleteItem(itemTest);
@@ -99,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot doc : value){
                         String itemname = doc.getString("name");
                         Double pricename = doc.getDouble("price");
+//                        LocalDate date = doc.getString("");
                         Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname,
                                 pricename));
                         Item addItem = new Item();
@@ -120,14 +101,6 @@ public class MainActivity extends AppCompatActivity {
                  * Sends the user to the 'add item' activity, allowing them to input their item
                  * and all of its relevant details.
                  */
-//                Item newItem = new Item();
-//                newItem.setPrice(44.8);
-//                newItem.setName("Whiteboard");
-//                itemHandler.addItem(newItem);
-
-//                itemHandler.deleteItem(0);
-
-//                itemHandler.deleteItem(itemHandler.getItem(0));
 
                 Intent addItemActivityIntent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(addItemActivityIntent);

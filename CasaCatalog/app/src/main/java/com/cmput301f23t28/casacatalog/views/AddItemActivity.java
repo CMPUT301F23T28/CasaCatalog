@@ -41,8 +41,7 @@ public class AddItemActivity  extends AppCompatActivity {
         itemHandler = new ItemHandler();
 
         Item newItem = new Item();
-
-        findViewById(R.id.addItemToListButton).setOnClickListener(view -> {
+        findViewById(R.id.addItemToListBtn).setOnClickListener(view -> {
             // Feel free to get rid of below if it's not necessary (the javadoc)
             /**
              * Adds item to database, as well as the item list displayed in MainActivity.
@@ -51,9 +50,13 @@ public class AddItemActivity  extends AppCompatActivity {
             newItem.setName(itemName.getEditText().getText().toString());
             // Should check if value is actually a double (probably possible in EditText somehow)
             TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
-            double price = Double.parseDouble(itemValue.getEditText().getText().toString());
-            newItem.setPrice(price);
+            if (itemValue.getEditText().getText().toString() != null) {
+                double price = Double.parseDouble(itemValue.getEditText().getText().toString());
+                newItem.setPrice(price);
+            }
+
             // Add rest of attributes as well
+
 
             itemHandler.addItem(newItem);
 
