@@ -1,13 +1,14 @@
 package com.cmput301f23t28.casacatalog.models;
 
 import java.nio.ByteBuffer;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Item {
 
     private String id;
     private String name;
-    private Date date;
+    private LocalDate date;
     private Double price;
     private ByteBuffer photo;
     private String tags;
@@ -35,11 +36,11 @@ public class Item {
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
