@@ -3,13 +3,14 @@ package com.cmput301f23t28.casacatalog.models;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Item implements Serializable {
 
     private String id;
     private String name;
-    private Date date;
+    private LocalDate date;
     private Double price;
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
@@ -37,11 +38,11 @@ public class Item implements Serializable {
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

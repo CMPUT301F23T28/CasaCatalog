@@ -198,7 +198,7 @@
             android:layout_height="40dp"/>
 
         <Button
-            android:id="@+id/addItemToListButton"
+            android:id="@+id/addItemToListBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add item"
