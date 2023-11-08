@@ -32,7 +32,6 @@ public class ItemHandler
     }
 
     public void setItem(Item item, int i){
-
         itemList.set(i, item);
     }
 
