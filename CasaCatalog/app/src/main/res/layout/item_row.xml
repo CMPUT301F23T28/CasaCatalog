@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="right|top"
-        android:text="Price"
+        android:text=""
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,7 +64,7 @@
             android:id="@+id/ItemPurchaseDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PurchaseDate" />
+            android:text="" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
