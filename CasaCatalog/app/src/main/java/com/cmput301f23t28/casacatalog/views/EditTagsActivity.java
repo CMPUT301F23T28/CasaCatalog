@@ -1,42 +1,87 @@
 package com.cmput301f23t28.casacatalog.views;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.ItemHandler;
-import com.google.android.material.textfield.TextInputLayout;
+import com.cmput301f23t28.casacatalog.models.Tag;
+
+import java.util.ArrayList;
 
 public class EditTagsActivity extends AppCompatActivity {
 
-    private ItemHandler itemHandler;
+    private Item item = null;
+    private ArrayList<Tag> tagList;
+    private RecyclerView tagsListView;
+    private TagsListAdapter tagAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_tags);
 
-        //final Button addButton = findViewById(R.id.addItemToListButton);
+        // Get passed in item from intent, if there is one
+        this.item = (Item) getIntent().getSerializableExtra("item");
+        this.tagList = MainActivity.tagDatabase.getTags();
 
-        addButton.setOnClickListener(view -> {
-            Item newItem = new Item();
-            TextInputLayout itemName = findViewById(R.id.itemName);
-            newItem.setName(itemName.getEditText().getText().toString());
-            // Should check if value is actually a double (probably possible in EditText somehow)
-            TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
-            double price = Double.parseDouble(itemValue.getEditText().getText().toString());
-            newItem.setPrice(price);
-            // Add rest of attributes as well
+        ArrayList<Tag> newTags = new ArrayList<>();
+        tagAdapter = new TagsListAdapter(this, newTags);
+        tagsListView = findViewById(R.id.tags_list);
+        tagsListView.setAdapter(tagAdapter);
+        tagsListView.setLayoutManager(new LinearLayoutManager(this));
 
-            itemHandler.addItem(newItem);
+        // TODO: BLOCKED! NEED EDIT ITEM ACTIVITY DONE TO PROPERLY IMPLEMENT
+        // Read item for already selected tags
+        // set state of checkboxes accordingly
+        // TODO: set newTags to item's existing tags
+        /*
+        if( this.item != null ){
+            for(Tag tag : this.item.getTags()){
+                for(int i = 0; i < this.tagList.size(); i++){
+                    TextView text = tagsListView.getChildAt(i).findViewById(R.id.tagName);
+                    if(tag.getName().contentEquals(text.getText())){
+                        CheckBox c = tagsListView.getChildAt(i).findViewById(R.id.tagCheckBox);
+                        c.setActivated(true);
+                    }
+                }
+            }
+        }
+         */
+
+        // Create new tag when add button is pressed
+        findViewById(R.id.createTagButton).setOnClickListener(view -> {
+            EditText nameInput = findViewById(R.id.newTagName);
+            MainActivity.tagDatabase.createTag(nameInput.getText().toString());
+            tagAdapter.notifyDataSetChanged();
+        });
+
+        // Prepare list of new tags for item
+        //((RecyclerView)findViewById(R.id.tags_list)).setOn
+
+        // Capture all selected tags from list and add to item's tag list
+        // when the back button is pressed
+        findViewById(R.id.backButtonTempName).setOnClickListener(view -> {
+
+            // Add new tags to item, if we are editing one
+            if(item != null) {
+                for (Tag tag : newTags) {
+                    item.addTag(tag);
+                    tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
+                }
+            }
+
+            // Delete any tags with no uses
+            for(Tag tag : MainActivity.tagDatabase.getTags()){
+                if(tag.getUses() <= 0) MainActivity.tagDatabase.deleteTag(tag.getName());
+            }
 
             finish();
         });
     }
-
-
-
 }

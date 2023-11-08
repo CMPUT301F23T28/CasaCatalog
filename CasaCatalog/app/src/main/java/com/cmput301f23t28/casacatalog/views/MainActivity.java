@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import com.cmput301f23t28.casacatalog.database.TagDatabase;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.firebase.firestore.CollectionReference;
@@ -44,12 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
     private ItemHandler itemHandler;
     private ItemListAdapter itemAdapter;
+    public static TagDatabase tagDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         itemHandler = new ItemHandler();
+        tagDatabase = new TagDatabase();
 
         String[] items = {
                 "Chair", "Table"
