@@ -2,7 +2,6 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,10 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
+import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
 
 public class AddItemActivity  extends AppCompatActivity {
 
@@ -43,31 +40,31 @@ public class AddItemActivity  extends AppCompatActivity {
         // probably reference the same itemhandler as mainactivity but this should work
         itemHandler = new ItemHandler();
 
-        final Button addButton = findViewById(R.id.addItemToListButton);
+        Item newItem = new Item();
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Feel free to get rid of below if it's not necessary (the javadoc)
-                /**
-                 * Adds item to database, as well as the item list displayed in MainActivity.
-                 */
-                Item newItem = new Item();
-                TextInputLayout itemName = findViewById(R.id.itemName);
-                newItem.setName(itemName.getEditText().getText().toString());
-                // Should check if value is actually a double (probably possible in EditText somehow)
-                TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
-                double price = Double.parseDouble(itemValue.getEditText().getText().toString());
-                newItem.setPrice(price);
-                // Add rest of attributes as well
+        findViewById(R.id.addItemToListButton).setOnClickListener(view -> {
+            // Feel free to get rid of below if it's not necessary (the javadoc)
+            /**
+             * Adds item to database, as well as the item list displayed in MainActivity.
+             */
+            TextInputLayout itemName = findViewById(R.id.itemName);
+            newItem.setName(itemName.getEditText().getText().toString());
+            // Should check if value is actually a double (probably possible in EditText somehow)
+            TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
+            double price = Double.parseDouble(itemValue.getEditText().getText().toString());
+            newItem.setPrice(price);
+            // Add rest of attributes as well
 
-                itemHandler.addItem(newItem);
+            itemHandler.addItem(newItem);
 
-                finish();
-            }
+            finish();
+        });
+
+        // Add tag button that launches TagsActivity
+        findViewById(R.id.addTagButton).setOnClickListener(view -> {
+            Intent i = new Intent(this, EditTagsActivity.class);
+            i.putExtra("item", newItem);
+            startActivity(i);
         });
     }
-
-
-
 }

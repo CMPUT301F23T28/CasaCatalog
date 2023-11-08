@@ -1,10 +1,11 @@
 package com.cmput301f23t28.casacatalog.models;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Item {
+public class Item implements Serializable {
 
     private String id;
     private String name;
@@ -18,7 +19,7 @@ public class Item {
     private String comment;
     private Boolean selected;
     public Item(){
-
+        this.tags = new ArrayList<>();
     }
     public  String getId() {
         return id;
