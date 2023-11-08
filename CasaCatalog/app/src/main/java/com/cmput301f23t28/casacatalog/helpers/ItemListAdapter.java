@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import com.cmput301f23t28.casacatalog.R;
@@ -40,10 +41,19 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item item = itemList.get(position);
 
-        holder.setItemName(item.getName());
+
+        if (item.getName() != null) {
+            holder.setItemName(item.getName());
+        }
+
         if (item.getPrice() != null){
             holder.setItemPrice(item.getPrice().toString());
         }
+        if (item.getDate() != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+            holder.setItemPurchaseDate(sdf.format(item.getDate()));
+        }
+        Log.e("Shown", "Item" + item.getName());
 //        holder.setItemPurchaseDate(item.getDate().toString());
         /// TODO:
         /// Need to implement setting the tags. Probably should receive some kind of collection of tags

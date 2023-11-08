@@ -8,14 +8,15 @@ public class Item {
 
     private String id;
     private String name;
-    private LocalDate date;
     private Double price;
+    private Date date;
     private ByteBuffer photo;
     private String tags;
     private String make;
     private String model;
     private String Description;
     private String comment;
+    private String serialNumber;
     private Boolean selected;
     public Item(){
 
@@ -36,11 +37,11 @@ public class Item {
         this.name = name;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -98,6 +99,14 @@ public class Item {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Boolean getSelected() {
