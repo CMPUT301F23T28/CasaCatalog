@@ -33,7 +33,7 @@ public class EditItemActivity extends AddItemActivity {
 
         itemHandler = new ItemHandler();
 
-        final Button editButton = findViewById(R.id.addItemToListButton);
+        final Button editButton = findViewById(R.id.addItemToListBtn);
 
         editButton.setText(R.string.item_edit_button_text);
         editButton.setOnClickListener(new View.OnClickListener() {
