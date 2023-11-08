@@ -23,4 +23,5 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.cmput301f23t28.casacatalog", appContext.getPackageName());
     }
+
 }

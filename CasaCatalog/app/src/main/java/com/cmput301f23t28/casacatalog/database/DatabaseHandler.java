@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.text.SimpleDateFormat;
 
 public class DatabaseHandler {
     private FirebaseFirestore db;
@@ -39,12 +40,17 @@ public class DatabaseHandler {
         HashMap<String, Object> data = new HashMap<>();
         data.put("name", item.getName());
         data.put("price", item.getPrice());
-//        data.put("date", item.getDate());
-//        data.put("make", item.getMake());
-//        data.put("model", item.getModel());
-//        data.put("description", item.getDescription());
-//        data.put("comments", item.getComment());
-//        data.put("tags", item.getTags());
+        if (item.getDate() != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+            data.put("date", sdf.format(item.getDate()));
+        }
+
+        data.put("make", item.getMake());
+        data.put("model", item.getModel());
+        data.put("description", item.getDescription());
+        data.put("comments", item.getComment());
+        data.put("serialNumber", item.getSerialNumber());
+        //        data.put("tags", item.getTags());
 
         itemsRef
                 .add(data)

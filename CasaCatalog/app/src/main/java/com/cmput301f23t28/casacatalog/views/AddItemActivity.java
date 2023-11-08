@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
+
+import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
+
 
 public class AddItemActivity  extends AppCompatActivity {
 
@@ -53,16 +61,60 @@ public class AddItemActivity  extends AppCompatActivity {
                  * Adds item to database, as well as the item list displayed in MainActivity.
                  */
                 Item newItem = new Item();
-                TextInputLayout itemName = findViewById(R.id.itemName);
-                newItem.setName(itemName.getEditText().getText().toString());
-                // Should check if value is actually a double (probably possible in EditText somehow)
+//                TextInputLayout itemName = findViewById(R.id.itemName);
+
+                TextInputLayout nameValue = findViewById(R.id.itemName);
+                if (nameValue.getEditText().getText().toString() != null) {
+                    newItem.setName(nameValue.getEditText().getText().toString());
+                }
+
+
+                // adds the price
                 TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
-                if (itemValue.getEditText().getText().toString() != null){
+                if (!itemValue.getEditText().getText().toString().isEmpty()) {
                     double price = Double.parseDouble(itemValue.getEditText().getText().toString());
                     newItem.setPrice(price);
                 }
 
+                // adds the date
+                TextInputLayout dateValue = findViewById(R.id.itemPurchaseDate);
+                if (!dateValue.getEditText().getText().toString().isEmpty()) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
+                    try{
+                        Date date = formatter.parse(dateValue.getEditText().getText().toString());
+                        newItem.setDate(date);
+                    } catch (ParseException e){
+                        Log.e("ParseException", "ParseException"+ e.toString());
+                    }
+
+                }
+
                 // Add rest of attributes as well
+                TextInputLayout makeValue = findViewById(R.id.itemMake);
+                if (makeValue.getEditText().getText().toString() != null) {
+                    newItem.setMake(makeValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout modelValue = findViewById(R.id.itemModel);
+                if (modelValue.getEditText().getText().toString() != null) {
+                    newItem.setModel(modelValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout descriptionValue = findViewById(R.id.itemDescription);
+                if (descriptionValue.getEditText().getText().toString() != null) {
+                    newItem.setDescription(descriptionValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout commentValue = findViewById(R.id.itemComments);
+                if (commentValue.getEditText().getText().toString() != null) {
+                    newItem.setComment(commentValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout serialNumberValue = findViewById(R.id.itemSerialNumber);
+                if (serialNumberValue.getEditText().getText().toString() != null) {
+                    newItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
+                }
+
 
                 itemHandler.addItem(newItem);
 
