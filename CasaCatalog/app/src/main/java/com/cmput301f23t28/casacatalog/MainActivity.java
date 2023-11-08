@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         itemHandler = new ItemHandler();
-        itemList = new ArrayList<Item>();
 
         String[] items = {
                 "Chair", "Table"
