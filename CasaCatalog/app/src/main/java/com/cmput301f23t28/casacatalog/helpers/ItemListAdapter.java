@@ -39,8 +39,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item item = itemList.get(position);
+
         holder.setItemName(item.getName());
-        holder.setItemPrice(item.getPrice().toString());
+        if (item.getPrice() != null){
+            holder.setItemPrice(item.getPrice().toString());
+        }
 //        holder.setItemPurchaseDate(item.getDate().toString());
         /// TODO:
         /// Need to implement setting the tags. Probably should receive some kind of collection of tags

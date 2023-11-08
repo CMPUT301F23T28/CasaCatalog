@@ -43,7 +43,7 @@ public class AddItemActivity  extends AppCompatActivity {
         // probably reference the same itemhandler as mainactivity but this should work
         itemHandler = new ItemHandler();
 
-        final Button addButton = findViewById(R.id.addItemToListButton);
+        final Button addButton = findViewById(R.id.addItemToListBtn);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +57,11 @@ public class AddItemActivity  extends AppCompatActivity {
                 newItem.setName(itemName.getEditText().getText().toString());
                 // Should check if value is actually a double (probably possible in EditText somehow)
                 TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
-                double price = Double.parseDouble(itemValue.getEditText().getText().toString());
-                newItem.setPrice(price);
+                if (itemValue.getEditText().getText().toString() != null){
+                    double price = Double.parseDouble(itemValue.getEditText().getText().toString());
+                    newItem.setPrice(price);
+                }
+
                 // Add rest of attributes as well
 
                 itemHandler.addItem(newItem);
