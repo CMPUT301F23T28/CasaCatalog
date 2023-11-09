@@ -1,17 +1,22 @@
 package com.cmput301f23t28.casacatalog.models;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class Item {
+public class Item implements Serializable {
 
     private String id;
     private String name;
     private Double price;
     private Date date;
     private ByteBuffer photo;
-    private String tags;
+    private ArrayList<Tag> tags;
     private String make;
     private String model;
     private String Description;
@@ -19,7 +24,7 @@ public class Item {
     private String serialNumber;
     private Boolean selected;
     public Item(){
-
+        this.tags = new ArrayList<>();
     }
     public  String getId() {
         return id;
@@ -61,12 +66,26 @@ public class Item {
         this.photo = photo;
     }
 
-    public String getTags() {
+    public ArrayList<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
+    // This method is just so it can be stored in database
+    // probably a better way with DocumentReference
+    public List<String> getTagsAsStrings(){
+        return tags.stream().map(Tag::getName).collect(Collectors.toList());
+    }
+
+    public void setTags(ArrayList<Tag> tags) {
         this.tags = tags;
+    }
+
+    public void addTag(Tag tag) {
+        if( !this.tags.contains(tag) ) this.tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        if( this.tags.contains(tag) ) this.tags.remove(tag);
     }
 
     public String getMake() {
