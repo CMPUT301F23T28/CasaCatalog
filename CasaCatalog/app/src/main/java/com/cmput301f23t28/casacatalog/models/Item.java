@@ -10,14 +10,15 @@ public class Item implements Serializable {
 
     private String id;
     private String name;
-    private LocalDate date;
     private Double price;
+    private Date date;
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
     private String make;
     private String model;
     private String Description;
     private String comment;
+    private String serialNumber;
     private Boolean selected;
     public Item(){
         this.tags = new ArrayList<>();
@@ -38,11 +39,11 @@ public class Item implements Serializable {
         this.name = name;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -104,6 +105,14 @@ public class Item implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Boolean getSelected() {

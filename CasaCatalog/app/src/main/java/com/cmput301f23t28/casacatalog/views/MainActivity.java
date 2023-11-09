@@ -23,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import android.view.View;
@@ -32,6 +34,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.models.Item;
@@ -76,18 +79,44 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (value != null){
                     itemHandler.getItemList().clear();
-                    for (QueryDocumentSnapshot doc : value){
+                    for (QueryDocumentSnapshot doc : value) {
                         String itemname = doc.getString("name");
                         Double pricename = doc.getDouble("price");
-//                        LocalDate date = doc.getString("");
+                        String dateinstring = doc.getString("date");
+
+                        String itemMake = doc.getString("make");
+                        String itemModel = doc.getString("model");
+                        String itemDescription = doc.getString("description");
+                        String itemComment = doc.getString("comment");
+                        String itemSerialNumber = doc.getString("serialNumber");
+
                         Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname,
                                 pricename));
                         Item addItem = new Item();
                         addItem.setName(itemname);
                         addItem.setPrice(pricename);
+
+                        //add date to the addItem
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
+                        if (dateinstring != null) {
+                            try {
+                                Date date = sdf.parse(dateinstring);
+                                addItem.setDate(date);
+                            } catch (ParseException e) {
+                                Log.e("ParseException", "ParseException" + e.toString());
+                            }
+                        }
+
+                        addItem.setMake(itemMake);
+                        addItem.setModel(itemModel);
+                        addItem.setDescription(itemDescription);
+                        addItem.setComment(itemComment);
+                        addItem.setSerialNumber(itemSerialNumber);
+
                         itemHandler.getItemList().add(addItem);
+                        itemAdapter.notifyDataSetChanged();
+
                     }
-                    itemAdapter.notifyDataSetChanged();
                 }
             }
         });
