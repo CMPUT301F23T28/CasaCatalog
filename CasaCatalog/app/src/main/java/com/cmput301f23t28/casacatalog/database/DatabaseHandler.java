@@ -14,7 +14,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-import java.util.UUID;
 import java.text.SimpleDateFormat;
 
 public class DatabaseHandler {
@@ -30,7 +29,10 @@ public class DatabaseHandler {
         itemsRef = db.collection("itemList");
     }
 
-
+    /**
+     * Exposes item ref
+     * @return Collections ref to itemList
+     */
     public CollectionReference getItemsRef() {
         return itemsRef;
     }
