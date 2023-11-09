@@ -45,6 +45,13 @@ public class TagDatabase {
         return this.tagList;
     }
 
+    public Tag findTagByName(String name){
+        for(Tag t : Database.tags.getTags()){
+            if(t.getName().contentEquals(name)) return t;
+        }
+        return null;
+    }
+
     public Tag createTag(String name) {
         Tag newTag = new Tag(name);
 
