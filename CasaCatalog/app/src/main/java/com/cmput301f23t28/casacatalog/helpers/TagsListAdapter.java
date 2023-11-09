@@ -1,6 +1,7 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
@@ -38,7 +40,7 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
             // Get tag object that list item refers to
             Tag tag = null;
             TextView name = l.findViewById(R.id.tagName);
-            for(Tag t : MainActivity.tagDatabase.getTags()){
+            for(Tag t : Database.tags.getTags()){
                 if(t.getName().equals(name.toString())) tag = t;
             }
 
@@ -58,13 +60,13 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TagHolder holder, int position) {
-        Tag tag = MainActivity.tagDatabase.getTags().get(position);
+        Tag tag = Database.tags.getTags().get(position);
         holder.setTagName(tag.getName());
     }
 
     @Override
     public int getItemCount() {
-        return MainActivity.tagDatabase.getTags().size();
+        return Database.tags.getTags().size();
     }
 
 }

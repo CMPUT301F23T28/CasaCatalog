@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.database.TagDatabase;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
@@ -43,18 +45,16 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
     private RecyclerView itemListView;
 
-
     private ItemHandler itemHandler;
     private ItemListAdapter itemAdapter;
-    public static TagDatabase tagDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Database.initialize();
         itemHandler = new ItemHandler();
-        tagDatabase = new TagDatabase();
 
 //        Test delete method (won't work due to delay?)
 //        Log.e("TEst id", itemTest.getId());
