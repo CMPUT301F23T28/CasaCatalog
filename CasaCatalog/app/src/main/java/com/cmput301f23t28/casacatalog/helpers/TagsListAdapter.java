@@ -35,8 +35,12 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
     public TagHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.tag_row, parent, false);
 
+        // Check checkboxes corresponding to tags already in newTags
+        if( this.newTags.contains(Database.tags.findTagByName(((TextView)view.findViewById(R.id.tagName)).getText().toString()) )){
+            ((CheckBox)view.findViewById(R.id.tagCheckBox)).setChecked(true);
+        }
+
         // Update newTags based on selection made to list checkboxes
-        // TODO: theres has to be a better way to do this
         view.setOnClickListener(l -> {
             // Get tag object that list item refers to
             TextView name = l.findViewById(R.id.tagName);
@@ -45,13 +49,16 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
             // Update newTags list based on checkbox state
             CheckBox c = l.findViewById(R.id.tagCheckBox);
             if( !c.isChecked() ){
-                if(!newTags.contains(tag)) newTags.add(tag);
+                if(!newTags.contains(tag)){
+                    tag.setUses(tag.getUses() + 1);
+                    newTags.add(tag);
+                }
                 c.setChecked(true);
             }else{
+                tag.setUses(tag.getUses() - 1);
                 newTags.remove(tag);
                 c.setChecked(false);
             }
-            //newTags.add(new Tag("test"));
         });
 
         return new TagHolder(view);
