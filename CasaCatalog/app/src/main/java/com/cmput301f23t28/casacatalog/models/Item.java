@@ -1,20 +1,22 @@
 package com.cmput301f23t28.casacatalog.models;
 
 import java.nio.ByteBuffer;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Item {
 
     private String id;
     private String name;
-    private Date date;
     private Double price;
+    private Date date;
     private ByteBuffer photo;
     private String tags;
     private String make;
     private String model;
     private String Description;
     private String comment;
+    private String serialNumber;
     private Boolean selected;
     public Item(){
 
@@ -97,6 +99,14 @@ public class Item {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Boolean getSelected() {
