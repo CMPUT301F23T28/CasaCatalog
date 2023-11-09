@@ -1,7 +1,10 @@
 package com.cmput301f23t28.casacatalog.views;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +21,7 @@ import java.util.ArrayList;
 
 public class EditTagsActivity extends AppCompatActivity {
 
-    private Item item = null;
-    private ArrayList<Tag> tagList;
+    private ArrayList<Tag> tags;
     private RecyclerView tagsListView;
     private TagsListAdapter tagAdapter;
 
@@ -28,11 +30,9 @@ public class EditTagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_tags);
 
         // Get passed in item from intent, if there is one
-        this.item = (Item) getIntent().getSerializableExtra("item");
-        this.tagList = Database.tags.getTags();
+        this.tags = (ArrayList<Tag>) getIntent().getSerializableExtra("tags");
 
-        ArrayList<Tag> newTags = new ArrayList<>();
-        tagAdapter = new TagsListAdapter(this, newTags);
+        tagAdapter = new TagsListAdapter(this, tags);
         tagsListView = findViewById(R.id.tags_list);
         tagsListView.setAdapter(tagAdapter);
         tagsListView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,21 +69,17 @@ public class EditTagsActivity extends AppCompatActivity {
         // when the back button is pressed
         findViewById(R.id.backButtonTempName).setOnClickListener(view -> {
 
-            // Add new tags to item, if we are editing one
-            // TODO: dont use "newTags", just edit tags of item directly. somehow
-            if(item != null) {
-                for (Tag tag : newTags) {
-                    item.addTag(tag);
-                    tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
-                }
-            }
-
             // Delete any tags with no uses
             /*
             for(Tag tag : MainActivity.tagDatabase.getTags()){
                 if(tag.getUses() <= 0) MainActivity.tagDatabase.deleteTag(tag.getName());
             }
              */
+
+            // Send new tags copy back
+            Intent ret = new Intent();
+            ret.putExtra("tags", tags);
+            setResult(Activity.RESULT_OK, ret);
 
             finish();
         });

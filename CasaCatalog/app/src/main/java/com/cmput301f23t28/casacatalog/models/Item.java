@@ -1,6 +1,7 @@
 package com.cmput301f23t28.casacatalog.models;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -65,6 +66,10 @@ public class Item implements Serializable {
 
     public ArrayList<Tag> getTags() {
         return tags;
+    }
+
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
     }
 
     public void addTag(Tag tag) {

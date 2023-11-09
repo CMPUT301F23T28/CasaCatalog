@@ -48,7 +48,7 @@ public class DatabaseHandler {
         data.put("name", item.getName());
         data.put("price", item.getPrice());
         if (item.getDate() != null){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             data.put("date", sdf.format(item.getDate()));
         }
 
@@ -57,7 +57,7 @@ public class DatabaseHandler {
         data.put("description", item.getDescription());
         data.put("comments", item.getComment());
         data.put("serialNumber", item.getSerialNumber());
-        //        data.put("tags", item.getTags());
+        data.put("tags", item.getTags());
 
         itemsRef
                 .add(data)
