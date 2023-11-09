@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Item implements Serializable {
 
@@ -66,6 +68,12 @@ public class Item implements Serializable {
 
     public ArrayList<Tag> getTags() {
         return tags;
+    }
+
+    // This method is just so it can be stored in database
+    // probably a better way with DocumentReference
+    public List<String> getTagsAsStrings(){
+        return tags.stream().map(Tag::getName).collect(Collectors.toList());
     }
 
     public void setTags(ArrayList<Tag> tags) {

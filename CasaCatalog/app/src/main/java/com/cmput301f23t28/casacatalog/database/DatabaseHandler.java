@@ -57,7 +57,7 @@ public class DatabaseHandler {
         data.put("description", item.getDescription());
         data.put("comments", item.getComment());
         data.put("serialNumber", item.getSerialNumber());
-        data.put("tags", item.getTags());
+        data.put("tags", item.getTagsAsStrings());
 
         itemsRef
                 .add(data)

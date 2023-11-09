@@ -41,6 +41,7 @@ public class TagDatabase {
         });
     }
 
+    // Do not use to store into database!
     public ArrayList<Tag> getTags(){
         return this.tagList;
     }
