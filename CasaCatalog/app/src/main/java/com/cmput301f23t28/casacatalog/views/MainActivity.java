@@ -60,9 +60,11 @@ public class MainActivity extends AppCompatActivity {
 //        itemHandler.deleteItem(itemTest);
 
 
+
         itemAdapter = new ItemListAdapter(this, itemHandler.getItemList(), itemHandler.getDb().getItemsRef());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
+
 
         itemListView.setLayoutManager(new LinearLayoutManager(this));
 
