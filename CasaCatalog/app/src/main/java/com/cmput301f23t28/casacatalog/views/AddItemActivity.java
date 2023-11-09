@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,6 +53,12 @@ public class AddItemActivity  extends AppCompatActivity {
         itemHandler = new ItemHandler();
 
         final Button addButton = findViewById(R.id.addItemToListBtn);
+        final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
+
+        // Remove deletebutton (only for editing not adding)
+        ViewGroup layout = (ViewGroup) deleteButton.getParent();
+        if(null!=layout) //for safety only  as you are doing onClick
+            layout.removeView(deleteButton);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override

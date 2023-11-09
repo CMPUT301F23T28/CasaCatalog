@@ -40,7 +40,7 @@ public class ItemHandler
     }
 
     public void deleteItem(int i){
-//        itemList.remove(itemList.get(i).getId());
+        db.deleteItemDatabase(itemList.get(i).getId());
     }
 
     public void deleteSelectedItems(){
