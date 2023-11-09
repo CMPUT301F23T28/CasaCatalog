@@ -37,24 +37,6 @@ public class EditTagsActivity extends AppCompatActivity {
         tagsListView.setAdapter(tagAdapter);
         tagsListView.setLayoutManager(new LinearLayoutManager(this));
 
-        // TODO: BLOCKED! NEED EDIT ITEM ACTIVITY DONE TO PROPERLY IMPLEMENT
-        // Read item for already selected tags
-        // set state of checkboxes accordingly
-        // TODO: set newTags to item's existing tags
-        /*
-        if( this.item != null ){
-            for(Tag tag : this.item.getTags()){
-                for(int i = 0; i < this.tagList.size(); i++){
-                    TextView text = tagsListView.getChildAt(i).findViewById(R.id.tagName);
-                    if(tag.getName().contentEquals(text.getText())){
-                        CheckBox c = tagsListView.getChildAt(i).findViewById(R.id.tagCheckBox);
-                        c.setActivated(true);
-                    }
-                }
-            }
-        }
-         */
-
         // Create new tag when add button is pressed
         findViewById(R.id.createTagButton).setOnClickListener(view -> {
             EditText nameInput = findViewById(R.id.newTagName);
@@ -62,19 +44,13 @@ public class EditTagsActivity extends AppCompatActivity {
             tagAdapter.notifyDataSetChanged();
         });
 
-        // Prepare list of new tags for item
-        //((RecyclerView)findViewById(R.id.tags_list)).setOn
-
         // Capture all selected tags from list and add to item's tag list
         // when the back button is pressed
         findViewById(R.id.backButtonTempName).setOnClickListener(view -> {
-
             // Delete any tags with no uses
-            /*
-            for(Tag tag : MainActivity.tagDatabase.getTags()){
-                if(tag.getUses() <= 0) MainActivity.tagDatabase.deleteTag(tag.getName());
+            for(Tag tag : Database.tags.getTags()){
+                if(tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());
             }
-             */
 
             // Send new tags copy back
             Intent ret = new Intent();
