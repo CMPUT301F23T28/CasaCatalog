@@ -9,7 +9,7 @@ public class Tag implements Serializable {
 
     public Tag(String name) {
         this.name = name;
-        this.uses = 0;
+        this.uses = 1;
     }
 
 

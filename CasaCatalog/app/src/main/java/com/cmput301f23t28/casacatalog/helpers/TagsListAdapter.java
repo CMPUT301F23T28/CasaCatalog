@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog.helpers;
 
 import android.content.Context;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,9 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
             // Get tag object that list item refers to
             Tag tag = null;
             TextView name = l.findViewById(R.id.tagName);
+            Log.e("DEBUG", name.getText().toString());
             for(Tag t : Database.tags.getTags()){
-                if(t.getName().equals(name.toString())) tag = t;
+                if(t.getName().contentEquals(name.getText())) tag = t;
             }
 
             // Update newTags list based on checkbox state
@@ -53,6 +55,7 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
                 newTags.remove(tag);
                 c.setChecked(false);
             }
+            Log.e("DEBUG", newTags.toString());
         });
 
         return new TagHolder(view);

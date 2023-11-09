@@ -70,6 +70,7 @@ public class EditTagsActivity extends AppCompatActivity {
         findViewById(R.id.backButtonTempName).setOnClickListener(view -> {
 
             // Add new tags to item, if we are editing one
+            // TODO: dont use "newTags", just edit tags of item directly. somehow
             if(item != null) {
                 for (Tag tag : newTags) {
                     item.addTag(tag);
