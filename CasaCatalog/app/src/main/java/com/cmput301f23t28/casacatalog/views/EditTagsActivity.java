@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
@@ -28,7 +29,7 @@ public class EditTagsActivity extends AppCompatActivity {
 
         // Get passed in item from intent, if there is one
         this.item = (Item) getIntent().getSerializableExtra("item");
-        this.tagList = MainActivity.tagDatabase.getTags();
+        this.tagList = Database.tags.getTags();
 
         ArrayList<Tag> newTags = new ArrayList<>();
         tagAdapter = new TagsListAdapter(this, newTags);
@@ -57,7 +58,7 @@ public class EditTagsActivity extends AppCompatActivity {
         // Create new tag when add button is pressed
         findViewById(R.id.createTagButton).setOnClickListener(view -> {
             EditText nameInput = findViewById(R.id.newTagName);
-            MainActivity.tagDatabase.createTag(nameInput.getText().toString());
+            Database.tags.createTag(nameInput.getText().toString());
             tagAdapter.notifyDataSetChanged();
         });
 
@@ -77,9 +78,11 @@ public class EditTagsActivity extends AppCompatActivity {
             }
 
             // Delete any tags with no uses
+            /*
             for(Tag tag : MainActivity.tagDatabase.getTags()){
                 if(tag.getUses() <= 0) MainActivity.tagDatabase.deleteTag(tag.getName());
             }
+             */
 
             finish();
         });
