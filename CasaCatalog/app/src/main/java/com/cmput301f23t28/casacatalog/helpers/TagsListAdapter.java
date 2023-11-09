@@ -39,12 +39,8 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
         // TODO: theres has to be a better way to do this
         view.setOnClickListener(l -> {
             // Get tag object that list item refers to
-            Tag tag = null;
             TextView name = l.findViewById(R.id.tagName);
-            Log.e("DEBUG", name.getText().toString());
-            for(Tag t : Database.tags.getTags()){
-                if(t.getName().contentEquals(name.getText())) tag = t;
-            }
+            Tag tag = Database.tags.findTagByName(name.getText().toString());
 
             // Update newTags list based on checkbox state
             CheckBox c = l.findViewById(R.id.tagCheckBox);
@@ -55,7 +51,7 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
                 newTags.remove(tag);
                 c.setChecked(false);
             }
-            Log.e("DEBUG", newTags.toString());
+            //newTags.add(new Tag("test"));
         });
 
         return new TagHolder(view);
