@@ -19,6 +19,7 @@ public class EditItemActivity extends AppCompatActivity {
 
     private ItemHandler itemHandler;
     private int listPosition;
+    private String itemID;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
@@ -30,6 +31,14 @@ public class EditItemActivity extends AppCompatActivity {
             Double itemPrice = extras.getDouble("ITEM_PRICE");
             String itemDate = extras.getString("ITEM_DATE");
             String itemTags = extras.getString("ITEM_TAGS");
+            itemID = extras.getString("ITEM_ID");
+
+            if (itemID != null) {
+                Log.d("ITEM ID", itemID);
+            }
+            else {
+                Log.d("ITEM ID", "NULL UH OH");
+            }
 
             TextInputLayout itemNameText = findViewById(R.id.itemName);
             // Should check if value is actually a double (probably possible in EditText somehow)
@@ -95,8 +104,8 @@ public class EditItemActivity extends AppCompatActivity {
                 /**
                  * Deletes item from database, as well as on the item list displayed in MainActivity.
                  */
-                // DOESN'T WORK! Because it's referencing a different itemHandler than main I think
-                //itemHandler.deleteItem(listPosition);
+
+                itemHandler.deleteItem(itemID);
 
                 finish();
             }

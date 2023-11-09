@@ -64,7 +64,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(context, "clicked on " + position, Toast.LENGTH_SHORT).show(); // just a test
                 /**
                  * Sends the user to the 'edit item' activity, allowing them to edit their current
                  * item and all of its relevant details.
@@ -74,6 +73,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
                 // way so I can implement this inside of the activity but I'm in a rush.
 
                 Intent editItemActivityIntent = new Intent(context, EditItemActivity.class);
+                // Tests (is null at the moment?? no idea why??)
+                if (item.getId() != null) {
+                    Log.d("ITEM ID ADAPTER", item.getId());
+                }
+                else {
+                    Log.d("ITEM ID ADAPTER", "NULL");
+                }
+                editItemActivityIntent.putExtra("ITEM_ID", item.getId());
                 editItemActivityIntent.putExtra("ITEM_POSITION", position);
                 editItemActivityIntent.putExtra("ITEM_NAME", item.getName());
                 editItemActivityIntent.putExtra("ITEM_PRICE", item.getPrice());
