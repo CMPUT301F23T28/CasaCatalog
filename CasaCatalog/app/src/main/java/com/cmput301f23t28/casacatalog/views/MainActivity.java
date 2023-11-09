@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ import com.cmput301f23t28.casacatalog.R;
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
     private RecyclerView itemListView;
+    private TextView totalValueTextView;
 
     private ItemHandler itemHandler;
     private ItemListAdapter itemAdapter;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         itemListView.setLayoutManager(new LinearLayoutManager(this));
 
+        totalValueTextView = findViewById(R.id.InventoryValueNumber); // Initialize the TextView
         itemHandler.getDb().getItemsRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -115,6 +118,18 @@ public class MainActivity extends AppCompatActivity {
 
                         itemHandler.getItemList().add(addItem);
                         itemAdapter.notifyDataSetChanged();
+
+                        // After adding all items to the itemList, calculate the total value
+                        double totalValue = 0;
+                        for (Item item : itemHandler.getItemList()) {
+                            if (item.getPrice() != null) {
+                                totalValue += item.getPrice();
+                            }
+                        }
+
+                        // Update the TextView with the total value
+                        String totalValueFormatted = String.format(Locale.ENGLISH, "Total Value: $%.2f", totalValue);
+                        totalValueTextView.setText(totalValueFormatted);
 
                     }
                 }
