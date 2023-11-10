@@ -31,9 +31,9 @@
             android:hint="@string/item_name_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemNameInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -44,9 +44,9 @@
             android:hint="@string/item_value_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemEstimatedValueInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -57,9 +57,9 @@
             android:hint="@string/item_purchase_date_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemPurchaseDateInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -70,9 +70,9 @@
             android:hint="@string/item_description_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemDescriptionInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -95,9 +95,9 @@
             android:hint="@string/item_make_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemMakeInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -108,9 +108,9 @@
             android:hint="@string/item_model_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemModelInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -121,9 +121,9 @@
             android:hint="@string/item_serial_number_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemSerialNumberInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -159,9 +159,9 @@
             android:hint="@string/item_comments_label">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/itemCommentsInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp"
-                />
+                android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
