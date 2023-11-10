@@ -12,11 +12,11 @@ public class User {
 
     /**
      * Constructor for creating a new User with a given name.
-     * @param context Any context from the application.
+     * @param deviceId A string representing the user's device ID.
      * @param name A string representing the user's name.
      */
-    public User(Context context, String name) {
-        this.deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    public User(String deviceId, String name) {
+        this.deviceId = deviceId;
         this.name = name;
     }
 
