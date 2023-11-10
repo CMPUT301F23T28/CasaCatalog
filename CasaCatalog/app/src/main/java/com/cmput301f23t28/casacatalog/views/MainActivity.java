@@ -17,6 +17,7 @@ import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
+import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -102,6 +103,13 @@ public class MainActivity extends AppCompatActivity {
                         String itemDescription = doc.getString("description");
                         String itemComment = doc.getString("comments");
                         String itemSerialNumber = doc.getString("serialNumber");
+                        ArrayList<String> itemTagStrings = (ArrayList<String>) doc.get("tags");
+                        ArrayList<Tag> itemTags = new ArrayList<>();
+                        if (itemTagStrings != null && itemTagStrings.size() > 0) {
+                            for (String t : itemTagStrings) {
+                                itemTags.add(new Tag(t));
+                            }
+                        }
 
                         Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname,
                                 pricename));
@@ -109,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         addItem.setId(itemID);
                         addItem.setName(itemname);
                         addItem.setPrice(pricename);
+                        addItem.setTags(itemTags);
 
                         //add date to the addItem
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
