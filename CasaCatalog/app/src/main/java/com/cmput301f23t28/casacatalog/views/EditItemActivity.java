@@ -32,6 +32,11 @@ public class EditItemActivity extends AppCompatActivity {
     TextInputLayout itemValueText;
     TextInputLayout itemDateText;
     TextInputLayout itemTagsText;
+    TextInputLayout itemDescriptionText;
+    TextInputLayout itemMakeText;
+    TextInputLayout itemModelText;
+    TextInputLayout itemSerialNumberText;
+    TextInputLayout itemCommentText;
     /**
      * Called when the activity is starting. This is where most initialization should go:
      * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
@@ -48,33 +53,51 @@ public class EditItemActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            // I now realize this was a terrible way of doing this
+            // But I'm too deep. Adds attributes to 'editingItem' for admittedly no reason
+            // Since it gets overwritten afterwards anyways.
             listPosition = extras.getInt("ITEM_POSITION");
             editingItem.setName(extras.getString("ITEM_NAME"));
             editingItem.setPrice(extras.getDouble("ITEM_PRICE"));
+            editingItem.setMake(extras.getString("ITEM_MAKE"));
+            editingItem.setModel(extras.getString("ITEM_MODEL"));
+            editingItem.setSerialNumber(extras.getString("ITEM_SERIAL_NUMBER"));
+            editingItem.setComment(extras.getString("ITEM_COMMENT"));
+            editingItem.setDescription(extras.getString("ITEM_DESCRIPTION"));
             // (Max) tags was changed since I worked on this, will have to fix later.
             // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
+            // Cheating to put the date here :I
             stringItemDate = extras.getString("ITEM_DATE");
+            editingItem.setDateFormatted(stringItemDate);
 
-            /*
-            if (itemID != null) {
-                Log.d("ITEM ID", itemID);
-            }
-            else {
-                Log.d("ITEM ID", "NULL UH OH");
-            }*/
-
+            // Setting all the 'EditText' thingies
             itemNameText = findViewById(R.id.itemName);
             // Should check if value is actually a double (probably possible in EditText somehow)
             itemValueText = findViewById(R.id.itemEstimatedValue);
             itemDateText = findViewById(R.id.itemPurchaseDate);
+            itemDescriptionText = findViewById(R.id.itemDescription);
+            itemMakeText = findViewById(R.id.itemMake);
+            itemModelText = findViewById(R.id.itemModel);
+            itemSerialNumberText = findViewById(R.id.itemSerialNumber);
+            itemCommentText = findViewById(R.id.itemComments);
             itemTagsText = findViewById(R.id.itemTags);
 
+            // Setting the text of each of the 'EditText's to whatever the item's attributes are
             itemNameText.getEditText().setText(editingItem.getName());
             itemValueText.getEditText().setText(editingItem.getPrice().toString());
             // SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy"); // IS BUGGING
             // TODO: Set this to a simple date not the whole thing
             itemDateText.getEditText().setText(stringItemDate);
+            itemDescriptionText.getEditText().setText(editingItem.getDescription());
+            itemMakeText.getEditText().setText(editingItem.getMake());
+            itemModelText.getEditText().setText(editingItem.getModel());
+            itemSerialNumberText.getEditText().setText(editingItem.getSerialNumber());
+            itemCommentText.getEditText().setText(editingItem.getComment());
+            if (editingItem.getComment() != null) {
+                Log.d("ITEM_COMMENT_EDIT_ITEM", editingItem.getComment());
+            }
+
             //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
         }
 
@@ -119,16 +142,17 @@ public class EditItemActivity extends AppCompatActivity {
                     editingItem.setPrice(price);
                 }
 
-                // adds the date
+                // adds the date (FAKE FOR NOW)
+                editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
+                // Real date adding
                 if (!itemDateText.getEditText().getText().toString().isEmpty()) {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
                     try{
                         Date date = formatter.parse(itemDateText.getEditText().getText().toString());
                         editingItem.setDate(date);
                     } catch (ParseException e){
-                        Log.e("ParseException", "ParseException"+ e.toString());
+                        Log.e("ParseExceptionEdit", "ParseException"+ e.toString());
                     }
-
                 }
 
                 // Add rest of attributes as well
