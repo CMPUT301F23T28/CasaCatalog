@@ -17,6 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
+/**
+ * Handles activities related to the item database
+ */
 public class DatabaseHandler {
     private FirebaseFirestore db;
     private CollectionReference itemsRef;
