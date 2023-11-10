@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class UserDatabase {
     private FirebaseFirestore db;
     private CollectionReference collection;
+    private User currentUser;
 
     public UserDatabase(){
         this.db = FirebaseFirestore.getInstance();
@@ -18,7 +19,7 @@ public class UserDatabase {
 
     public CollectionReference getCollection(){ return this.collection; }
 
-    public User createUser(Context context, String name) {
+    public void createUser(Context context, String name) {
         User newUser = new User(context, name);
 
         HashMap<String, Object> data = new HashMap<>();
@@ -27,7 +28,10 @@ public class UserDatabase {
 
         // TODO: log success and failure
         collection.document(newUser.getDeviceId()).set(data);
+        this.currentUser = newUser;
+    }
 
-        return newUser;
+    public User getCurrentUser(){
+        return this.currentUser;
     }
 }
