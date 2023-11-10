@@ -1,18 +1,29 @@
 package com.cmput301f23t28.casacatalog.models;
 
-public class Tag {
+import java.io.Serializable;
 
-    private String name;
+public class Tag implements Serializable {
+
+    private final String name;
+    private int uses;
 
     public Tag(String name) {
         this.name = name;
+        this.uses = 1;
     }
+
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    // This is a bit out of the scope of the user story
+    // so it will be unused for now. QoL feature.
+    public int getUses(){
+        return this.uses;
+    }
+
+    public void setUses(int uses){
+        this.uses = uses;
     }
 }
