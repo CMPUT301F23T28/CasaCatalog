@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="0 uses"
+        android:text=""
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/tagName"
         app:layout_constraintTop_toTopOf="@+id/tagName" />
