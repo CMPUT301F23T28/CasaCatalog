@@ -70,6 +70,7 @@ public class ItemHolder extends RecyclerView.ViewHolder{
      */
     public void setItemTags(ArrayList<Chip> chips) {
         if( chips != null ){
+            ItemTags.removeAllViews();
             for(Chip c : chips) ItemTags.addView(c);
         }
     }
