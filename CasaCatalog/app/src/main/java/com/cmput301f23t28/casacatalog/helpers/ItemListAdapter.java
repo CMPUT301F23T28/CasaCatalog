@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Tag;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.firestore.CollectionReference;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
@@ -75,9 +77,19 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
         }
         Log.e("Shown", "Item" + item.getName());
 //        holder.setItemPurchaseDate(item.getDate().toString());
-        /// TODO:
-        /// Need to implement setting the tags. Probably should receive some kind of collection of tags
-        /// as setItemTags and then that method can attach them somehow to the ChipGroup in the ItemHolder
+
+        if( item.getTags() != null ){
+            ArrayList<Chip> chips = new ArrayList<>();
+
+            // Create chips for each tag, add to chip group
+            for(Tag tag : item.getTags()) {
+                Chip c = new Chip(context);
+                c.setText(tag.getName());
+                chips.add(c);
+            }
+
+            holder.setItemTags(chips);
+        }
     }
 
     /**

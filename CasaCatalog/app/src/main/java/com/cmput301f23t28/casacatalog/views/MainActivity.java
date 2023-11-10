@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.database.TagDatabase;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.firebase.firestore.CollectionReference;
@@ -47,14 +50,15 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView itemListView;
     private TextView totalValueTextView;
 
-
     private ItemHandler itemHandler;
     private ItemListAdapter itemAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Database.initialize();
         itemHandler = new ItemHandler();
 
 //        Test delete method (won't work due to delay?)
@@ -124,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Update the TextView with the total value
-                        String totalValueFormatted = String.format(Locale.ENGLISH, "Total Value: $%.2f", totalValue);
+                        String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", totalValue);
                         totalValueTextView.setText(totalValueFormatted);
 
                     }
