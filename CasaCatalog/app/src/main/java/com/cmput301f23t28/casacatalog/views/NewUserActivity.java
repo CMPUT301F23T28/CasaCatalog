@@ -1,16 +1,12 @@
 package com.cmput301f23t28.casacatalog.views;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
-import com.cmput301f23t28.casacatalog.models.User;
 
 /**
  * The new user activity that starts when the application is launched for the first time.

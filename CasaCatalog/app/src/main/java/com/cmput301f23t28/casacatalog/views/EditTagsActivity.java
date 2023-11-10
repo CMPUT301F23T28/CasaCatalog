@@ -1,10 +1,8 @@
 package com.cmput301f23t28.casacatalog.views;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
-import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 
 import java.util.ArrayList;

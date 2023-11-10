@@ -3,7 +3,6 @@ package com.cmput301f23t28.casacatalog.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,13 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.models.Tag;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
 
 import java.text.ParseException;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.text.SimpleDateFormat;
 
 /**
  * Activity for adding a new item to the inventory.

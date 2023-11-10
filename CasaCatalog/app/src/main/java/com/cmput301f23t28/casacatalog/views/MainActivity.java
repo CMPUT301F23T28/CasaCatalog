@@ -1,17 +1,23 @@
 package com.cmput301f23t28.casacatalog.views;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
-
+import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
+import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -20,17 +26,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import android.view.View;
-import android.widget.TextView;
-
 import java.util.Date;
 import java.util.Locale;
-
-import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
-import com.cmput301f23t28.casacatalog.models.Item;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import com.cmput301f23t28.casacatalog.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

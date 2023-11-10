@@ -3,7 +3,6 @@ package com.cmput301f23t28.casacatalog.views;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
