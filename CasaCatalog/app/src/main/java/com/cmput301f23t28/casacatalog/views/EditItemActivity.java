@@ -40,7 +40,8 @@ public class EditItemActivity extends AppCompatActivity {
             listPosition = extras.getInt("ITEM_POSITION");
             editingItem.setName(extras.getString("ITEM_NAME"));
             editingItem.setPrice(extras.getDouble("ITEM_PRICE"));
-            editingItem.setTags(extras.getString("ITEM_TAGS"));
+            // (Max) tags was changed since I worked on this, will have to fix later.
+            // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
             stringItemDate = extras.getString("ITEM_DATE");
 
@@ -63,7 +64,7 @@ public class EditItemActivity extends AppCompatActivity {
             // SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy"); // IS BUGGING
             // TODO: Set this to a simple date not the whole thing
             itemDateText.getEditText().setText(stringItemDate);
-            itemTagsText.getEditText().setText(editingItem.getTags()); // not working
+            //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
         }
 
 
@@ -84,12 +85,13 @@ public class EditItemActivity extends AppCompatActivity {
 
         editButton.setText(R.string.item_edit_button_text);
         editButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Edits item in database, as well as on the item list displayed in MainActivity.
+             */
             @Override
             public void onClick(View view) {
                 // Feel free to get rid of below if it's not necessary (the javadoc)
-                /**
-                 * Edits item in database, as well as on the item list displayed in MainActivity.
-                 */
+
                 // Add rest of attributes as well (make model desc. comment etc)
 
                 // Delete item from database, and add new item with new attributes
@@ -151,12 +153,13 @@ public class EditItemActivity extends AppCompatActivity {
         });
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Deletes item from database, as well as on the item list displayed in MainActivity.
+             */
             @Override
             public void onClick(View view) {
                 // Feel free to get rid of below if it's not necessary (the javadoc)
-                /**
-                 * Deletes item from database, as well as on the item list displayed in MainActivity.
-                 */
+
 
                 itemHandler.deleteItem(editingItem.getId());
 

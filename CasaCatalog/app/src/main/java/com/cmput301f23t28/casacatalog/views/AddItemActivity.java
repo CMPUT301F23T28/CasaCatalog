@@ -66,12 +66,13 @@ public class AddItemActivity  extends AppCompatActivity {
             layout.removeView(deleteButton);
 
         addButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Adds item to database, as well as the item list displayed in MainActivity.
+             */
             @Override
             public void onClick(View view) {
                 // Feel free to get rid of below if it's not necessary (the javadoc)
-                /**
-                 * Adds item to database, as well as the item list displayed in MainActivity.
-                 */
+
 //                TextInputLayout itemName = findViewById(R.id.itemName);
 
                     TextInputLayout nameValue = findViewById(R.id.itemName);
