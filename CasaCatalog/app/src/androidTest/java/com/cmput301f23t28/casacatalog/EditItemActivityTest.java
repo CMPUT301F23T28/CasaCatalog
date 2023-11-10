@@ -3,11 +3,13 @@ package com.cmput301f23t28.casacatalog;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.cmput301f23t28.casacatalog.util.EspressoUtils.waitUntilVisible;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +19,9 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.cmput301f23t28.casacatalog.util.EspressoUtils;
 import com.cmput301f23t28.casacatalog.views.AddItemActivity;
+//import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
 
@@ -57,10 +61,12 @@ public class EditItemActivityTest {
     public void testAddingItemToList() {
         Intents.init();
         onView(withId(R.id.add_item_button)).perform(click());
-        onView(withId(R.id.itemName)).perform(ViewActions.typeText("Toaster"));
-        onView(withId(R.id.itemEstimatedValue)).perform(ViewActions.typeText("123.99"));
-        onView(withId(R.id.itemPurchaseDate)).perform(ViewActions.typeText("12-12-2012"));
-        onView(withId(R.id.itemDescription)).perform(ViewActions.typeText("Super dope toaster"));
+        EspressoUtils.waitUntilVisible(onView(withId(R.id.itemNameInput)), 5000)
+                .perform(typeText("Toaster"));
+        onView(withId(R.id.itemEstimatedValueInput)).perform(typeText("123.99"));
+        onView(withId(R.id.itemPurchaseDateInput)).perform(typeText("12-12-2012"));
+        onView(withId(R.id.itemDescriptionInput)).perform(typeText("Super dope toaster"));
+        onView(withId(R.id.addItemToListBtn)).perform(ViewActions.scrollTo());
         onView(withId(R.id.addItemToListBtn)).perform(click());
 
         //intended(hasComponent(MainActivity.class.getName())); // might not work :I
@@ -89,10 +95,10 @@ public class EditItemActivityTest {
     public void testEditingItemInList() {
         Intents.init();
         onData(anything()).inAdapterView(withId(R.id.items_list)).atPosition(0).perform(click());
-        onView(withId(R.id.itemName)).perform(ViewActions.typeText("Toaster2"));
-        onView(withId(R.id.itemEstimatedValue)).perform(ViewActions.typeText("100.10"));
-        onView(withId(R.id.itemPurchaseDate)).perform(ViewActions.typeText("11-11-2012"));
-        onView(withId(R.id.itemDescription)).perform(ViewActions.typeText("Super duper dope toaster"));
+        onView(withId(R.id.itemNameInput)).perform(typeText("Toaster2"));
+        onView(withId(R.id.itemEstimatedValueInput)).perform(typeText("100.10"));
+        onView(withId(R.id.itemPurchaseDateInput)).perform(typeText("11-11-2012"));
+        onView(withId(R.id.itemDescriptionInput)).perform(typeText("Super duper dope toaster"));
         onView(withId(R.id.addItemToListBtn)).perform(click());
 
         onView(withText("Toaster")).check(doesNotExist());
