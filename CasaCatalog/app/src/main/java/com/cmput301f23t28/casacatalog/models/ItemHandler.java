@@ -22,6 +22,9 @@ public class ItemHandler
 
     private ArrayList<String> filters;
 
+    /**
+     * Constructor for ItemHandler
+     */
     public ItemHandler() {
         this.db = new DatabaseHandler();
         itemList = new ArrayList<Item>();
