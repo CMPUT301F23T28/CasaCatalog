@@ -1,10 +1,8 @@
 package com.cmput301f23t28.casacatalog.views;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,17 +12,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
-import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 
 import java.util.ArrayList;
 
+/**
+ * Activity for editing tags associated with an item.
+ * Allows users to add new tags and modify existing ones.
+ */
 public class EditTagsActivity extends AppCompatActivity {
 
     private ArrayList<Tag> tags;
     private RecyclerView tagsListView;
     private TagsListAdapter tagAdapter;
 
+    /**
+     * Initializes the activity, sets up the RecyclerView for tags, and handles creation and deletion of tags.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise it is null.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_tags);
