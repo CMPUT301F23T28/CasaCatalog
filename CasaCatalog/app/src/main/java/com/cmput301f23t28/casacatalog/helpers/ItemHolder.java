@@ -51,7 +51,6 @@ public class ItemHolder extends RecyclerView.ViewHolder{
         if (ItemPurchaseDate != null){
             ItemPurchaseDate.setText(itemPurchaseDate);
         }
-
     }
 
     /**

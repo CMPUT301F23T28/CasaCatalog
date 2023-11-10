@@ -107,9 +107,15 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
                 editItemActivityIntent.putExtra("ITEM_NAME", item.getName());
                 editItemActivityIntent.putExtra("ITEM_PRICE", item.getPrice());
                 if (item.getDate() != null) {
-                    editItemActivityIntent.putExtra("ITEM_DATE", item.getDate().toString());
+                    editItemActivityIntent.putExtra("ITEM_DATE", item.getDateFormatted());
                 }
-                editItemActivityIntent.putExtra("ITEM_TAGS", item.getTags());
+                editItemActivityIntent.putExtra("ITEM_DESCRIPTION", item.getDescription());
+                editItemActivityIntent.putExtra("ITEM_MAKE", item.getMake());
+                editItemActivityIntent.putExtra("ITEM_MODEL", item.getModel());
+                editItemActivityIntent.putExtra("ITEM_SERIAL_NUMBER", item.getSerialNumber());
+                editItemActivityIntent.putExtra("ITEM_COMMENT", item.getComment());
+                // TODO: Figure out whether we need to pass the tags here or not
+                //editItemActivityIntent.putExtra("ITEM_TAGS", item.getTags());
                 context.startActivity(editItemActivityIntent);
             }
         });

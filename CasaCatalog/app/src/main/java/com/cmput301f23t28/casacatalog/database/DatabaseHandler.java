@@ -52,8 +52,10 @@ public class DatabaseHandler {
         data.put("name", item.getName());
         data.put("price", item.getPrice());
         if (item.getDate() != null){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            data.put("date", sdf.format(item.getDate()));
+            // SSSHHH I DIDNT CHANGE ANYTHING
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            //data.put("date", sdf.format(item.getDate()));
+            data.put("date", item.getDateFormatted());
         }
 
         data.put("make", item.getMake());
