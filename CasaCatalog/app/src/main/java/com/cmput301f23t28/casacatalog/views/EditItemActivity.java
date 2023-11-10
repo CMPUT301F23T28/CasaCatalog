@@ -9,10 +9,24 @@ import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * Activity for editing an existing item. Inherits functionality from AddItemActivity
+ * and repurposes it for editing items.
+ */
 public class EditItemActivity extends AddItemActivity {
 
     private ItemHandler itemHandler;
     private int listPosition;
+
+    /**
+     * Called when the activity is starting. This is where most initialization should go:
+     * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
+     * to programmatically interact with widgets in the UI, setting up listeners, etc.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     *                           shut down then this Bundle contains the most recent data supplied
+     *                           in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
