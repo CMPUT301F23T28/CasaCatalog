@@ -2,8 +2,10 @@ package com.cmput301f23t28.casacatalog.helpers;
 
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.cmput301f23t28.casacatalog.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -62,7 +64,7 @@ public class ItemHolder extends RecyclerView.ViewHolder{
 
      /**
      * Set the UI Tags in the item row.
-     * @param itemTags
+     * @param chips
      */
     public void setItemTags(ArrayList<Chip> chips) {
         if( chips != null ){
