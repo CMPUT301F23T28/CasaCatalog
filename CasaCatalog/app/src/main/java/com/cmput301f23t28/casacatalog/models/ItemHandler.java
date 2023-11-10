@@ -38,20 +38,35 @@ public class ItemHandler {
         itemList.set(i, item);
     }
 
+    // TODO: you do NOT NEED THREE OF THESE...........smh
 
+    /**
+     * Delete an item from the database.
+     * @param item The item to delete.
+     */
     public void deleteItem(Item item) {
         db.deleteItemDatabase(item.getId());
     }
 
-
-
+    /**
+     * Delete an item from the database.
+     * @param i The index of the item to delete.
+     */
     public void deleteItem(int i){
         db.deleteItemDatabase(itemList.get(i).getId());
     }
 
+    /**
+     * Delete an item from the database.
+     * @param ID The ID of the item to delete.
+     */
     public void deleteItem(String ID){
         db.deleteItemDatabase(ID);
     }
+
+    /**
+     * Delete all items current selected in the itemList.
+     */
     public void deleteSelectedItems(){
         ArrayList<String> selectedItemsIds = new ArrayList<String>();
         for (Item item : itemList) {
