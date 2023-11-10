@@ -45,6 +45,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.cmput301f23t28.casacatalog.R;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
     private RecyclerView itemListView;
@@ -149,6 +151,17 @@ public class MainActivity extends AppCompatActivity {
                 Intent addItemActivityIntent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(addItemActivityIntent);
 
+            }
+        });
+
+        // Find the userProfileImage view by its ID and set an OnClickListener
+        CircleImageView userProfileImage = findViewById(R.id.userProfileImage);
+        userProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to start UserActivity
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(intent);
             }
         });
 
