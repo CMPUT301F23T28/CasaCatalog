@@ -38,6 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * including the RecyclerView for items and listeners for UI elements.
  */
 public class MainActivity extends AppCompatActivity {
+    public static String deviceId;
     private ArrayList<Item> itemList;
     private RecyclerView itemListView;
     private TextView totalValueTextView;
@@ -56,10 +57,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Record device identifier
+        deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        // Initialize all databases
         Database.initialize();
 
         // If first time using app, start create user activity
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         Database.users.getCollection().document(deviceId).get().addOnCompleteListener(task -> {
             if( !task.isSuccessful() || !task.getResult().exists() ){
                 startActivity(new Intent(this, NewUserActivity.class));
