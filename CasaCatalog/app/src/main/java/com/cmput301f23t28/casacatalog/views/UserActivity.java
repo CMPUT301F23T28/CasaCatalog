@@ -23,7 +23,7 @@ public class UserActivity extends AppCompatActivity {
         usernameTextView = findViewById(R.id.usernameTextView);
 
 
-        user = new User("Kai"); // Sample username
+        user = new User(this, "Kai"); // Sample username
         updateUI();
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
