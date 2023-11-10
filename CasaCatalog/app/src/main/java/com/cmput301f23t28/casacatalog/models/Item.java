@@ -74,9 +74,19 @@ public class Item implements Serializable {
     public Date getDate() {
         return date;
     }
+
+    /**
+     * Gets the formatted purchase or acquisition date of the item.
+     * @return A String representing a formatted date of when the item was acquired.
+     */
     public String getDateFormatted() { // (Max) Im doing this for the editItem i cannot be bothered
         return dateFormatted;
     }
+
+    /**
+     * Sets the formatted purchase or acquisition date of the item.
+     * @param dateFormatted A String representing a formatted date of when the item was acquired.
+     */
     public void setDateFormatted(String dateFormatted) {
         this.dateFormatted = dateFormatted;
     }
