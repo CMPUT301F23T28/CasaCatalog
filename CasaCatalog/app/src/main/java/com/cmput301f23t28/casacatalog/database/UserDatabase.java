@@ -1,7 +1,11 @@
 package com.cmput301f23t28.casacatalog.database;
 import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
 
 import com.cmput301f23t28.casacatalog.models.User;
+import com.cmput301f23t28.casacatalog.views.MainActivity;
+import com.cmput301f23t28.casacatalog.views.NewUserActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -22,6 +26,13 @@ public class UserDatabase {
     public UserDatabase(){
         this.db = FirebaseFirestore.getInstance();
         this.collection = db.collection("users");
+
+        // Attempt to load current user from database.
+        collection.document(MainActivity.deviceId).get().addOnCompleteListener(task -> {
+            if( task.isSuccessful() && task.getResult().exists() ){
+                this.currentUser = new User(MainActivity.deviceId, task.getResult().getString("name"));
+            }
+        });
     }
 
     /**
@@ -32,11 +43,11 @@ public class UserDatabase {
 
     /**
      * Creates a new User and stores in database
-     * @param context Any context in the application
+     * @param deviceId A unique identifier for the new user
      * @param name The name of the new user
      */
-    public void createUser(Context context, String name) {
-        User newUser = new User(context, name);
+    public void createUser(String deviceId, String name) {
+        User newUser = new User(deviceId, name);
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("name", newUser.getName());
@@ -52,7 +63,7 @@ public class UserDatabase {
      *
      * @return A User object representing the current client
      */
-    public User getCurrentUser(){
+    public User getCurrentUser(Context context){
         return this.currentUser;
     }
 }
