@@ -3,6 +3,7 @@ package com.cmput301f23t28.casacatalog.models;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.Date;
@@ -15,6 +16,7 @@ public class Item implements Serializable {
     private String name;
     private Double price;
     private Date date;
+    private String dateFormatted; // I don't want to figure out how to do this another way right now
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
     private String make;
@@ -44,6 +46,12 @@ public class Item implements Serializable {
 
     public Date getDate() {
         return date;
+    }
+    public String getDateFormatted() { // (Max) Im doing this for the editItem i cannot be bothered
+        return dateFormatted;
+    }
+    public void setDateFormatted(String dateFormatted) {
+        this.dateFormatted = dateFormatted;
     }
 
     public void setDate(Date date) {

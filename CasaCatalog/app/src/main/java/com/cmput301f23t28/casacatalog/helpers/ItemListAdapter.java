@@ -107,7 +107,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
                 editItemActivityIntent.putExtra("ITEM_NAME", item.getName());
                 editItemActivityIntent.putExtra("ITEM_PRICE", item.getPrice());
                 if (item.getDate() != null) {
-                    editItemActivityIntent.putExtra("ITEM_DATE", item.getDate().toString());
+                    editItemActivityIntent.putExtra("ITEM_DATE", item.getDateFormatted());
                 }
                 editItemActivityIntent.putExtra("ITEM_DESCRIPTION", item.getDescription());
                 editItemActivityIntent.putExtra("ITEM_MAKE", item.getMake());

@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("ParseException", "ParseException" + e.toString());
                             }
                         }
+                        // (Max) SSH IM NOT CHANGING THE DATE TO A STRING
+                        addItem.setDateFormatted(dateinstring);
 
                         addItem.setMake(itemMake);
                         addItem.setModel(itemModel);
