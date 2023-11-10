@@ -1,11 +1,13 @@
 package com.cmput301f23t28.casacatalog.views;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.User;
 
 /**
@@ -15,9 +17,8 @@ import com.cmput301f23t28.casacatalog.models.User;
  */
 public class UserActivity extends AppCompatActivity {
 
-    private ImageView userProfileImage; // View for user's profile image
-    private TextView usernameTextView; // View for user's name
-    private User user; // User model for this activity
+    private ImageView userProfileImage;
+    private TextView usernameTextView;
 
     /**
      * Called when the activity is starting.
@@ -38,9 +39,6 @@ public class UserActivity extends AppCompatActivity {
 
         userProfileImage = findViewById(R.id.userProfileImage);
         usernameTextView = findViewById(R.id.usernameTextView);
-
-        // Initialize a User object with sample data for display purposes
-        user = new User("Kai");
         // Update the UI with the User data
         updateUI();
 
@@ -59,8 +57,11 @@ public class UserActivity extends AppCompatActivity {
      * the userProfileImage ImageView with the user's profile image.
      */
     private void updateUI() {
-        usernameTextView.setText(user.getName());
-        // Set the profile image from resources
+        usernameTextView.setText(Database.users.getCurrentUser().getName());
+        // Set the profile image, if you have different images for different users
+
         userProfileImage.setImageResource(R.drawable.profile);
+
+        findViewById(R.id.backButton).setOnClickListener(view -> finish());
     }
 }
