@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         String itemMake = doc.getString("make");
                         String itemModel = doc.getString("model");
                         String itemDescription = doc.getString("description");
-                        String itemComment = doc.getString("comment");
+                        String itemComment = doc.getString("comments");
                         String itemSerialNumber = doc.getString("serialNumber");
 
                         Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname,
@@ -131,6 +131,10 @@ public class MainActivity extends AppCompatActivity {
                         addItem.setModel(itemModel);
                         addItem.setDescription(itemDescription);
                         addItem.setComment(itemComment);
+                        if (itemComment != null) {
+                            Log.d("ITEM_COMMENT_MAIN", itemComment);
+                        }
+
                         addItem.setSerialNumber(itemSerialNumber);
 
                         itemHandler.getItemList().add(addItem);
