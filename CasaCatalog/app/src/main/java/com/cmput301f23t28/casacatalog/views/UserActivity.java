@@ -39,7 +39,9 @@ public class UserActivity extends AppCompatActivity {
         userProfileImage = findViewById(R.id.userProfileImage);
         usernameTextView = findViewById(R.id.usernameTextView);
 
-        usernameTextView.setText(Database.users.getCurrentUser().getName());
+        if(Database.users != null && Database.users.getCurrentUser() != null && Database.users.getCurrentUser().getName() != null){
+            usernameTextView.setText(Database.users.getCurrentUser().getName());
+        }
         // Set the profile image, if you have different images for different users
         userProfileImage.setImageResource(R.drawable.profile);
 
