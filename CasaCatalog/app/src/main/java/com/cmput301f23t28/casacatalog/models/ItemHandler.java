@@ -43,9 +43,12 @@ public class ItemHandler
     }
 
     public void deleteItem(int i){
-//        itemList.remove(itemList.get(i).getId());
+        db.deleteItemDatabase(itemList.get(i).getId());
     }
 
+    public void deleteItem(String ID){
+        db.deleteItemDatabase(ID);
+    }
     public void deleteSelectedItems(){
         ArrayList<String> selectedItemsIds = new ArrayList<String>();
         for (int i=0; i < itemList.size(); i++){
