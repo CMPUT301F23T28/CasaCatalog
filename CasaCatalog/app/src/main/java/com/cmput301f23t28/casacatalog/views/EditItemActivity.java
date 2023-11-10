@@ -13,7 +13,10 @@ import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class EditItemActivity extends AppCompatActivity {
 
@@ -22,6 +25,11 @@ public class EditItemActivity extends AppCompatActivity {
     private Item editingItem;
     // Temporary solution so i dont convert string to date because im lazy
     private String stringItemDate;
+
+    TextInputLayout itemNameText;
+    TextInputLayout itemValueText;
+    TextInputLayout itemDateText;
+    TextInputLayout itemTagsText;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
@@ -44,11 +52,11 @@ public class EditItemActivity extends AppCompatActivity {
                 Log.d("ITEM ID", "NULL UH OH");
             }*/
 
-            TextInputLayout itemNameText = findViewById(R.id.itemName);
+            itemNameText = findViewById(R.id.itemName);
             // Should check if value is actually a double (probably possible in EditText somehow)
-            TextInputLayout itemValueText = findViewById(R.id.itemEstimatedValue);
-            TextInputLayout itemDateText = findViewById(R.id.itemPurchaseDate);
-            TextInputLayout itemTagsText = findViewById(R.id.itemTags);
+            itemValueText = findViewById(R.id.itemEstimatedValue);
+            itemDateText = findViewById(R.id.itemPurchaseDate);
+            itemTagsText = findViewById(R.id.itemTags);
 
             itemNameText.getEditText().setText(editingItem.getName());
             itemValueText.getEditText().setText(editingItem.getPrice().toString());
@@ -82,18 +90,60 @@ public class EditItemActivity extends AppCompatActivity {
                 /**
                  * Edits item in database, as well as on the item list displayed in MainActivity.
                  */
-                Item newItem = new Item();
-                TextInputLayout itemName = findViewById(R.id.itemName);
-                newItem.setName(itemName.getEditText().getText().toString());
-                // TODO: Should check if value is actually a double (probably possible in EditText somehow)
-                TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
-                double price = Double.parseDouble(itemValue.getEditText().getText().toString());
-                newItem.setPrice(price);
                 // Add rest of attributes as well (make model desc. comment etc)
 
                 // Delete item from database, and add new item with new attributes
                 itemHandler.deleteItem(editingItem.getId());
                 // Now add new item
+                if (itemNameText.getEditText().getText().toString() != null) {
+                    editingItem.setName(itemNameText.getEditText().getText().toString());
+                }
+
+
+                // adds the price
+                if (!itemValueText.getEditText().getText().toString().isEmpty()) {
+                    double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
+                    editingItem.setPrice(price);
+                }
+
+                // adds the date
+                if (!itemDateText.getEditText().getText().toString().isEmpty()) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
+                    try{
+                        Date date = formatter.parse(itemDateText.getEditText().getText().toString());
+                        editingItem.setDate(date);
+                    } catch (ParseException e){
+                        Log.e("ParseException", "ParseException"+ e.toString());
+                    }
+
+                }
+
+                // Add rest of attributes as well
+                TextInputLayout makeValue = findViewById(R.id.itemMake);
+                if (makeValue.getEditText().getText().toString() != null) {
+                    editingItem.setMake(makeValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout modelValue = findViewById(R.id.itemModel);
+                if (modelValue.getEditText().getText().toString() != null) {
+                    editingItem.setModel(modelValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout descriptionValue = findViewById(R.id.itemDescription);
+                if (descriptionValue.getEditText().getText().toString() != null) {
+                    editingItem.setDescription(descriptionValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout commentValue = findViewById(R.id.itemComments);
+                if (commentValue.getEditText().getText().toString() != null) {
+                    editingItem.setComment(commentValue.getEditText().getText().toString());
+                }
+
+                TextInputLayout serialNumberValue = findViewById(R.id.itemSerialNumber);
+                if (serialNumberValue.getEditText().getText().toString() != null) {
+                    editingItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
+                }
+
                 itemHandler.addItem(editingItem);
 
                 finish();
