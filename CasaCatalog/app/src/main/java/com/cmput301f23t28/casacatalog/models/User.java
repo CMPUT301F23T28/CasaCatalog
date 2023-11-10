@@ -1,6 +1,5 @@
 package com.cmput301f23t28.casacatalog.models;
 
-
 import android.content.Context;
 import android.provider.Settings;
 
