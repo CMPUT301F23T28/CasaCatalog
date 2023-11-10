@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Update the TextView with the total value
-                        String totalValueFormatted = String.format(Locale.ENGLISH, "Total Value: $%.2f", totalValue);
+                        String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", totalValue);
                         totalValueTextView.setText(totalValueFormatted);
 
                     }
