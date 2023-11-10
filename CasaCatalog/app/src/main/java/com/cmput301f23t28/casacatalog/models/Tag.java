@@ -7,7 +7,6 @@ import java.io.Serializable;
  * allowing tag objects to be serialized for easy storage and transmission.
  */
 public class Tag implements Serializable {
-
     private final String name;
     private int uses;
 
