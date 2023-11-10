@@ -6,22 +6,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.views.AddItemActivity;
-import com.cmput301f23t28.casacatalog.views.EditItemActivity;
-import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.firestore.CollectionReference;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
     private final Context context;

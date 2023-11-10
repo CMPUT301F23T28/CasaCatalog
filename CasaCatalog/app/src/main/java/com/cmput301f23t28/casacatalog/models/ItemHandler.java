@@ -1,6 +1,7 @@
 package com.cmput301f23t28.casacatalog.models;
 
 import com.cmput301f23t28.casacatalog.database.DatabaseHandler;
+
 import java.util.ArrayList;
 
 /**

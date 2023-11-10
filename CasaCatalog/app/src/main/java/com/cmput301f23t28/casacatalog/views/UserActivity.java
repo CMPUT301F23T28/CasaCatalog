@@ -1,14 +1,13 @@
 package com.cmput301f23t28.casacatalog.views;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
-import com.cmput301f23t28.casacatalog.models.User;
 
 /**
  * Represents an activity for user interactions within the app.
