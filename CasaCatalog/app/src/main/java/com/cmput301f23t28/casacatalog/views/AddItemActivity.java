@@ -62,7 +62,7 @@ public class AddItemActivity  extends AppCompatActivity {
         // database I don't think it should matter if I create a new one. Ideally this would
         // probably reference the same itemhandler as mainactivity but this should work
         itemHandler = new ItemHandler();
-        Item newItem = new Item();
+        newItem = new Item();
 
         final Button addButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
