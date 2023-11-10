@@ -19,26 +19,30 @@ public class EditItemActivity extends AppCompatActivity {
 
     private ItemHandler itemHandler;
     private int listPosition;
-    private String itemID;
+    private Item editingItem;
+    // Temporary solution so i dont convert string to date because im lazy
+    private String stringItemDate;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+        editingItem = new Item();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             listPosition = extras.getInt("ITEM_POSITION");
-            String itemName = extras.getString("ITEM_NAME");
-            Double itemPrice = extras.getDouble("ITEM_PRICE");
-            String itemDate = extras.getString("ITEM_DATE");
-            String itemTags = extras.getString("ITEM_TAGS");
-            itemID = extras.getString("ITEM_ID");
+            editingItem.setName(extras.getString("ITEM_NAME"));
+            editingItem.setPrice(extras.getDouble("ITEM_PRICE"));
+            editingItem.setTags(extras.getString("ITEM_TAGS"));
+            editingItem.setId(extras.getString("ITEM_ID"));
+            stringItemDate = extras.getString("ITEM_DATE");
 
+            /*
             if (itemID != null) {
                 Log.d("ITEM ID", itemID);
             }
             else {
                 Log.d("ITEM ID", "NULL UH OH");
-            }
+            }*/
 
             TextInputLayout itemNameText = findViewById(R.id.itemName);
             // Should check if value is actually a double (probably possible in EditText somehow)
@@ -46,12 +50,12 @@ public class EditItemActivity extends AppCompatActivity {
             TextInputLayout itemDateText = findViewById(R.id.itemPurchaseDate);
             TextInputLayout itemTagsText = findViewById(R.id.itemTags);
 
-            itemNameText.getEditText().setText(itemName);
-            itemValueText.getEditText().setText(itemPrice.toString());
+            itemNameText.getEditText().setText(editingItem.getName());
+            itemValueText.getEditText().setText(editingItem.getPrice().toString());
             // SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy"); // IS BUGGING
             // TODO: Set this to a simple date not the whole thing
-            itemDateText.getEditText().setText(itemDate);
-            itemTagsText.getEditText().setText(itemTags); // not working
+            itemDateText.getEditText().setText(stringItemDate);
+            itemTagsText.getEditText().setText(editingItem.getTags()); // not working
         }
 
 
@@ -81,17 +85,16 @@ public class EditItemActivity extends AppCompatActivity {
                 Item newItem = new Item();
                 TextInputLayout itemName = findViewById(R.id.itemName);
                 newItem.setName(itemName.getEditText().getText().toString());
-                // Should check if value is actually a double (probably possible in EditText somehow)
+                // TODO: Should check if value is actually a double (probably possible in EditText somehow)
                 TextInputLayout itemValue = findViewById(R.id.itemEstimatedValue);
                 double price = Double.parseDouble(itemValue.getEditText().getText().toString());
                 newItem.setPrice(price);
                 // Add rest of attributes as well (make model desc. comment etc)
 
-
-                // This doesn't do what I thought
-                // I"ll need to see the database to know if I modified the value
-                // I don't (think) I have access to it right now
-                //itemHandler.setItem(newItem, listPosition);
+                // Delete item from database, and add new item with new attributes
+                itemHandler.deleteItem(editingItem.getId());
+                // Now add new item
+                itemHandler.addItem(editingItem);
 
                 finish();
             }
@@ -105,7 +108,7 @@ public class EditItemActivity extends AppCompatActivity {
                  * Deletes item from database, as well as on the item list displayed in MainActivity.
                  */
 
-                itemHandler.deleteItem(itemID);
+                itemHandler.deleteItem(editingItem.getId());
 
                 finish();
             }
