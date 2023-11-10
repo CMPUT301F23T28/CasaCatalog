@@ -76,18 +76,6 @@
                 android:id="@+id/ItemTags"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/tag1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Garage" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/tag2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Home" />
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
