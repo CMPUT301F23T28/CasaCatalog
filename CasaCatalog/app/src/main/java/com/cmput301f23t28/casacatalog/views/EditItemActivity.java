@@ -58,6 +58,7 @@ public class EditItemActivity extends AppCompatActivity {
             editingItem.setId(extras.getString("ITEM_ID"));
             // Cheating to put the date here :I
             stringItemDate = extras.getString("ITEM_DATE");
+            editingItem.setDateFormatted(stringItemDate);
 
             // Setting all the 'EditText' thingies
             itemNameText = findViewById(R.id.itemName);
@@ -130,16 +131,17 @@ public class EditItemActivity extends AppCompatActivity {
                     editingItem.setPrice(price);
                 }
 
-                // adds the date
+                // adds the date (FAKE FOR NOW)
+                editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
+                // Real date adding
                 if (!itemDateText.getEditText().getText().toString().isEmpty()) {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
                     try{
                         Date date = formatter.parse(itemDateText.getEditText().getText().toString());
                         editingItem.setDate(date);
                     } catch (ParseException e){
-                        Log.e("ParseException", "ParseException"+ e.toString());
+                        Log.e("ParseExceptionEdit", "ParseException"+ e.toString());
                     }
-
                 }
 
                 // Add rest of attributes as well
