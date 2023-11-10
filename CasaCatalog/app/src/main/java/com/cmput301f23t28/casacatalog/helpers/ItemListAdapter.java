@@ -6,23 +6,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.views.AddItemActivity;
-import com.cmput301f23t28.casacatalog.views.EditItemActivity;
-import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.firestore.CollectionReference;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+/**
+ * A RecyclerView adapter linking ItemHolder's data to the ItemList
+ */
 public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
     private final Context context;
     private ArrayList<Item> itemList;
@@ -31,9 +31,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
 
     /**
      * Construct for an ItemListAdapter. Has access to the context, data and db reference.
-     * @param context
-     * @param itemList
-     * @param itemsRef
+     * @param context Any context in the application.
+     * @param itemList The list of items.
+     * @param itemsRef A reference to the items collection in the database.
      */
     public ItemListAdapter(Context context, ArrayList<Item> itemList, CollectionReference itemsRef) {
         super();
@@ -48,7 +48,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
      *               an adapter position.
      * @param viewType The view type of the new View.
      *
-     * @return
+     * @return A new ItemHolder.
      */
     @NonNull
     @Override
@@ -138,7 +138,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
 
     /**
      * Gets the number of items
-     * @return
+     * @return Integer size of item list.
      */
     @Override
     public int getItemCount() {

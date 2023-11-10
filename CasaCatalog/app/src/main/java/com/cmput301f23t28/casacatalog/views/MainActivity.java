@@ -1,53 +1,41 @@
 package com.cmput301f23t28.casacatalog.views;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.Settings;
-import android.util.Log;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-
+import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
-import com.cmput301f23t28.casacatalog.database.TagDatabase;
+import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
+import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
-import com.cmput301f23t28.casacatalog.views.EditItemActivity;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
-import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.ItemHandler;
-import com.cmput301f23t28.casacatalog.views.AddItemActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import com.cmput301f23t28.casacatalog.R;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * The main activity that starts when the application is launched.
+ * It initializes the database, item handler, and sets up the main user interface,
+ * including the RecyclerView for items and listeners for UI elements.
+ */
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
     private RecyclerView itemListView;
@@ -56,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private ItemHandler itemHandler;
     private ItemListAdapter itemAdapter;
 
+    /**
+     * Initializes the activity, sets up the database, and configures the RecyclerView.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

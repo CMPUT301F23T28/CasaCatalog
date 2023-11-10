@@ -1,4 +1,5 @@
 package com.cmput301f23t28.casacatalog.database;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,9 +14,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
+/**
+ * Handles activities related to the item database
+ */
 public class DatabaseHandler {
     private FirebaseFirestore db;
     private CollectionReference itemsRef;
