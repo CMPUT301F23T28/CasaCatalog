@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,7 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
         Database.initialize();
 
-        Database.users.createUser(this, "Phil");
+        // If first time using app, start create user activity
+        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Database.users.getCollection().document(deviceId).get().addOnCompleteListener(task -> {
+            if( !task.isSuccessful() || !task.getResult().exists() ){
+                startActivity(new Intent(this, NewUserActivity.class));
+            }
+        });
 
         itemHandler = new ItemHandler();
 
