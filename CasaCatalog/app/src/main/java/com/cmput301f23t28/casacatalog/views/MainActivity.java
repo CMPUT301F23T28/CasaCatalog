@@ -75,9 +75,11 @@ public class MainActivity extends AppCompatActivity {
 //        itemHandler.deleteItem(itemTest);
 
 
+
         itemAdapter = new ItemListAdapter(this, itemHandler.getItemList(), itemHandler.getDb().getItemsRef());
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
+
 
         itemListView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -92,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
                 if (value != null){
                     itemHandler.getItemList().clear();
                     for (QueryDocumentSnapshot doc : value) {
+                        String itemID = doc.getId();
+                        Log.d("ITEM ID QUERY", itemID);
                         String itemname = doc.getString("name");
                         Double pricename = doc.getDouble("price");
                         String dateinstring = doc.getString("date");
@@ -105,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname,
                                 pricename));
                         Item addItem = new Item();
+                        addItem.setId(itemID);
                         addItem.setName(itemname);
                         addItem.setPrice(pricename);
 
