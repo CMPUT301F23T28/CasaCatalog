@@ -8,40 +8,47 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
-import java.util.UUID;
 import java.text.SimpleDateFormat;
 
 public class DatabaseHandler {
     private FirebaseFirestore db;
     private CollectionReference itemsRef;
 
+    /**
+     * Constructor for the DatabaseHandler class.
+     * Initializes the Firebase Firestore instance and collection reference.
+     */
     public DatabaseHandler(){
         db = FirebaseFirestore.getInstance();
         itemsRef = db.collection("itemList");
     }
 
+    /**
+     * Exposes item ref
+     * @return Collections ref to itemList
+     */
     public CollectionReference getItemsRef() {
         return itemsRef;
     }
 
+    /**
+     * Adds an item to the Firestore database.
+     *
+     * @param item The Item object to be added.
+     */
     public void addItemDatabase(Item item) {
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("name", item.getName());
         data.put("price", item.getPrice());
         if (item.getDate() != null){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             data.put("date", sdf.format(item.getDate()));
         }
 
@@ -50,7 +57,7 @@ public class DatabaseHandler {
         data.put("description", item.getDescription());
         data.put("comments", item.getComment());
         data.put("serialNumber", item.getSerialNumber());
-        //        data.put("tags", item.getTags());
+        data.put("tags", item.getTagsAsStrings());
 
         itemsRef
                 .add(data)
@@ -86,6 +93,11 @@ public class DatabaseHandler {
                 });
     }
 
+    /**
+     * Deletes an item from the Firestore database.
+     *
+     * @param itemId The ID of the item to be deleted.
+     */
     public void deleteItemDatabase(String itemId) {
         // Check if the item exists before attempting to delete it
         itemsRef
