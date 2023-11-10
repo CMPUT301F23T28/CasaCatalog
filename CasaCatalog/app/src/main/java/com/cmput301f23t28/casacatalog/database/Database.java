@@ -15,8 +15,8 @@ public final class Database {
     private Database(){}
 
     /**
-     * Initializes the static instance of the TagDatabase.
-     * This method should be called at the beginning of the application lifecycle to ensure the database is set up.
+     * Initializes static instances of different database classes.
+     * This method should be called at the beginning of the application lifecycle to ensure the databases are set up.
      */
     public static void initialize(){
         users = new UserDatabase();
