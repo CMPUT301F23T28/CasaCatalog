@@ -26,7 +26,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
 
-
+/**
+ * Activity for adding a new item to the inventory.
+ * It allows users to enter item details, save the item to the database, and associate tags with the item.
+ */
 public class AddItemActivity  extends AppCompatActivity {
 
     private ItemHandler itemHandler;
@@ -46,6 +49,15 @@ public class AddItemActivity  extends AppCompatActivity {
     */
         // Needs photos too (not on UI yet)
 
+    /**
+     * Called when the activity is starting. This method is where most initialization should go:
+     * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
+     * to programmatically interact with widgets in the UI, and setting up listeners.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     *                           shut down then this Bundle contains the most recent data supplied
+     *                           in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_item);
@@ -137,6 +149,16 @@ public class AddItemActivity  extends AppCompatActivity {
         }
 
     // Receive data from EditTagsActivity
+
+    /**
+     * Callback for the result from launching EditTagsActivity.
+     * This method is invoked after the EditTagsActivity finishes and returns the selected tags.
+     *
+     * @param req The integer request code originally supplied to startActivityForResult(),
+     *            allowing you to identify who this result came from.
+     * @param res The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
