@@ -7,20 +7,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
-import com.google.android.material.chip.ChipGroup;
 
+/**
+ * ViewHolder for a tag item in a RecyclerView, used in TagsListAdapter.
+ * It holds the view for an individual tag and its associated data.
+ */
 public class TagHolder extends RecyclerView.ViewHolder {
     private TextView tagName;
 
+    /**
+     * Constructs a TagHolder with the specified itemView.
+     *
+     * @param itemView The view of the RecyclerView item.
+     */
     public TagHolder(@NonNull View itemView) {
         super(itemView);
         tagName = itemView.findViewById(R.id.tagName);
     }
 
+    /**
+     * Sets the name of the tag to the TextView.
+     *
+     * @param newName The new name to be set for the tag.
+     */
     public void setTagName(String newName) {
-        if (tagName != null){
+        if (tagName != null) {
             tagName.setText(newName);
         }
     }
-
 }
