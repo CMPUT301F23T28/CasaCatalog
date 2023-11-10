@@ -11,11 +11,18 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Manages the operations related to Tag storage and retrieval in Firestore.
+ */
 public class TagDatabase {
     private FirebaseFirestore db;
     private CollectionReference tagsRef;
     private ArrayList<Tag> tagList;
 
+    /**
+     * Constructs a TagDatabase and initializes the connection to Firestore's tag collection,
+     * setting up real-time data synchronization.
+     */
     public TagDatabase(){
         this.db = FirebaseFirestore.getInstance();
         this.tagsRef = db.collection("tags");
@@ -41,11 +48,21 @@ public class TagDatabase {
         });
     }
 
-    // Do not use to store into database!
+    /**
+     * Retrieves a copy of the local list of tags.
+     *
+     * @return An ArrayList of Tag objects currently in the local list.
+     */
     public ArrayList<Tag> getTags(){
         return this.tagList;
     }
 
+    /**
+     * Finds a tag by its name.
+     *
+     * @param name The name of the tag to find.
+     * @return The Tag object if found, null otherwise.
+     */
     public Tag findTagByName(String name){
         for(Tag t : Database.tags.getTags()){
             if(t.getName().contentEquals(name)) return t;
@@ -53,6 +70,12 @@ public class TagDatabase {
         return null;
     }
 
+    /**
+     * Creates a new tag with the given name and adds it to Firestore and the local list.
+     *
+     * @param name The name of the new tag to create.
+     * @return The new Tag object that was created.
+     */
     public Tag createTag(String name) {
         Tag newTag = new Tag(name);
 
@@ -67,6 +90,11 @@ public class TagDatabase {
         return newTag;
     }
 
+    /**
+     * Deletes a tag from Firestore and the local list based on the name.
+     *
+     * @param name The name of the tag to be deleted.
+     */
     public void deleteTag(String name) {
         DocumentReference doc = tagsRef.document(name);
         doc.get().addOnCompleteListener(task -> {
