@@ -37,29 +37,21 @@ public class ItemHandler {
         itemList.set(i, item);
     }
 
-    /**
-     * Deletes an item from the database using its unique ID.
-     *
-     * @param item The item to be deleted from the database.
-     */
+
     public void deleteItem(Item item) {
         db.deleteItemDatabase(item.getId());
     }
 
-    /**
-     * Deletes an item from the list based on the index.
-     * Note: The method body is commented out and needs implementation.
-     *
-     * @param i The index of the item in the list to be deleted.
-     */
-    public void deleteItem(int i) {
-        // itemList.remove(itemList.get(i).getId());
+
+
+    public void deleteItem(int i){
+        db.deleteItemDatabase(itemList.get(i).getId());
     }
 
-    /**
-     * Deletes all selected items from the database.
-     */
-    public void deleteSelectedItems() {
+    public void deleteItem(String ID){
+        db.deleteItemDatabase(ID);
+    }
+    public void deleteSelectedItems(){
         ArrayList<String> selectedItemsIds = new ArrayList<String>();
         for (Item item : itemList) {
             if (item.getSelected()) {
