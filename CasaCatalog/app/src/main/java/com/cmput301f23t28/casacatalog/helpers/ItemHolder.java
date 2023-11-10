@@ -62,7 +62,7 @@ public class ItemHolder extends RecyclerView.ViewHolder{
 
      /**
      * Set the UI Tags in the item row.
-     * @param itemTags
+     * @param chips
      */
     public void setItemTags(ArrayList<Chip> chips) {
         if( chips != null ){
