@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,24 +48,30 @@ public class AddItemActivity  extends AppCompatActivity {
         // Needs photos too (not on UI yet)
 
     protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_add_item);
-            // Need to reference the database from a different activity.
-            // This is kind of a bad way of doing this but if itemhandler always references the same
-            // database I don't think it should matter if I create a new one. Ideally this would
-            // probably reference the same itemhandler as mainactivity but this should work
-            itemHandler = new ItemHandler();
-            newItem = new Item();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_item);
+        // Need to reference the database from a different activity.
+        // This is kind of a bad way of doing this but if itemhandler always references the same
+        // database I don't think it should matter if I create a new one. Ideally this would
+        // probably reference the same itemhandler as mainactivity but this should work
+        itemHandler = new ItemHandler();
+        Item newItem = new Item();
 
-            final Button addButton = findViewById(R.id.addItemToListBtn);
+        final Button addButton = findViewById(R.id.addItemToListBtn);
+        final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
 
-            addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Feel free to get rid of below if it's not necessary (the javadoc)
-                    /**
-                     * Adds item to database, as well as the item list displayed in MainActivity.
-                     */
+        // Remove deletebutton (only for editing not adding)
+        ViewGroup layout = (ViewGroup) deleteButton.getParent();
+        if(null!=layout) //for safety only  as you are doing onClick
+            layout.removeView(deleteButton);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Feel free to get rid of below if it's not necessary (the javadoc)
+                /**
+                 * Adds item to database, as well as the item list displayed in MainActivity.
+                 */
 //                TextInputLayout itemName = findViewById(R.id.itemName);
 
                     TextInputLayout nameValue = findViewById(R.id.itemName);
