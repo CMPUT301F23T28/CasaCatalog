@@ -49,11 +49,11 @@ public class EditItemActivityTest {
             ActivityScenarioRule<MainActivity>(MainActivity.class);
 
     // OH GOD!!!! OH GOD
+    /**
+     * Tests clicking the 'add item' button, and whether the 'add item' activity appears.
+     */
     @Test
     public void testAddActivitySwitch() {
-        /**
-         * Tests clicking the 'add item' button, and whether the 'add item' activity appears.
-         */
         Intents.init();
         onView(withId(R.id.add_item_button)).perform(click());
         // Check activity switched
@@ -61,12 +61,12 @@ public class EditItemActivityTest {
         Intents.release();
     }
 
+    /**
+     * Opens the 'add item' activity, fills in the fields of the item, and adds it
+     * to the database.
+     */
     @Test
     public void testAddingItemToList() {
-        /**
-         * Opens the 'add item' activity, fills in the fields of the item, and adds it
-         * to the database.
-         */
         Intents.init();
         onView(withId(R.id.add_item_button)).perform(click());
         onView(withId(R.id.itemName)).perform(ViewActions.typeText("Toaster"));
@@ -80,11 +80,11 @@ public class EditItemActivityTest {
         Intents.release();
     }
 
+    /**
+     * Tests clicking an item, and whether the 'edit item' activity appears.
+     */
     @Test
     public void testEditActivitySwitch() {
-        /**
-         * Tests clicking an item, and whether the 'edit item' activity appears.
-         */
         Intents.init();
         // Click on the first item
         onData(anything()).inAdapterView(withId(R.id.items_list)).atPosition(0).perform(click());
@@ -93,12 +93,12 @@ public class EditItemActivityTest {
         Intents.release();
     }
 
+    /**
+     * Opens the 'edit item' activity, edits fields of the item, and edits it
+     * in the database.
+     */
     @Test
     public void testEditingItemInList() {
-        /**
-         * Opens the 'edit item' activity, edits fields of the item, and edits it
-         * in the database.
-         */
         Intents.init();
         onData(anything()).inAdapterView(withId(R.id.items_list)).atPosition(0).perform(click());
         onView(withId(R.id.itemName)).perform(ViewActions.typeText("Toaster2"));
@@ -111,11 +111,12 @@ public class EditItemActivityTest {
         Intents.release();
     }
 
+    /**
+     * Tests clicking an item, clicking delete button, and seeing if it is deleted from database.
+     */
     @Test
     public void testDeletingItem() {
-        /**
-         * Tests clicking an item, clicking delete button, and seeing if it is deleted from database.
-         */
+
         Intents.init();
         // Click on the first item
         onData(anything()).inAdapterView(withId(R.id.items_list)).atPosition(0).perform(click());
