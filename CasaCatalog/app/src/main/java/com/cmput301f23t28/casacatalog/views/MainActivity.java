@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Database.initialize();
+
+        Database.users.createUser(this, "Phil");
+
         itemHandler = new ItemHandler();
 
 //        Test delete method (won't work due to delay?)
