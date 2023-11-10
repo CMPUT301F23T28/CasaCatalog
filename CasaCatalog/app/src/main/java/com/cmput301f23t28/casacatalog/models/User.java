@@ -1,19 +1,21 @@
 package com.cmput301f23t28.casacatalog.models;
 
 
-/**
- * Represents a user with a name property.
- */
 import static java.security.AccessController.getContext;
 
 import android.content.Context;
 import android.provider.Settings;
 
+/**
+ * Represents a user with a name property.
+ */
 public class User {
     private String deviceId;
     private String name;
 
     /**
+     * Constructor for creating a new User with a given name.
+     * @param name A string representing the user's name.
      * Retrieves the name of the user.
      * @return A string representing the user's name.
      */
@@ -21,7 +23,9 @@ public class User {
         this.deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         this.name = name;
     }
+    public User(String name) {
 
+    }
     public String getDeviceId(){ return deviceId; }
 
     public String getName() {

@@ -19,6 +19,7 @@ public class UserActivity extends AppCompatActivity {
 
     private ImageView userProfileImage;
     private TextView usernameTextView;
+    private User user;
 
     /**
      * Called when the activity is starting.
@@ -57,9 +58,10 @@ public class UserActivity extends AppCompatActivity {
      * the userProfileImage ImageView with the user's profile image.
      */
     private void updateUI() {
+
+        //Set the profile image from resources
         usernameTextView.setText(Database.users.getCurrentUser().getName());
         // Set the profile image, if you have different images for different users
-
         userProfileImage.setImageResource(R.drawable.profile);
 
         findViewById(R.id.backButton).setOnClickListener(view -> finish());
