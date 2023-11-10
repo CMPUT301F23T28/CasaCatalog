@@ -24,6 +24,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
 
     private CollectionReference itemsRef;
 
+    /**
+     * Construct for an ItemListAdapter. Has access to the context, data and db reference.
+     * @param context
+     * @param itemList
+     * @param itemsRef
+     */
     public ItemListAdapter(Context context, ArrayList<Item> itemList, CollectionReference itemsRef) {
         super();
         this.context = context;
@@ -31,6 +37,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
         this.itemsRef = itemsRef;
     }
 
+    /**
+     * Inflates each item row
+     * @param parent The ViewGroup into which the new View will be added after it is bound to
+     *               an adapter position.
+     * @param viewType The view type of the new View.
+     *
+     * @return
+     */
     @NonNull
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,6 +53,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
         return new ItemHolder(view);
     }
 
+    /**
+     * Sets the values to each view component in the ItemRow.
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *        item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item item = itemList.get(position);
@@ -72,6 +92,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
         }
     }
 
+    /**
+     * Gets the number of items
+     * @return
+     */
     @Override
     public int getItemCount() {
         return itemList.size();
