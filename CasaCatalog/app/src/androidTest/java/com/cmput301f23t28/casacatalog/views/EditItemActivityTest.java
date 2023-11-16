@@ -66,7 +66,6 @@ public class EditItemActivityTest {
         Intents.release();
     }
 
-    // OH GOD!!!! OH GOD
     /**
      * Tests clicking the 'add item' button, and whether the 'add item' activity appears.
      */
@@ -76,7 +75,6 @@ public class EditItemActivityTest {
         onView(ViewMatchers.withId(R.id.add_item_button)).perform(click());
         // Check activity switched
         intended(hasComponent(AddItemActivity.class.getName()));
-        Intents.release();
     }
 
     /**
@@ -87,16 +85,16 @@ public class EditItemActivityTest {
     public void testAddingItemToList() {
 //        Intents.init();
         onView(withId(R.id.add_item_button)).perform(click());
+        int rand = new Random().nextInt(99);
         EspressoUtils.waitUntilVisible(onView(withId(R.id.itemNameInput)), 5000)
-                .perform(typeText("Toaster"));
+                .perform(typeText("AddItemTest" + rand));
         onView(withId(R.id.itemEstimatedValueInput)).perform(typeText("123.99"));
         onView(withId(R.id.itemPurchaseDateInput)).perform(typeText("12-12-2012"));
         onView(withId(R.id.itemDescriptionInput)).perform(typeText("Super dope toaster"));
         onView(withId(R.id.addItemToListBtn)).perform(ViewActions.scrollTo());
         onView(withId(R.id.addItemToListBtn)).perform(click());
 
-        //intended(hasComponent(MainActivity.class.getName())); // might not work :I
-        assertTrue(scenario != null);
+        onView(withText("AddItemTest" + rand)).check(matches(isDisplayed()));
 //        Intents.release();
     }
 
@@ -155,12 +153,10 @@ public class EditItemActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        // Click on the first item
-//        onView(withId(R.id.items_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
-        onView(withText("testDeletingItem")).perform(click());
+        // Click on the item we added.
+        onView(withText("testDeletingItem")).perform(ViewActions.scrollTo(), click());
         onView(withId(R.id.deleteItemFromListBtn)).perform(ViewActions.scrollTo());
         onView(withId(R.id.deleteItemFromListBtn)).perform(click());
-        // MIGHT bug bc toaster might not be first item in list uh oh
         onView(withText("testDeletingItem")).check(doesNotExist());
     }
 
