@@ -28,6 +28,7 @@ public class EditTagsActivity extends AppCompatActivity {
 
     /**
      * Initializes the activity, sets up the RecyclerView for tags, and handles creation and deletion of tags.
+     *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
      *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
      *                           Otherwise it is null.
@@ -55,8 +56,8 @@ public class EditTagsActivity extends AppCompatActivity {
         // when the back button is pressed
         findViewById(R.id.backButtonTempName).setOnClickListener(view -> {
             // Delete any tags with no uses
-            for(Tag tag : Database.tags.getTags()){
-                if(tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());
+            for (Tag tag : Database.tags.getTags()) {
+                if (tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());
             }
 
             // Send new tags copy back
