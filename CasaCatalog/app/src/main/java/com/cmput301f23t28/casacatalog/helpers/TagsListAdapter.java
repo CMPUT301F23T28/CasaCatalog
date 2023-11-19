@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
     private final Context context;
-    private ArrayList<Tag> newTags;
+    private final ArrayList<Tag> newTags;
 
     /**
      * Constructs a TagsListAdapter with the specified context and list of tags.

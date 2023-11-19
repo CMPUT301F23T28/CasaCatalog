@@ -1,17 +1,12 @@
 package com.cmput301f23t28.casacatalog.database;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
+import android.util.Log;
+import android.widget.TextView;
 
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -32,7 +27,7 @@ public class ItemDatabase {
     private ArrayList<Item> itemList;
 
     /**
-     * Constructs a ItemDatabase and initializes the connection to Firestore's tag collection,
+     * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection,
      * setting up real-time data synchronization.
      */
     public ItemDatabase() {
@@ -41,14 +36,19 @@ public class ItemDatabase {
         this.itemList = new ArrayList<>();
     }
 
-    public void registerListener(ItemListAdapter adapter){
+    /**
+     * Connects the item database to the RecyclerView UI
+     *
+     * @param adapter The ItemListAdapter currently associated with the ItemList view
+     */
+    public void registerListener(ItemListAdapter adapter, TextView totalValueText) {
         // Read item from database into itemList
         this.itemRef.addSnapshotListener((value, error) -> {
-            if (error != null){
+            if (error != null) {
                 Log.e("Firestore", error.toString());
                 return;
             }
-            if (value != null){
+            if (value != null) {
                 this.itemList.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     String itemID = doc.getId();
@@ -70,8 +70,7 @@ public class ItemDatabase {
                         }
                     }
 
-                    Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname,
-                            pricename));
+                    Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname, pricename));
                     Item addItem = new Item();
                     addItem.setId(itemID);
                     addItem.setName(itemname);
@@ -102,6 +101,11 @@ public class ItemDatabase {
                     addItem.setSerialNumber(itemSerialNumber);
 
                     this.itemList.add(addItem);
+
+                    // Update UI to reflect changes in state
+                    String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", Database.items.getTotalValue());
+                    totalValueText.setText(totalValueFormatted);
+
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -114,11 +118,10 @@ public class ItemDatabase {
      * @param item The Item object to be added.
      */
     public void add(Item item) {
-
         HashMap<String, Object> data = new HashMap<>();
         data.put("name", item.getName());
         data.put("price", item.getPrice());
-        if (item.getDate() != null){
+        if (item.getDate() != null) {
             // SSSHHH I DIDNT CHANGE ANYTHING
             //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             //data.put("date", sdf.format(item.getDate()));
@@ -134,36 +137,20 @@ public class ItemDatabase {
 
         this.itemRef
                 .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        String generatedDocumentId = documentReference.getId();
-                        Log.i("Firestore", "Item added with ID: " + generatedDocumentId);
+                .addOnSuccessListener(documentReference -> {
+                    String generatedDocumentId = documentReference.getId();
+                    Log.i("Firestore", "Item added with ID: " + generatedDocumentId);
 
-                        item.setId(generatedDocumentId);
-                        data.put("Id", item.getId());
-                        documentReference.set(data)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.i("Firestore", "ID field updated in Firestore document");
-                                        Log.i("Test fb", "Set ID to " + item.getId());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.e("Firestore", "Failed to update ID field in Firestore document: " + e.getMessage());
-                                    }
-                                });
-                    }
+                    item.setId(generatedDocumentId);
+                    data.put("Id", item.getId());
+                    documentReference.set(data)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.i("Firestore", "ID field updated in Firestore document");
+                                Log.i("Test fb", "Set ID to " + item.getId());
+                            })
+                            .addOnFailureListener(e -> Log.e("Firestore", "Failed to update ID field in Firestore document: " + e.getMessage()));
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Firestore", "Failed to add item to the database");
-                    }
-                });
+                .addOnFailureListener(e -> Log.e("Firestore", "Failed to add item to the database"));
     }
 
     /**
@@ -176,38 +163,30 @@ public class ItemDatabase {
         this.itemRef
                 .document(itemId)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                itemRef
-                                        .document(itemId)
-                                        .delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.i("Firestore", "Item deleted from the database");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.e("Firestore", "Failed to delete item from the database");
-                                            }
-                                        });
-                            } else {
-                                Log.w("Firestore", "Item does not exist in the database" + itemId);
-                            }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            itemRef
+                                    .document(itemId)
+                                    .delete()
+                                    .addOnSuccessListener(e -> Log.i("Firestore", "Item deleted from the database"))
+                                    .addOnFailureListener(e -> Log.e("Firestore", "Failed to delete item from the database"));
                         } else {
-                            Log.e("Firestore", "Error checking item existence: " + task.getException());
+                            Log.w("Firestore", "Item does not exist in the database" + itemId);
                         }
+                    } else {
+                        Log.e("Firestore", "Error checking item existence: " + task.getException());
                     }
                 });
     }
 
-    public double getTotalValue(){
+    /**
+     * Calculates the current total value of the item list
+     *
+     * @return Sum of value for all items in itemList
+     */
+    public double getTotalValue() {
         double totalValue = 0;
         for (Item item : this.itemList) {
             if (item.getPrice() != null) {
@@ -217,27 +196,34 @@ public class ItemDatabase {
         return totalValue;
     }
 
-    public ArrayList<Item> getItems(){
+    /**
+     * Retrieves a reference to the item list
+     *
+     * @return the itemList arraylist
+     */
+    public ArrayList<Item> getItems() {
         return this.itemList;
     }
 
-    public CollectionReference getCollection(){
+    /**
+     * Retrieves a reference to the Firestore collection representing the item list
+     *
+     * @return a CollectionReference to Firestore's itemList collection
+     */
+    public CollectionReference getCollection() {
         return this.itemRef;
     }
 
     /**
      * Delete all items current selected in the itemList.
+     *
      * @deprecated
      */
-    public void deleteSelected(){
+    public void deleteSelected() {
         ArrayList<String> selectedItemsIds = new ArrayList<String>();
         for (Item item : itemList) {
-            if (item.getSelected()) {
-                selectedItemsIds.add(item.getId());
-            }
+            if (item.getSelected()) selectedItemsIds.add(item.getId());
         }
-        for (String id : selectedItemsIds) {
-            this.delete(id);
-        }
+        for (String id : selectedItemsIds) this.delete(id);
     }
 }
