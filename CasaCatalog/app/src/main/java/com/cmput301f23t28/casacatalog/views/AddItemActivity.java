@@ -11,8 +11,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -28,7 +28,6 @@ import java.util.Locale;
  */
 public class AddItemActivity  extends AppCompatActivity {
 
-    private ItemHandler itemHandler;
     private Item newItem;
 
     /*
@@ -57,11 +56,6 @@ public class AddItemActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-        // Need to reference the database from a different activity.
-        // This is kind of a bad way of doing this but if itemhandler always references the same
-        // database I don't think it should matter if I create a new one. Ideally this would
-        // probably reference the same itemhandler as mainactivity but this should work
-        itemHandler = new ItemHandler();
         newItem = new Item();
 
         final Button addButton = findViewById(R.id.addItemToListBtn);
@@ -135,7 +129,7 @@ public class AddItemActivity  extends AppCompatActivity {
                     }
 
 
-                    itemHandler.addItem(newItem);
+                    Database.items.add(newItem);
 
                     finish();
                 }

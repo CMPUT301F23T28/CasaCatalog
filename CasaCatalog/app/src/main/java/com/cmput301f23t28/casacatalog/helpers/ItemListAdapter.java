@@ -26,7 +26,6 @@ import java.util.ArrayList;
 public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
     private final Context context;
     private ArrayList<Item> itemList;
-
     private CollectionReference itemsRef;
 
     /**
