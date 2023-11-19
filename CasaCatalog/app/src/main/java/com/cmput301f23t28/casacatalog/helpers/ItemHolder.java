@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * A RecyclerView ViewHolder that stores all data related to rendering an item in the ItemList
  */
-public class ItemHolder extends RecyclerView.ViewHolder{
+public class ItemHolder extends RecyclerView.ViewHolder {
     private TextView ItemName;
     private TextView ItemPurchaseDate;
     private TextView ItemPrice;
@@ -23,6 +23,7 @@ public class ItemHolder extends RecyclerView.ViewHolder{
 
     /**
      * Constructor for ItemHolder. Basically connects the UI elements to an in code reference.
+     *
      * @param itemView The item view.
      */
     public ItemHolder(@NonNull View itemView) {
@@ -35,43 +36,47 @@ public class ItemHolder extends RecyclerView.ViewHolder{
 
     /**
      * Sets the UI Item Component in the item row.
+     *
      * @param itemName The name of the item.
      */
     public void setItemName(String itemName) {
-        if (ItemName != null){
+        if (ItemName != null) {
             ItemName.setText(itemName);
         }
     }
 
     /**
      * Sets the UI Item Purchase Date in the item row.
+     *
      * @param itemPurchaseDate The purchase date of the item.
      */
     public void setItemPurchaseDate(String itemPurchaseDate) {
-        if (ItemPurchaseDate != null){
+        if (ItemPurchaseDate != null) {
             ItemPurchaseDate.setText(itemPurchaseDate);
         }
     }
 
     /**
      * Set the UI Item Price in the item row.
+     *
      * @param itemPrice The price of the item.
      */
     public void setItemPrice(String itemPrice) {
-        if (ItemPrice != null){
+        if (ItemPrice != null) {
             ItemPrice.setText(itemPrice);
         }
 
     }
 
-     /**
+    /**
      * Set the UI Tags in the item row.
+     *
      * @param chips An array of chips to add to the ChipGroup.
      */
     public void setItemTags(ArrayList<Chip> chips) {
-        if( chips != null ){
+        if (chips != null) {
             ItemTags.removeAllViews();
-            for(Chip c : chips) ItemTags.addView(c);
+            for (Chip c : chips) ItemTags.addView(c);
         }
     }
 }
