@@ -10,8 +10,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -26,7 +26,6 @@ import java.util.Locale;
      */
 public class EditItemActivity extends AppCompatActivity {
 
-    private ItemHandler itemHandler;
     private int listPosition;
     private Item editingItem;
     // Temporary solution so i dont convert string to date because im lazy
@@ -105,9 +104,6 @@ public class EditItemActivity extends AppCompatActivity {
             //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
         }
 
-
-        itemHandler = new ItemHandler();
-
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
 
@@ -133,7 +129,7 @@ public class EditItemActivity extends AppCompatActivity {
                 // Add rest of attributes as well (make model desc. comment etc)
 
                 // Delete item from database, and add new item with new attributes
-                itemHandler.deleteItem(editingItem.getId());
+                Database.items.delete(editingItem.getId());
                 // Now add new item
                 if (itemNameText.getEditText().getText().toString() != null) {
                     editingItem.setName(itemNameText.getEditText().getText().toString());
@@ -185,7 +181,7 @@ public class EditItemActivity extends AppCompatActivity {
                     editingItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
                 }
 
-                itemHandler.addItem(editingItem);
+                Database.items.add(editingItem);
 
                 finish();
             }
@@ -200,7 +196,7 @@ public class EditItemActivity extends AppCompatActivity {
                 // Feel free to get rid of below if it's not necessary (the javadoc)
 
 
-                itemHandler.deleteItem(editingItem.getId());
+                Database.items.delete(editingItem.getId());
 
                 finish();
             }
