@@ -121,6 +121,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> {
 
             holder.setItemTags(chips);
         }
+
+        // working on implementing multi select
+        holder.itemView.set
     }
 
     /**
