@@ -13,7 +13,7 @@ import com.cmput301f23t28.casacatalog.R;
  * It holds the view for an individual tag and its associated data.
  */
 public class TagHolder extends RecyclerView.ViewHolder {
-    private TextView tagName;
+    private final TextView tagName;
 
     /**
      * Constructs a TagHolder with the specified itemView.

@@ -1,11 +1,9 @@
 package com.cmput301f23t28.casacatalog.database;
+
 import android.content.Context;
-import android.content.Intent;
-import android.provider.Settings;
 
 import com.cmput301f23t28.casacatalog.models.User;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
-import com.cmput301f23t28.casacatalog.views.NewUserActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
