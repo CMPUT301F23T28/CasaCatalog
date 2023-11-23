@@ -25,7 +25,7 @@ public class Item implements Serializable {
     private String description;
     private String comment;
     private String serialNumber;
-    private Boolean selected;
+    private Boolean selected = false;
 
     /**
      * Default constructor initializing the tags list.
