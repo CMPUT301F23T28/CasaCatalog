@@ -20,11 +20,21 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 
+/**
+ * The sorting dialog fragment is presented when the user requests to sort the item list
+ * It gives the options of what item property to sort by and in which order.
+ */
 public class SortDialog extends DialogFragment {
     public static final String TAG = "DIALOG_SORT";
-    private static String sortByType = "Date";
-    private static String sortOrder = "Descending";
+    private static String sortByType = ItemSorting.Type.date.name();
+    private static String sortOrder = ItemSorting.Order.descending.name();
 
+    /**
+     * Initializes the activity, registers listeners to allow inputting into spinners.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise it is null.
+     */
     @Override @NonNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -68,7 +78,7 @@ public class SortDialog extends DialogFragment {
         builder.setTitle("Sort by");  // TODO: extract to string resource file
         builder.setNegativeButton(getString(android.R.string.no), null);
         builder.setPositiveButton(getString(android.R.string.yes), (dialogInterface, i) -> {
-            Database.items.sort(new ItemSorting(sortByType, sortOrder).getComparator());
+            Database.items.sort(new ItemSorting(sortByType, sortOrder));
             Toast.makeText(this.getContext(), "Sorted items.", Toast.LENGTH_SHORT).show();
         });
         return builder.create();

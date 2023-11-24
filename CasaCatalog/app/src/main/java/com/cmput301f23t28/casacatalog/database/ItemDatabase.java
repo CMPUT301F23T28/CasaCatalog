@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.firebase.firestore.CollectionReference;
@@ -110,7 +111,9 @@ public class ItemDatabase {
                     String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", Database.items.getTotalValue());
                     totalValueText.setText(totalValueFormatted);
 
-                    adapter.notifyDataSetChanged();
+                    // Sort item list by default settings
+                    // (this also updates adapter)
+                    this.sort(new ItemSorting());
                 }
             }
         });
@@ -219,17 +222,16 @@ public class ItemDatabase {
     }
 
     /**
-     * Given a comparator, sorts the item list based on it
-     * @param comp An Item comparator
+     * Given an ItemSorting, sorts the item list based on it
+     * @param sorting An instance of ItemSorting
      */
-    public void sort(Comparator<Item> comp){
-        this.itemList.sort(comp);
-        this.adapter.notifyDataSetChanged();
+    public void sort(ItemSorting sorting){
+        this.itemList.sort(sorting.getComparator());
+        this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
     }
 
     /**
      * Delete all items current selected in the itemList.
-     *
      * @deprecated
      */
     public void deleteSelected() {
