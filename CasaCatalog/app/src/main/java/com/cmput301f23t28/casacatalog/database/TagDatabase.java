@@ -1,4 +1,5 @@
 package com.cmput301f23t28.casacatalog.database;
+
 import android.util.Log;
 
 import com.cmput301f23t28.casacatalog.models.Tag;
@@ -23,24 +24,25 @@ public class TagDatabase {
      * Constructs a TagDatabase and initializes the connection to Firestore's tag collection,
      * setting up real-time data synchronization.
      */
-    public TagDatabase(){
+    public TagDatabase() {
         this.db = FirebaseFirestore.getInstance();
         this.tagsRef = db.collection("tags");
         this.tagList = new ArrayList<>();
 
         // Read tags from database into tagList
         this.tagsRef.addSnapshotListener((value, error) -> {
-            if (error != null){
+            if (error != null) {
                 Log.e("Firestore", error.toString());
                 return;
             }
-            if (value != null){
-                for (QueryDocumentSnapshot doc : value){
-                    if(doc != null) {
+            if (value != null) {
+                for (QueryDocumentSnapshot doc : value) {
+                    if (doc != null) {
                         Tag newTag = new Tag(doc.getId());
-                        if(doc.getLong("uses") != null) {
+                        if (doc.getLong("uses") != null) {
                             newTag.setUses(doc.getLong("uses").intValue());
                         }
+                        Log.i("Firestore", String.format("Tag(%s,%s) fetched", newTag.getName(), newTag.getUses()));
                         this.tagList.add(newTag);
                     }
                 }
@@ -53,7 +55,7 @@ public class TagDatabase {
      *
      * @return An ArrayList of Tag objects currently in the local list.
      */
-    public ArrayList<Tag> getTags(){
+    public ArrayList<Tag> getTags() {
         return this.tagList;
     }
 
@@ -63,9 +65,9 @@ public class TagDatabase {
      * @param name The name of the tag to find.
      * @return The Tag object if found, null otherwise.
      */
-    public Tag findTagByName(String name){
-        for(Tag t : Database.tags.getTags()){
-            if(t.getName().contentEquals(name)) return t;
+    public Tag findTagByName(String name) {
+        for (Tag t : Database.tags.getTags()) {
+            if (t.getName().contentEquals(name)) return t;
         }
         return null;
     }
@@ -83,10 +85,12 @@ public class TagDatabase {
         data.put("name", newTag.getName());
         data.put("uses", newTag.getUses());
 
-        // TODO: log success and failure
-        tagsRef.document(newTag.getName()).set(data).addOnSuccessListener(doc -> {
-            this.tagList.add(newTag);
-        });
+        tagsRef.document(newTag.getName()).set(data)
+                .addOnSuccessListener(doc -> {
+                    this.tagList.add(newTag);
+                    Log.i("Firestore", "Tag added with name: " + newTag.getName());
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Failed to add tag to the database"));
         return newTag;
     }
 
@@ -100,7 +104,7 @@ public class TagDatabase {
         doc.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if (document.exists()){
+                if (document.exists()) {
                     doc.delete()
                             .addOnSuccessListener(unused -> {
                                 // Update local taglist accordingly

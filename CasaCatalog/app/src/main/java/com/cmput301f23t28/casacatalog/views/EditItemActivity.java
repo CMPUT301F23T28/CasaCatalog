@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -20,13 +19,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-    /**
-     * Activity for editing an existing item. Inherits functionality from AddItemActivity
-     * and repurposes it for editing items.
-     */
+
+/**
+ * Activity for editing an existing item. Inherits functionality from AddItemActivity
+ * and repurposes it for editing items.
+ */
 public class EditItemActivity extends AppCompatActivity {
 
-    private ItemHandler itemHandler;
     private int listPosition;
     private Item editingItem;
     // Temporary solution so i dont convert string to date because im lazy
@@ -41,6 +40,7 @@ public class EditItemActivity extends AppCompatActivity {
     TextInputLayout itemModelText;
     TextInputLayout itemSerialNumberText;
     TextInputLayout itemCommentText;
+
     /**
      * Called when the activity is starting. This is where most initialization should go:
      * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
@@ -105,9 +105,6 @@ public class EditItemActivity extends AppCompatActivity {
             //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
         }
 
-
-        itemHandler = new ItemHandler();
-
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
 
@@ -122,88 +119,74 @@ public class EditItemActivity extends AppCompatActivity {
         */
 
         editButton.setText(R.string.item_edit_button_text);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Edits item in database, as well as on the item list displayed in MainActivity.
-             */
-            @Override
-            public void onClick(View view) {
-                // Feel free to get rid of below if it's not necessary (the javadoc)
+        // Edits item in database, as well as on the item list displayed in MainActivity.
+        editButton.setOnClickListener(view -> {
+            // Feel free to get rid of below if it's not necessary (the javadoc)
 
-                // Add rest of attributes as well (make model desc. comment etc)
+            // Add rest of attributes as well (make model desc. comment etc)
 
-                // Delete item from database, and add new item with new attributes
-                itemHandler.deleteItem(editingItem.getId());
-                // Now add new item
-                if (itemNameText.getEditText().getText().toString() != null) {
-                    editingItem.setName(itemNameText.getEditText().getText().toString());
-                }
-
-
-                // adds the price
-                if (!itemValueText.getEditText().getText().toString().isEmpty()) {
-                    double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
-                    editingItem.setPrice(price);
-                }
-
-                // adds the date (FAKE FOR NOW)
-                editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
-                // Real date adding
-                if (!itemDateText.getEditText().getText().toString().isEmpty()) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
-                    try{
-                        Date date = formatter.parse(itemDateText.getEditText().getText().toString());
-                        editingItem.setDate(date);
-                    } catch (ParseException e){
-                        Log.e("ParseExceptionEdit", "ParseException"+ e.toString());
-                    }
-                }
-
-                // Add rest of attributes as well
-                TextInputLayout makeValue = findViewById(R.id.itemMake);
-                if (makeValue.getEditText().getText().toString() != null) {
-                    editingItem.setMake(makeValue.getEditText().getText().toString());
-                }
-
-                TextInputLayout modelValue = findViewById(R.id.itemModel);
-                if (modelValue.getEditText().getText().toString() != null) {
-                    editingItem.setModel(modelValue.getEditText().getText().toString());
-                }
-
-                TextInputLayout descriptionValue = findViewById(R.id.itemDescription);
-                if (descriptionValue.getEditText().getText().toString() != null) {
-                    editingItem.setDescription(descriptionValue.getEditText().getText().toString());
-                }
-
-                TextInputLayout commentValue = findViewById(R.id.itemComments);
-                if (commentValue.getEditText().getText().toString() != null) {
-                    editingItem.setComment(commentValue.getEditText().getText().toString());
-                }
-
-                TextInputLayout serialNumberValue = findViewById(R.id.itemSerialNumber);
-                if (serialNumberValue.getEditText().getText().toString() != null) {
-                    editingItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
-                }
-
-                itemHandler.addItem(editingItem);
-
-                finish();
+            // Delete item from database, and add new item with new attributes
+            Database.items.delete(editingItem.getId());
+            // Now add new item
+            if (itemNameText.getEditText().getText().toString() != null) {
+                editingItem.setName(itemNameText.getEditText().getText().toString());
             }
+
+
+            // adds the price
+            if (!itemValueText.getEditText().getText().toString().isEmpty()) {
+                double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
+                editingItem.setPrice(price);
+            }
+
+            // adds the date (FAKE FOR NOW)
+            editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
+            // Real date adding
+            if (!itemDateText.getEditText().getText().toString().isEmpty()) {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
+                try {
+                    Date date = formatter.parse(itemDateText.getEditText().getText().toString());
+                    editingItem.setDate(date);
+                } catch (ParseException e) {
+                    Log.e("ParseExceptionEdit", "ParseException" + e.toString());
+                }
+            }
+
+            // Add rest of attributes as well
+            TextInputLayout makeValue = findViewById(R.id.itemMake);
+            if (makeValue.getEditText().getText().toString() != null) {
+                editingItem.setMake(makeValue.getEditText().getText().toString());
+            }
+
+            TextInputLayout modelValue = findViewById(R.id.itemModel);
+            if (modelValue.getEditText().getText().toString() != null) {
+                editingItem.setModel(modelValue.getEditText().getText().toString());
+            }
+
+            TextInputLayout descriptionValue = findViewById(R.id.itemDescription);
+            if (descriptionValue.getEditText().getText().toString() != null) {
+                editingItem.setDescription(descriptionValue.getEditText().getText().toString());
+            }
+
+            TextInputLayout commentValue = findViewById(R.id.itemComments);
+            if (commentValue.getEditText().getText().toString() != null) {
+                editingItem.setComment(commentValue.getEditText().getText().toString());
+            }
+
+            TextInputLayout serialNumberValue = findViewById(R.id.itemSerialNumber);
+            if (serialNumberValue.getEditText().getText().toString() != null) {
+                editingItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
+            }
+
+            Database.items.add(editingItem);
+
+            finish();
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Deletes item from database, as well as on the item list displayed in MainActivity.
-             */
-            @Override
-            public void onClick(View view) {
-                // Feel free to get rid of below if it's not necessary (the javadoc)
-
-
-                itemHandler.deleteItem(editingItem.getId());
-
-                finish();
-            }
+        // Deletes item from database, as well as on the item list displayed in MainActivity.
+        deleteButton.setOnClickListener(view -> {
+            Database.items.delete(editingItem.getId());
+            finish();
         });
 
         // Add tag button that launches TagsActivity
@@ -216,33 +199,33 @@ public class EditItemActivity extends AppCompatActivity {
 
     }
 
-        /**
-         * Callback for the result from launching EditTagsActivity.
-         * This method is invoked after the EditTagsActivity finishes and returns the selected tags.
-         *
-         * @param req The integer request code originally supplied to startActivityForResult(),
-         *            allowing you to identify who this result came from.
-         * @param res The integer result code returned by the child activity through its setResult().
-         * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-         */
-        @Override
-        protected void onActivityResult(int req, int res, Intent data) {
-            super.onActivityResult(req, res, data);
-            if (req == 200) {  // TODO: enum instead of hardcoded id
-                if (res == Activity.RESULT_OK) {
-                    // TODO: use parcelable instead of serializable
-                    ArrayList<Tag> newTags = (ArrayList<Tag>) data.getSerializableExtra("tags");
-                    // Add new tags to item, if we are editing one
-                    if (editingItem != null) {
-                        for (Tag tag : newTags) {
-                            tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
-                        }
-                        editingItem.setTags(newTags);
+    /**
+     * Callback for the result from launching EditTagsActivity.
+     * This method is invoked after the EditTagsActivity finishes and returns the selected tags.
+     *
+     * @param req  The integer request code originally supplied to startActivityForResult(),
+     *             allowing you to identify who this result came from.
+     * @param res  The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
+    @Override
+    protected void onActivityResult(int req, int res, Intent data) {
+        super.onActivityResult(req, res, data);
+        if (req == 200) {  // TODO: enum instead of hardcoded id
+            if (res == Activity.RESULT_OK) {
+                // TODO: use parcelable instead of serializable
+                ArrayList<Tag> newTags = (ArrayList<Tag>) data.getSerializableExtra("tags");
+                // Add new tags to item, if we are editing one
+                if (editingItem != null) {
+                    for (Tag tag : newTags) {
+                        tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
                     }
-
+                    editingItem.setTags(newTags);
                 }
 
             }
-        }
 
+        }
     }
+
+}
