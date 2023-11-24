@@ -22,4 +22,17 @@
     <string name="item_photos_text">Photos</string>
 
     <string name="item_edit_button_text">Edit Item</string>
+
+    <string-array name="type_choices">
+        <item>Date</item>
+        <item>Description</item>
+        <item>Make</item>
+        <item>Estimated Value</item>
+        <item>Tag</item>
+    </string-array>
+
+    <string-array name="order_choices">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>
