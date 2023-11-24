@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -25,6 +26,7 @@ public class ItemDatabase {
     private FirebaseFirestore db;
     private CollectionReference itemRef;
     private ArrayList<Item> itemList;
+    private ItemListAdapter adapter;
 
     /**
      * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection,
@@ -42,6 +44,8 @@ public class ItemDatabase {
      * @param adapter The ItemListAdapter currently associated with the ItemList view
      */
     public void registerListener(ItemListAdapter adapter, TextView totalValueText) {
+        this.adapter = adapter;
+
         // Read item from database into itemList
         this.itemRef.addSnapshotListener((value, error) -> {
             if (error != null) {
@@ -212,6 +216,15 @@ public class ItemDatabase {
      */
     public CollectionReference getCollection() {
         return this.itemRef;
+    }
+
+    /**
+     * Given a comparator, sorts the item list based on it
+     * @param comp An Item comparator
+     */
+    public void sort(Comparator<Item> comp){
+        this.itemList.sort(comp);
+        this.adapter.notifyDataSetChanged();
     }
 
     /**
