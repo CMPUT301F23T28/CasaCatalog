@@ -27,7 +27,7 @@
         <item>Date</item>
         <item>Description</item>
         <item>Make</item>
-        <item>Estimated Value</item>
+        <item>Value</item>
         <item>Tag</item>
     </string-array>
 

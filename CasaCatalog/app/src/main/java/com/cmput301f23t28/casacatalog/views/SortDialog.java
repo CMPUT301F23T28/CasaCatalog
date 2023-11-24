@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 
 public class SortDialog extends DialogFragment {
     public static final String TAG = "DIALOG_SORT";
@@ -66,17 +67,10 @@ public class SortDialog extends DialogFragment {
         builder.setView(view);
         builder.setTitle("Sort by");  // TODO: extract to string resource file
         builder.setNegativeButton(getString(android.R.string.no), null);
-        builder.setPositiveButton(getString(android.R.string.yes), (dialogInterface, i) -> handleSort());
-        return builder.create();
-    }
-
-    // TODO: handle sorting by more than just price
-    private void handleSort(){
-        Database.items.sort((a, b) -> {
-            if (a.getPrice() == b.getPrice()) return 0;
-            return a.getPrice() < b.getPrice() ? -1 : 1;
+        builder.setPositiveButton(getString(android.R.string.yes), (dialogInterface, i) -> {
+            Database.items.sort(new ItemSorting(sortByType, sortOrder).getComparator());
+            Toast.makeText(this.getContext(), "Sorted items.", Toast.LENGTH_SHORT).show();
         });
-        Toast.makeText(this.getContext(), sortByType + ", " + sortOrder, Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this.getContext(), "Sorted items.", Toast.LENGTH_SHORT).show();
+        return builder.create();
     }
 }
