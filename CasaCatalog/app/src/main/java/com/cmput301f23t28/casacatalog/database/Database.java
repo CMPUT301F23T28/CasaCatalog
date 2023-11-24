@@ -6,6 +6,7 @@ package com.cmput301f23t28.casacatalog.database;
  */
 public final class Database {
 
+    public static ItemDatabase items;
     public static TagDatabase tags;
     public static UserDatabase users;
 
@@ -19,6 +20,7 @@ public final class Database {
      * This method should be called at the beginning of the application lifecycle to ensure the databases are set up.
      */
     public static void initialize(){
+        items = new ItemDatabase();
         users = new UserDatabase();
         tags = new TagDatabase();
     }
