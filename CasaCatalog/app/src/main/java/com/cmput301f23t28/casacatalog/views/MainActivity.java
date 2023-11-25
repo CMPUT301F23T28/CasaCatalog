@@ -85,8 +85,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
                 itemAdapter.setEditingState(false);
             }
             if (!anySelected) {
-                // make a toast or something pop up.
-                CharSequence text = "No items were selected.";
+                String text = "No items were selected.";
                 Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
             }
 
