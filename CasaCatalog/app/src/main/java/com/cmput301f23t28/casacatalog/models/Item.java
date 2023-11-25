@@ -26,7 +26,7 @@ public class Item implements Serializable {
     private String Description;
     private String comment;
     private String serialNumber;
-    private Boolean selected;
+    private Boolean selected = false;
 
     /**
      * Default constructor initializing the tags list.
@@ -266,5 +266,12 @@ public class Item implements Serializable {
      */
     public void setSelected(Boolean selected) {
         this.selected = selected;
+    }
+
+    /**
+     * Toggles the selected state.
+     */
+    public void toggleSelected() {
+        this.selected = !this.selected;
     }
 }

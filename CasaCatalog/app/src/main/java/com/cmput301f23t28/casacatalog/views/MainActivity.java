@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.ItemHandler;
 import com.cmput301f23t28.casacatalog.models.Tag;
@@ -37,7 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * It initializes the database, item handler, and sets up the main user interface,
  * including the RecyclerView for items and listeners for UI elements.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements VisibilityCallback {
     public static String deviceId;
     private ArrayList<Item> itemList;
     private RecyclerView itemListView;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ItemHandler itemHandler;
     private ItemListAdapter itemAdapter;
+    private FloatingActionButton editTagsButton;
+    private FloatingActionButton trashButton;
 
     /**
      * Initializes the activity, sets up the database, and configures the RecyclerView.
@@ -76,9 +80,11 @@ public class MainActivity extends AppCompatActivity {
 //        Log.e("TEst id", itemTest.getId());
 //        itemHandler.deleteItem(itemTest);
 
+        trashButton = findViewById(R.id.delete_items_button);
+        editTagsButton = findViewById(R.id.add_tag_items_button);
 
 
-        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList(), itemHandler.getDb().getItemsRef());
+        itemAdapter = new ItemListAdapter(this, itemHandler.getItemList(), itemHandler.getDb().getItemsRef(), this);
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
 
@@ -182,6 +188,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        trashButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (Item item: itemList) {
+                    if (item.getSelected() == true) {
+                        item.getId();
+                    }
+                }
+            }
+        });
+
         // Find the userProfileImage view by its ID and set an OnClickListener
         CircleImageView userProfileImage = findViewById(R.id.userProfileImage);
         userProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -193,5 +210,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void toggleVisibility() {
+        if (editTagsButton != null && trashButton != null) {
+            if (editTagsButton.getVisibility() == View.VISIBLE && trashButton.getVisibility() == View.VISIBLE) {
+                editTagsButton.setVisibility(View.GONE);
+                trashButton.setVisibility(View.GONE);
+            } else {
+                editTagsButton.setVisibility(View.VISIBLE);
+                trashButton.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }
