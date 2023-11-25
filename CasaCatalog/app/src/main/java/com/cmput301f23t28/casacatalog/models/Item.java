@@ -266,4 +266,11 @@ public class Item implements Serializable {
     public void setSelected(Boolean selected) {
         this.selected = selected;
     }
+
+    /**
+     * Toggles the selected state.
+     */
+    public void toggleSelected() {
+        this.selected = !this.selected;
+    }
 }
