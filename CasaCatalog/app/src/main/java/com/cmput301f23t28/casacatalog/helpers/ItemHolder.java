@@ -30,6 +30,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     private ChipGroup ItemTags;
     private ItemListClickListener mListener;
     private ConstraintLayout ItemContainer;
+    private int backgroundColor = Color.WHITE;
 
     /**
      * Constructor for ItemHolder. Basically connects the UI elements to an in code reference.
@@ -124,5 +125,17 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         if (mListener != null) {
             mListener.onItemClick(getAdapterPosition(), this);
         }
+    }
+
+    /**
+     * Gets the selected style color as an int.
+     * @return
+     */
+    public int getSelectedStyle() {
+        Drawable background = ItemContainer.getBackground();
+        if (background instanceof ColorDrawable) {
+            return ((ColorDrawable) background).getColor();
+        }
+        return 0;
     }
 }
