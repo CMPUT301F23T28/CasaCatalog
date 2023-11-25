@@ -3,6 +3,9 @@ package com.cmput301f23t28.casacatalog.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,8 +16,6 @@ import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.ItemHandler;
-import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         editTagsButton = findViewById(R.id.add_tag_items_button);
 
 
-        itemAdapter = new ItemListAdapter(this, Database.items.getItems());
+        itemAdapter = new ItemListAdapter(this, Database.items.getItems(), this);
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));
@@ -71,15 +72,26 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         final FloatingActionButton addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddItemActivity.class)));
 
-        trashButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (Item item: itemList) {
-                    if (item.getSelected() == true) {
-                        item.getId();
-                    }
+        // handles deletion of selection items
+        trashButton.setOnClickListener(v -> {
+            boolean anySelected = false;
+            for (Item item: Database.items.getItems()) {
+
+                if (item.getSelected()) {
+                    anySelected = true;
+                    Log.i("CRUD", "Deleted item. Name: " + item.getName() + ". Id: " + item.getId());
+                    Database.items.delete(item.getId());
                 }
+                itemAdapter.setEditingState(false);
             }
+            if (!anySelected) {
+                // make a toast or something pop up.
+                CharSequence text = "No items were selected.";
+                Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
+            }
+
+            // hide buttons
+            toggleVisibility();
         });
 
         // Find the userProfileImage view by its ID and set an OnClickListener
@@ -88,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
 
     }
 
+    /**
+     * Toggles the visibility of the trash and edit tags buttons
+     */
     @Override
     public void toggleVisibility() {
         if (editTagsButton != null && trashButton != null) {

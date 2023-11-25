@@ -70,16 +70,12 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         }
     }
 
-    public void toggleSelected() {
-        Drawable background = ItemContainer.getBackground();
-        if (background instanceof ColorDrawable) {
-            int color = ((ColorDrawable) background).getColor();
-            if (color == Color.WHITE) {
-                ItemContainer.setBackgroundColor(Color.LTGRAY);
-            } else {
-                ItemContainer.setBackgroundColor(Color.WHITE);
-            }
-        }
+    /**
+     * Sets the background color of the main container in the ViewHolder.
+     * @param color the color!
+     */
+    public void setSelectedStyle(int color) {
+        ItemContainer.setBackgroundColor(color);
     }
     /**
      * Set the UI Item Price in the item row.
@@ -103,7 +99,12 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         }
     }
 
-
+    /**
+     * Called when a long click is detected on the ViewHolder's view.
+     * Notifies the registered listener about the long click event.
+     * @param v The view that was clicked.
+     * @return True if the listener consumes the long click, false otherwise.
+     */
     @Override
     public boolean onLongClick(View v) {
         if (mListener != null) {
@@ -113,6 +114,11 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         return false;
     }
 
+    /**
+     * Called when a click is detected on the ViewHolder's view.
+     * Notifies the registered listener about the click event.
+     * @param v The view that was clicked.
+     */
     @Override
     public void onClick(View v) {
         if (mListener != null) {
