@@ -28,7 +28,7 @@ import java.util.Random;
 @RunWith(AndroidJUnit4.class) @LargeTest
 public class MainActivityTest {
     @Rule
-    public ActivityScenarioRule<MainActivity> scenario = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> scenario = new ActivityScenarioRule<>(MainActivity.class);
 
     /**
      * Test for deleting single item.
@@ -75,7 +75,7 @@ public class MainActivityTest {
     /**
      * TODO: Refactor so the code is not duplicated in other tests.
      * Adds an item to the database.
-     * @param itemName
+     * @param itemName the name to give to the new item
      */
     public void addTestItemTestData(String itemName) {
         onView(withId(R.id.add_item_button)).perform(click());
