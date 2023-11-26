@@ -30,8 +30,6 @@ public class TextRecognitionHelper {
     - ByteBuffer
     - ByteArray
     - Bitmap
-
-    For now I will use file URI
      */
 
     // Prepare the Input Image
