@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CasaCatalog"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" ></meta-data>
         <activity
             android:name=".views.MainActivity"
             android:exported="true">
