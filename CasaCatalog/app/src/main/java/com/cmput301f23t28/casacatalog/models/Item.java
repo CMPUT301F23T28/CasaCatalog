@@ -2,7 +2,6 @@ package com.cmput301f23t28.casacatalog.models;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,10 +22,10 @@ public class Item implements Serializable {
     private ArrayList<Tag> tags;
     private String make;
     private String model;
-    private String Description;
+    private String description;
     private String comment;
     private String serialNumber;
-    private Boolean selected;
+    private Boolean selected = false;
 
     /**
      * Default constructor initializing the tags list.
@@ -169,7 +168,7 @@ public class Item implements Serializable {
      * @param tag A Tag object to remove from the item.
      */
     public void removeTag(Tag tag) {
-        if( this.tags.contains(tag) ) this.tags.remove(tag);
+        this.tags.remove(tag);
     }
 
     /**
@@ -209,7 +208,7 @@ public class Item implements Serializable {
      * @return A string representing the item's description.
      */
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     /**
@@ -217,7 +216,7 @@ public class Item implements Serializable {
      * @param description A string containing the new description of the item.
      */
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     /**
@@ -266,5 +265,12 @@ public class Item implements Serializable {
      */
     public void setSelected(Boolean selected) {
         this.selected = selected;
+    }
+
+    /**
+     * Toggles the selected state.
+     */
+    public void toggleSelected() {
+        this.selected = !this.selected;
     }
 }
