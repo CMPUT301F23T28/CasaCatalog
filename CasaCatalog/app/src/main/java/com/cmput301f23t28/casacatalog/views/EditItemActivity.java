@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +25,7 @@ import java.util.Locale;
  * Activity for editing an existing item. Inherits functionality from AddItemActivity
  * and repurposes it for editing items.
  */
-public class EditItemActivity extends AppCompatActivity {
+public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private int listPosition;
     private Item editingItem;
@@ -107,6 +108,7 @@ public class EditItemActivity extends AppCompatActivity {
 
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
+        final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
 
         /*
         ViewGroup layout = (ViewGroup) deleteButton.getParent();
@@ -183,6 +185,10 @@ public class EditItemActivity extends AppCompatActivity {
             finish();
         });
 
+        addPhotoButton.setOnClickListener(view -> {
+            new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_PHOTO");
+        });
+
         // Deletes item from database, as well as on the item list displayed in MainActivity.
         deleteButton.setOnClickListener(view -> {
             Database.items.delete(editingItem.getId());
@@ -228,4 +234,8 @@ public class EditItemActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onOKPressed() {
+        Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+    }
 }
