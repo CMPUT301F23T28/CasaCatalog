@@ -28,30 +28,30 @@
                 android:minWidth="250dp"
                 android:orientation="horizontal">
 
-                <TextView
+                <ImageButton
                     android:id="@+id/camera"
                     style="@style/option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:drawableStart="@drawable/camera"
+                    android:src="@drawable/camera"
                     android:gravity="start|center_vertical"
                     android:scaleX=".5"
                     android:scaleY=".5"
-                    android:text="@string/camera"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:contentDescription="@string/camera" />
 
-                <TextView
+                <ImageButton
                     android:id="@+id/gallery"
                     style="@style/option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:drawableStart="@drawable/gallery"
+                    android:src="@drawable/gallery"
                     android:gravity="start|center_vertical"
                     android:scaleX=".5"
                     android:scaleY=".5"
-                    android:text="@string/gallery" />
+                    android:contentDescription="@string/gallery"/>
 
         </LinearLayout>
 
