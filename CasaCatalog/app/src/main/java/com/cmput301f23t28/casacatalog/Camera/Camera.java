@@ -7,4 +7,5 @@ package com.cmput301f23t28.casacatalog.Camera;
 //https://developers.google.com/ml-kit/vision/barcode-scanning/android
 
 public class Camera {
+
 }
