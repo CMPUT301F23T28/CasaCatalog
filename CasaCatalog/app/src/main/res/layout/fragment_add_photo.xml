@@ -29,7 +29,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/camera"
+                    android:id="@+id/camera_button"
                     style="@style/option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                     android:contentDescription="@string/camera" />
 
                 <ImageButton
-                    android:id="@+id/gallery"
+                    android:id="@+id/gallery_button"
                     style="@style/option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
