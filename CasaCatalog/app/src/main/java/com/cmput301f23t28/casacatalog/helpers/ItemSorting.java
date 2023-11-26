@@ -50,24 +50,29 @@ public class ItemSorting {
         return (a, b) -> {
             switch (this.currentType) {
                 case date:
-                    if (!a.getDate().equals(b.getDate())) {
+                    if (a.getDate() != null && b.getDate() != null &&
+                            !a.getDate().equals(b.getDate())) {
                         return a.getDate().after(b.getDate()) ? -1 : 1;
                     }
                 case description:
-                    if (!a.getDescription().equals(b.getDescription())) {
+                    if (a.getDescription() != null && b.getDescription() != null &&
+                            !a.getDescription().equals(b.getDescription())) {
                         return a.getDescription().compareTo(b.getDescription()) < 0 ? -1 : 1;
                     }
                 case make:
-                    if (!a.getMake().equals(b.getMake())) {
+                    if (a.getMake() != null && b.getMake() != null &&
+                            !a.getMake().equals(b.getMake())) {
                         return a.getMake().compareTo(b.getMake()) < 0 ? -1 : 1;
                     }
                 case value:
-                    if (!a.getPrice().equals(b.getPrice())) {
+                    if (a.getPrice() != null && b.getPrice() != null &&
+                            !a.getPrice().equals(b.getPrice())) {
                         return a.getPrice() < b.getPrice() ? -1 : 1;
                     }
                 case tag:
                     // TODO: implement this correctly
-                    if (!a.getTags().equals(b.getTags())) {
+                    if (a.getTags() != null && b.getTags() != null &&
+                            !a.getTags().equals(b.getTags())) {
                         return 1;
                     }
                 default:
