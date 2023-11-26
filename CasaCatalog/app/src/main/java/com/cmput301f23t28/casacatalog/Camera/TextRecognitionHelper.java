@@ -1,4 +1,4 @@
-package com.cmput301f23t28.casacatalog.helpers;
+package com.cmput301f23t28.casacatalog.Camera;
 
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
