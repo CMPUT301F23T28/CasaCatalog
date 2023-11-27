@@ -45,8 +45,17 @@ public class ItemSorting {
      * Use this as a parameter for ArrayList#sort in order to sort Items correctly.
      * @return A comparator for Items
      */
-    public Comparator<Item> getComparator() {
+    public Comparator<Item> getComparator(){
         Log.i("SORTER", "Sorting by '" + this.currentType.name() + "' in '" + this.currentOrder.name() + "' order.");
+        return this.currentOrder.equals(Order.descending) ? getPartialComparator().reversed() : getPartialComparator();
+    }
+
+    /**
+     * Generates an Item comparator that sorts based on the currentType.
+     * Use this as a parameter for ArrayList#sort in order to sort Items correctly.
+     * @return A comparator for Items
+     */
+    private Comparator<Item> getPartialComparator() {
         return (a, b) -> {
             switch (this.currentType) {
                 case date:
