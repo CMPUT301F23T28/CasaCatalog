@@ -29,8 +29,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
     private int listPosition;
     private Item editingItem;
-    // Temporary solution so i dont convert string to date because im lazy
-    private String stringItemDate;
 
     TextInputLayout itemNameText;
     TextInputLayout itemValueText;
@@ -72,9 +70,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             // (Max) tags was changed since I worked on this, will have to fix later.
             // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
-            // Cheating to put the date here :I
-            stringItemDate = extras.getString("ITEM_DATE");
-            editingItem.setDateFormatted(stringItemDate);
+            editingItem.setDate();
 
             // Setting all the 'EditText' thingies
             itemNameText = findViewById(R.id.itemName);
@@ -91,9 +87,8 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             // Setting the text of each of the 'EditText's to whatever the item's attributes are
             itemNameText.getEditText().setText(editingItem.getName());
             itemValueText.getEditText().setText(editingItem.getPrice().toString());
-            // SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy"); // IS BUGGING
-            // TODO: Set this to a simple date not the whole thing
-            itemDateText.getEditText().setText(stringItemDate);
+            // TODO
+            //itemDateText.getEditText().setText(stringItemDate);
             itemDescriptionText.getEditText().setText(editingItem.getDescription());
             itemMakeText.getEditText().setText(editingItem.getMake());
             itemModelText.getEditText().setText(editingItem.getModel());
@@ -142,6 +137,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             }
 
             // adds the date (FAKE FOR NOW)
+            /*
             editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
             // Real date adding
             if (!itemDateText.getEditText().getText().toString().isEmpty()) {
@@ -153,6 +149,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                     Log.e("ParseExceptionEdit", "ParseException" + e.toString());
                 }
             }
+             */
 
             // Add rest of attributes as well
             TextInputLayout makeValue = findViewById(R.id.itemMake);
@@ -203,6 +200,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             startActivityForResult(i, 200);
         });
 
+        findViewById(R.id.setDateButton).setOnClickListener(v -> new ItemDatePicker(editingItem, findViewById(R.id.purchaseDateText)));
     }
 
     /**

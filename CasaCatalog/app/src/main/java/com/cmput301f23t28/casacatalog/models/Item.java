@@ -2,11 +2,13 @@ package com.cmput301f23t28.casacatalog.models;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -18,8 +20,7 @@ public class Item implements Serializable {
     private String id;
     private String name;
     private Double price;
-    private Date date;
-    private String dateFormatted; // I don't want to figure out how to do this another way right now
+    private LocalDateTime date;
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
     private String make;
@@ -72,33 +73,27 @@ public class Item implements Serializable {
     /**
      * Gets the purchase or acquisition date of the item.
      * Returns current date if there is no date set.
-     * @return A Date object representing when the item was acquired.
+     * @return A LocalDateTime object representing when the item was acquired.
      */
-    public Date getDate() {
-        return this.date != null ? this.date : new Date();
+    public LocalDateTime getDate() {
+        return this.date != null ? this.date : LocalDateTime.now();
     }
 
     /**
      * Gets the formatted purchase or acquisition date of the item.
      * @return A String representing a formatted date of when the item was acquired.
      */
-    public String getDateFormatted() { // (Max) Im doing this for the editItem i cannot be bothered
-        return dateFormatted;
+    public String getFormattedDate() {
+        // TODO: probably define this format in an xml
+        return this.date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
     }
 
-    /**
-     * Sets the formatted purchase or acquisition date of the item.
-     * @param dateFormatted A String representing a formatted date of when the item was acquired.
-     */
-    public void setDateFormatted(String dateFormatted) {
-        this.dateFormatted = dateFormatted;
-    }
 
     /**
      * Sets the purchase or acquisition date of the item.
-     * @param date A Date object containing the new acquisition date of the item.
+     * @param date A LocalDateTime object containing the new acquisition date of the item.
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
