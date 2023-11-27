@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         CircleImageView userProfileImage = findViewById(R.id.userProfileImage);
         userProfileImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, UserActivity.class)));
 
+        // Register sort button to open sorting dialog
+        findViewById(R.id.SortButton).setOnClickListener(v -> new SortDialog().show(getSupportFragmentManager(), SortDialog.TAG));
+
     }
 
     /**
