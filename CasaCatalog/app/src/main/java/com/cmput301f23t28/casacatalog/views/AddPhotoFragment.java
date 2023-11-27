@@ -65,6 +65,9 @@ public class AddPhotoFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_photo, null);
 
+        // Initialize storage reference
+        storageReference = FirebaseStorage.getInstance().getReference();
+
         cameraButton = view.findViewById(R.id.camera_button);
         galleryButton = view.findViewById(R.id.gallery_button);
 
