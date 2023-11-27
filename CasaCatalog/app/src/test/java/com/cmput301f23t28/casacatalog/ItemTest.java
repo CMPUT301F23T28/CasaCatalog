@@ -45,7 +45,7 @@ public class ItemTest {
     public void testSetAndGetDateFormatted() {
         String dateFormatted = "2023-11-10";
         item.setDateFormatted(dateFormatted);
-        assertEquals(dateFormatted, item.getDateFormatted());
+        assertEquals(dateFormatted, item.getFormattedDate());
     }
 
     @Test
