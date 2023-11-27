@@ -63,6 +63,7 @@ public class ItemDatabase {
                     String itemComment = doc.getString("comments");
                     String itemSerialNumber = doc.getString("serialNumber");
                     ArrayList<String> itemTagStrings = (ArrayList<String>) doc.get("tags");
+                    ArrayList<String> itemPhotos = (ArrayList<String>) doc.get("photos");
                     ArrayList<Tag> itemTags = new ArrayList<>();
                     if (itemTagStrings != null && itemTagStrings.size() > 0) {
                         for (String t : itemTagStrings) {
@@ -76,7 +77,7 @@ public class ItemDatabase {
                     addItem.setName(itemname);
                     addItem.setPrice(pricename);
                     addItem.setTags(itemTags);
-
+                    addItem.setPhotos(itemPhotos);
                     //add date to the addItem
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
                     if (dateinstring != null) {
