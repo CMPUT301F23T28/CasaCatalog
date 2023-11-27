@@ -1,11 +1,16 @@
 package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,13 +18,19 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.dialog.MaterialDialogs;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Activity for adding a new item to the inventory.
@@ -79,7 +90,7 @@ public class AddItemActivity extends AppCompatActivity {
                 newItem.setPrice(price);
             }
 
-            // adds the date
+            /*
             TextInputLayout dateValue = findViewById(R.id.itemPurchaseDate);
             if (!dateValue.getEditText().getText().toString().isEmpty()) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
@@ -90,6 +101,9 @@ public class AddItemActivity extends AppCompatActivity {
                     Log.e("ParseException", "ParseException" + e.toString());
                 }
             }
+             */
+
+
 
             // Add rest of attributes as well
             TextInputLayout makeValue = findViewById(R.id.itemMake);
@@ -130,6 +144,10 @@ public class AddItemActivity extends AppCompatActivity {
             // TODO: dont use deprecated method
             startActivityForResult(i, 200);
         });
+
+        // Handles purchase date picker
+        // If new item, initialize to current date
+        findViewById(R.id.setDateButton).setOnClickListener(v -> new ItemDatePicker(newItem, findViewById(R.id.purchaseDateText)));
     }
 
     /**
