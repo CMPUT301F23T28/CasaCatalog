@@ -61,28 +61,27 @@ public class ItemSorting {
                 case date:
                     if (a.getDate() != null && b.getDate() != null &&
                             !a.getDate().equals(b.getDate())) {
-                        return a.getDate().after(b.getDate()) ? -1 : 1;
+                        return a.getDate().compareTo(b.getDate());
                     }
                 case description:
                     if (a.getDescription() != null && b.getDescription() != null &&
                             !a.getDescription().equals(b.getDescription())) {
-                        return a.getDescription().compareTo(b.getDescription()) < 0 ? -1 : 1;
+                        return a.getDescription().compareTo(b.getDescription());
                     }
                 case make:
                     if (a.getMake() != null && b.getMake() != null &&
                             !a.getMake().equals(b.getMake())) {
-                        return a.getMake().compareTo(b.getMake()) < 0 ? -1 : 1;
+                        return a.getMake().compareTo(b.getMake());
                     }
                 case value:
                     if (a.getPrice() != null && b.getPrice() != null &&
                             !a.getPrice().equals(b.getPrice())) {
-                        return a.getPrice() < b.getPrice() ? -1 : 1;
+                        return Double.compare(a.getPrice(), b.getPrice());
                     }
                 case tag:
-                    // TODO: implement this correctly
                     if (a.getTags() != null && b.getTags() != null &&
                             !a.getTags().equals(b.getTags())) {
-                        return 1;
+                        return b.getTagsAsStrings().toString().compareTo(a.getTagsAsStrings().toString());
                     }
                 default:
                     return 0;
