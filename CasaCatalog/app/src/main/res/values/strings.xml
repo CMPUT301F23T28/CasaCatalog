@@ -23,6 +23,12 @@
 
     <string name="item_edit_button_text">Edit Item</string>
 
+    <string name="camera">c</string>
+    <string name="gallery">g</string>
+    <string name="cancel">@android:string/cancel</string>
+    <string name="choose">choose</string>
+    <string name="loading">loading</string>
+
     <string-array name="type_choices">
         <item>Date</item>
         <item>Description</item>
