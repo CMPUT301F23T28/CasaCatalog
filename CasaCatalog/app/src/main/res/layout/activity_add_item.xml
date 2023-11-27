@@ -1,229 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="AddItemActivity">
-
-        <Space
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="15dp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="AddItemActivity">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/detailsText"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="30dp"
-            android:layout_marginStart="15dp"
-            android:text="@string/item_details_text" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_name_label">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailsText"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="30dp"
+                android:layout_marginStart="15dp"
+                android:text="@string/item_details_text" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemNameInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_name_label">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemEstimatedValue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_value_label">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemNameInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemEstimatedValueInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemEstimatedValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_value_label">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemPurchaseDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_purchase_date_label">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemEstimatedValueInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemPurchaseDateInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemPurchaseDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_purchase_date_label">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_description_label">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemPurchaseDateInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemDescriptionInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_description_label">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemDescriptionInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/specificsText"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="30dp"
-            android:layout_marginStart="15dp"
-            android:text="@string/item_specifics_text" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemMake"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_make_label">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/specificsText"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="30dp"
+                android:layout_marginStart="15dp"
+                android:text="@string/item_specifics_text" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemMakeInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemMake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_make_label">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_model_label">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemMakeInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemModelInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_model_label">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemSerialNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_serial_number_label">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemModelInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemSerialNumberInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemSerialNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_serial_number_label">
 
-        <ImageButton
-            android:id="@id/backButton"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:background="?android:selectableItemBackground"
-            android:contentDescription="@string/camera_icon"
-            android:src="@android:drawable/ic_menu_camera"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@android:color/black" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemSerialNumberInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp"/>
+            <ImageButton
+                android:id="@id/backButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@string/camera_icon"
+                android:src="@android:drawable/ic_menu_camera"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/black" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/extrasText"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="30dp"
-            android:layout_marginStart="15dp"
-            android:text="@string/item_extras_text" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemComments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_comments_label">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/extrasText"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="30dp"
+                android:layout_marginStart="15dp"
+                android:text="@string/item_extras_text" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemCommentsInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_comments_label">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemTags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="@string/item_tag_label">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/itemCommentsInput"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/itemTags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="@string/item_tag_label">
+
+                <Button
+                    android:id="@+id/addTagButton"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    android:text="Add tags" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/photosText"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="30dp"
+                android:layout_marginStart="15dp"
+                android:text="@string/item_photos_text" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/item_images_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
 
             <Button
-                android:id="@+id/addTagButton"
+                android:id="@+id/addPhotoToItem"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:text="Add tags" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Add photo" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp"/>
+            <Button
+                android:id="@+id/addItemToListBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add item"
+                android:layout_marginStart="20dp"
+                style="?attr/materialButtonOutlinedStyle"
+                />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/photosText"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="30dp"
-            android:layout_marginStart="15dp"
-            android:text="@string/item_photos_text" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="40dp"/>
-
-        <Button
-            android:id="@+id/addPhotoToItem"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="Add photo" />
-
-        <Button
-            android:id="@+id/addItemToListBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add item"
-            android:layout_marginStart="20dp"
-            style="?attr/materialButtonOutlinedStyle"
-            />
-
-        <Button
-            android:id="@+id/deleteItemFromListBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete item"
-            android:layout_marginStart="20dp"
-            style="?attr/materialButtonOutlinedStyle"
-            />
+            <Button
+                android:id="@+id/deleteItemFromListBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete item"
+                android:layout_marginStart="20dp"
+                style="?attr/materialButtonOutlinedStyle"
+                />
 
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/change_default_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:enabled="true"
+        android:src="@drawable/baseline_edit_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"  />
 
-</ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_pictures_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="80dp"
+        android:clickable="true"
+        android:enabled="true"
+        android:src="@drawable/baseline_delete_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

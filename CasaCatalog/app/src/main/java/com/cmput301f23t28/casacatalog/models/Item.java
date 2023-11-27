@@ -20,6 +20,7 @@ public class Item implements Serializable {
     private String dateFormatted; // I don't want to figure out how to do this another way right now
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
+    private final ArrayList<Photo> photos;
     private String make;
     private String model;
     private String description;
@@ -32,6 +33,7 @@ public class Item implements Serializable {
      */
     public Item(){
         this.tags = new ArrayList<>();
+        this.photos = new ArrayList<>();
     }
 
     /**
@@ -272,5 +274,24 @@ public class Item implements Serializable {
      */
     public void toggleSelected() {
         this.selected = !this.selected;
+    }
+
+    public void setPhotos(ArrayList<String> itemPhotos) {
+        if (itemPhotos != null && itemPhotos.size() > 0) {
+            for (String photoURL: itemPhotos) {
+                photos.add(new Photo(photoURL));
+            }
+        }
+    }
+
+    public ArrayList<Photo> getPhotos() {
+        return photos;
+    }
+    public ArrayList<String> getPhotosURL() {
+        ArrayList<String> urls = new ArrayList<>();
+        for (Photo photo: photos) {
+            urls.add(photo.getUrl());
+        }
+        return urls;
     }
 }

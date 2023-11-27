@@ -4,15 +4,21 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
@@ -25,7 +31,7 @@ import java.util.Locale;
  * Activity for editing an existing item. Inherits functionality from AddItemActivity
  * and repurposes it for editing items.
  */
-public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
+public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private int listPosition;
     private Item editingItem;
@@ -41,6 +47,10 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     TextInputLayout itemModelText;
     TextInputLayout itemSerialNumberText;
     TextInputLayout itemCommentText;
+    private RecyclerView itemPhotoContainer;
+    private PhotoListAdapter photoListAdapter;
+    private FloatingActionButton changeDefaultButton;
+    private FloatingActionButton trashButton;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -56,6 +66,9 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         setContentView(R.layout.activity_add_item);
         editingItem = new Item();
 
+        trashButton = findViewById(R.id.delete_pictures_button);
+        changeDefaultButton = findViewById(R.id.change_default_button);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             // I now realize this was a terrible way of doing this
@@ -69,6 +82,8 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             editingItem.setSerialNumber(extras.getString("ITEM_SERIAL_NUMBER"));
             editingItem.setComment(extras.getString("ITEM_COMMENT"));
             editingItem.setDescription(extras.getString("ITEM_DESCRIPTION"));
+            ArrayList<String> photoURLS = extras.getStringArrayList("ITEM_PHOTOS");
+            editingItem.setPhotos(photoURLS);
             // (Max) tags was changed since I worked on this, will have to fix later.
             // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
@@ -102,6 +117,14 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             if (editingItem.getComment() != null) {
                 Log.d("ITEM_COMMENT_EDIT_ITEM", editingItem.getComment());
             }
+            if (photoURLS != null && photoURLS.size() > 0) {
+                photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
+                itemPhotoContainer = findViewById(R.id.item_images_container);
+                itemPhotoContainer.setAdapter(photoListAdapter);
+                itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
+
+            }
+
 
             //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
         }
@@ -237,5 +260,21 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     @Override
     public void onOKPressed() {
         Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void toggleVisibility() {
+        Log.i("Ryan", "Visibility method");
+        if (changeDefaultButton != null && trashButton != null) {
+            if (changeDefaultButton.getVisibility() == View.VISIBLE && trashButton.getVisibility() == View.VISIBLE) {
+                Log.i("Ryan", "INVisible buttons");
+                changeDefaultButton.setVisibility(View.GONE);
+                trashButton.setVisibility(View.GONE);
+            } else {
+                Log.i("Ryan", "Visible buttons");
+                changeDefaultButton.setVisibility(View.VISIBLE);
+                trashButton.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }
