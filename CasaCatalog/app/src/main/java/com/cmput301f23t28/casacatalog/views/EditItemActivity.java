@@ -199,7 +199,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             startActivityForResult(i, 200);
         });
 
-        findViewById(R.id.setDateButton).setOnClickListener(v -> new ItemDatePicker(editingItem, findViewById(R.id.purchaseDateText)));
+        findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
     }
 
     /**
