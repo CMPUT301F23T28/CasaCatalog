@@ -2,13 +2,11 @@ package com.cmput301f23t28.casacatalog.models;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +18,7 @@ public class Item implements Serializable {
     private String id;
     private String name;
     private Double price;
-    private LocalDateTime date;
+    private LocalDate date;
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
     private String make;
@@ -75,8 +73,8 @@ public class Item implements Serializable {
      * Returns current date if there is no date set.
      * @return A LocalDateTime object representing when the item was acquired.
      */
-    public LocalDateTime getDate() {
-        return this.date != null ? this.date : LocalDateTime.now();
+    public LocalDate getDate() {
+        return this.date != null ? this.date : LocalDate.now();
     }
 
     /**
@@ -93,7 +91,7 @@ public class Item implements Serializable {
      * Sets the purchase or acquisition date of the item.
      * @param date A LocalDateTime object containing the new acquisition date of the item.
      */
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
