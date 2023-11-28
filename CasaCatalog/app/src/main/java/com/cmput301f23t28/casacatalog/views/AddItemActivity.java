@@ -147,7 +147,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         // Handles purchase date picker
         // If new item, initialize to current date
-        findViewById(R.id.setDateButton).setOnClickListener(v -> new ItemDatePicker(newItem, findViewById(R.id.purchaseDateText)));
+        findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, newItem, findViewById(R.id.purchaseDateText)));
     }
 
     /**
