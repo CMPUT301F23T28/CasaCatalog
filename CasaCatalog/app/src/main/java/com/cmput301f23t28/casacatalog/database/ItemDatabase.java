@@ -34,7 +34,7 @@ public class ItemDatabase {
      */
     public ItemDatabase() {
         this.db = FirebaseFirestore.getInstance();
-        this.itemRef = db.collection("items"); // TEMP for debug
+        this.itemRef = db.collection("items");
         this.itemList = new ArrayList<>();
     }
 
