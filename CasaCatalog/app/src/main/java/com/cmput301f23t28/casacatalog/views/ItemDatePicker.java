@@ -31,7 +31,7 @@ public class ItemDatePicker implements View.OnClickListener {
         DatePickerDialog dialog = new DatePickerDialog(context, android.R.style.Theme_Material_Dialog_Alert, (picker, year, month, dayOfMonth) -> {
             newItem.setDate(LocalDate.of(year, month+1, dayOfMonth));
             dateText.setText(newItem.getFormattedDate());
-        }, selectedDate.getYear(), selectedDate.getMonth().getValue(), selectedDate.getDayOfMonth());
+        }, selectedDate.getYear(), selectedDate.getMonth().getValue()-1, selectedDate.getDayOfMonth());
         dialog.show();
     }
 }
