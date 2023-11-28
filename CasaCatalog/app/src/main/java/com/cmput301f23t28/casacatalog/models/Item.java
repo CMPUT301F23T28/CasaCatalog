@@ -32,7 +32,14 @@ public class Item implements Serializable {
      * Default constructor initializing the tags list.
      */
     public Item(){
+        // Defaults
         this.tags = new ArrayList<>();
+        this.date = LocalDate.now();
+        this.price = 0.0;
+        this.make = "";
+        this.model = "";
+        this.description = "";
+        this.comment = "";
     }
 
     /**
@@ -74,7 +81,7 @@ public class Item implements Serializable {
      * @return A LocalDateTime object representing when the item was acquired.
      */
     public LocalDate getDate() {
-        return this.date != null ? this.date : LocalDate.now();
+        return this.date;
     }
 
     /**
@@ -101,7 +108,7 @@ public class Item implements Serializable {
      * @return A Double representing the item's price.
      */
     public Double getPrice() {
-        return this.price != null ? this.price : 0;
+        return this.price;
     }
 
     /**
@@ -175,7 +182,7 @@ public class Item implements Serializable {
      * @return A string representing the item's make.
      */
     public String getMake() {
-        return this.make != null ? this.make : "";
+        return this.make;
     }
 
     /**
@@ -192,7 +199,7 @@ public class Item implements Serializable {
      * @return A string representing the item's model.
      */
     public String getModel() {
-        return this.model != null ? this.model : "";
+        return this.model;
     }
 
     /**
@@ -209,7 +216,7 @@ public class Item implements Serializable {
      * @return A string representing the item's description.
      */
     public String getDescription() {
-        return this.description != null ? this.description : "";
+        return this.description;
     }
 
     /**
@@ -226,7 +233,7 @@ public class Item implements Serializable {
      * @return A string representing any comments associated with the item.
      */
     public String getComment() {
-        return this.comment != null ? this.comment : "";
+        return this.comment;
     }
 
     /**
