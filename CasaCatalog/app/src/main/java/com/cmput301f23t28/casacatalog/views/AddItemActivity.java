@@ -40,20 +40,6 @@ public class AddItemActivity extends AppCompatActivity {
 
     private Item newItem;
 
-    /*
-    //Add when it's also in the database (not sure if it is)
-    // This might not work I got crash when I put name + price here
-    // instead of calling immediately upon click
-    private TextInputEditText itemPurchaseDate = findViewById(R.id.itemPurchaseDate);
-    private TextInputEditText itemDescription = findViewById(R.id.itemDescription);
-    private TextInputEditText itemMake = findViewById(R.id.itemMake);
-    private TextInputEditText itemModel = findViewById(R.id.itemModel);
-    private TextInputEditText itemSerialNumber = findViewById(R.id.itemSerialNumber);
-    private TextInputEditText itemComments = findViewById(R.id.itemComments);
-    private TextInputEditText itemTags = findViewById(R.id.itemTags);
-    */
-    // Needs photos too (not on UI yet)
-
     /**
      * Called when the activity is starting. This method is where most initialization should go:
      * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
@@ -70,6 +56,9 @@ public class AddItemActivity extends AppCompatActivity {
 
         final Button addButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
+
+        // Set date preview to current date
+        ((TextView)findViewById(R.id.purchaseDateText)).setText(newItem.getFormattedDate());
 
         // Remove deletebutton (only for editing not adding)
         ViewGroup layout = (ViewGroup) deleteButton.getParent();
@@ -89,21 +78,6 @@ public class AddItemActivity extends AppCompatActivity {
                 double price = Double.parseDouble(itemValue.getEditText().getText().toString());
                 newItem.setPrice(price);
             }
-
-            /*
-            TextInputLayout dateValue = findViewById(R.id.itemPurchaseDate);
-            if (!dateValue.getEditText().getText().toString().isEmpty()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
-                try {
-                    Date date = formatter.parse(dateValue.getEditText().getText().toString());
-                    newItem.setDate(date);
-                } catch (ParseException e) {
-                    Log.e("ParseException", "ParseException" + e.toString());
-                }
-            }
-             */
-
-
 
             // Add rest of attributes as well
             TextInputLayout makeValue = findViewById(R.id.itemMake);
