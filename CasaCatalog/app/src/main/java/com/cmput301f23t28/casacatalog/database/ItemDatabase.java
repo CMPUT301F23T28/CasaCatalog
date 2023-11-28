@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.firebase.firestore.CollectionReference;
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -25,6 +27,7 @@ public class ItemDatabase {
     private FirebaseFirestore db;
     private CollectionReference itemRef;
     private ArrayList<Item> itemList;
+    private ItemListAdapter adapter;
 
     /**
      * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection,
@@ -42,6 +45,8 @@ public class ItemDatabase {
      * @param adapter The ItemListAdapter currently associated with the ItemList view
      */
     public void registerListener(ItemListAdapter adapter, TextView totalValueText) {
+        this.adapter = adapter;
+
         // Read item from database into itemList
         this.itemRef.addSnapshotListener((value, error) -> {
             if (error != null) {
@@ -106,7 +111,9 @@ public class ItemDatabase {
                     String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", Database.items.getTotalValue());
                     totalValueText.setText(totalValueFormatted);
 
-                    adapter.notifyDataSetChanged();
+                    // Sort item list by default settings
+                    // (this also updates adapter)
+                    this.sort(new ItemSorting());
                 }
             }
         });
@@ -215,8 +222,16 @@ public class ItemDatabase {
     }
 
     /**
+     * Given an ItemSorting, sorts the item list based on it
+     * @param sorting An instance of ItemSorting
+     */
+    public void sort(ItemSorting sorting){
+        this.itemList.sort(sorting.getComparator());
+        this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
+    }
+
+    /**
      * Delete all items current selected in the itemList.
-     *
      * @deprecated
      */
     public void deleteSelected() {

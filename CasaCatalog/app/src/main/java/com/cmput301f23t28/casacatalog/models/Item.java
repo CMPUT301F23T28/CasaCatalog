@@ -3,6 +3,8 @@ package com.cmput301f23t28.casacatalog.models;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,10 +54,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the name of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's name.
      */
     public String getName() {
-        return name;
+        return this.name != null ? this.name : "";
     }
 
     /**
@@ -68,10 +71,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the purchase or acquisition date of the item.
+     * Returns current date if there is no date set.
      * @return A Date object representing when the item was acquired.
      */
     public Date getDate() {
-        return date;
+        return this.date != null ? this.date : new Date();
     }
 
     /**
@@ -100,10 +104,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the price of the item.
+     * Returns 0 if there is no price set.
      * @return A Double representing the item's price.
      */
     public Double getPrice() {
-        return price;
+        return this.price != null ? this.price : 0;
     }
 
     /**
@@ -139,12 +144,12 @@ public class Item implements Serializable {
     }
 
     /**
-     * Converts the list of tags to a list of strings representing tag names.
-     * This method is used for database storage.
+     * Converts the list of tags to an alphabetically sorted list of strings representing tag names.
+     * This method is used for database storage and sorting.
      * @return A List of strings representing the names of the tags.
      */
     public List<String> getTagsAsStrings(){
-        return tags.stream().map(Tag::getName).collect(Collectors.toList());
+        return tags.stream().map(Tag::getName).sorted().collect(Collectors.toList());
     }
 
     /**
@@ -173,10 +178,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the make of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's make.
      */
     public String getMake() {
-        return make;
+        return this.make != null ? this.make : "";
     }
 
     /**
@@ -189,10 +195,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the model of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's model.
      */
     public String getModel() {
-        return model;
+        return this.model != null ? this.model : "";
     }
 
     /**
@@ -205,10 +212,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the description of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's description.
      */
     public String getDescription() {
-        return description;
+        return this.description != null ? this.description : "";
     }
 
     /**
@@ -221,10 +229,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the comment associated with the item.
+     * Returns empty string if there is none set.
      * @return A string representing any comments associated with the item.
      */
     public String getComment() {
-        return comment;
+        return this.comment != null ? this.comment : "";
     }
 
     /**
