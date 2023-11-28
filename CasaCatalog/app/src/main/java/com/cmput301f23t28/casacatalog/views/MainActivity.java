@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));
+        itemListView.setItemAnimator(null);     // fixes bug in Android
         Database.items.registerListener(itemAdapter, findViewById(R.id.InventoryValueNumber));
 
         // Sends the user to the 'add item' activity, allowing them to input their item and all of its relevant details.

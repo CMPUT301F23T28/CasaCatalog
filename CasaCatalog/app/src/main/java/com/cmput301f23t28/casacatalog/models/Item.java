@@ -2,10 +2,10 @@ package com.cmput301f23t28.casacatalog.models;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,8 +18,7 @@ public class Item implements Serializable {
     private String id;
     private String name;
     private Double price;
-    private Date date;
-    private String dateFormatted; // I don't want to figure out how to do this another way right now
+    private LocalDate date;
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
     private String make;
@@ -33,7 +32,14 @@ public class Item implements Serializable {
      * Default constructor initializing the tags list.
      */
     public Item(){
+        // Defaults
         this.tags = new ArrayList<>();
+        this.date = LocalDate.now();
+        this.price = 0.0;
+        this.make = "";
+        this.model = "";
+        this.description = "";
+        this.comment = "";
     }
 
     /**
@@ -72,33 +78,27 @@ public class Item implements Serializable {
     /**
      * Gets the purchase or acquisition date of the item.
      * Returns current date if there is no date set.
-     * @return A Date object representing when the item was acquired.
+     * @return A LocalDateTime object representing when the item was acquired.
      */
-    public Date getDate() {
-        return this.date != null ? this.date : new Date();
+    public LocalDate getDate() {
+        return this.date;
     }
 
     /**
      * Gets the formatted purchase or acquisition date of the item.
      * @return A String representing a formatted date of when the item was acquired.
      */
-    public String getDateFormatted() { // (Max) Im doing this for the editItem i cannot be bothered
-        return dateFormatted;
+    public String getFormattedDate() {
+        // TODO: probably define this format in an xml
+        return this.date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
     }
 
-    /**
-     * Sets the formatted purchase or acquisition date of the item.
-     * @param dateFormatted A String representing a formatted date of when the item was acquired.
-     */
-    public void setDateFormatted(String dateFormatted) {
-        this.dateFormatted = dateFormatted;
-    }
 
     /**
      * Sets the purchase or acquisition date of the item.
-     * @param date A Date object containing the new acquisition date of the item.
+     * @param date A LocalDateTime object containing the new acquisition date of the item.
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -108,7 +108,7 @@ public class Item implements Serializable {
      * @return A Double representing the item's price.
      */
     public Double getPrice() {
-        return this.price != null ? this.price : 0;
+        return this.price;
     }
 
     /**
@@ -182,7 +182,7 @@ public class Item implements Serializable {
      * @return A string representing the item's make.
      */
     public String getMake() {
-        return this.make != null ? this.make : "";
+        return this.make;
     }
 
     /**
@@ -199,7 +199,7 @@ public class Item implements Serializable {
      * @return A string representing the item's model.
      */
     public String getModel() {
-        return this.model != null ? this.model : "";
+        return this.model;
     }
 
     /**
@@ -216,7 +216,7 @@ public class Item implements Serializable {
      * @return A string representing the item's description.
      */
     public String getDescription() {
-        return this.description != null ? this.description : "";
+        return this.description;
     }
 
     /**
@@ -233,7 +233,7 @@ public class Item implements Serializable {
      * @return A string representing any comments associated with the item.
      */
     public String getComment() {
-        return this.comment != null ? this.comment : "";
+        return this.comment;
     }
 
     /**
