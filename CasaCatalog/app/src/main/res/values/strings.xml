@@ -22,9 +22,23 @@
     <string name="item_photos_text">Photos</string>
 
     <string name="item_edit_button_text">Edit Item</string>
+
     <string name="camera">c</string>
     <string name="gallery">g</string>
     <string name="cancel">@android:string/cancel</string>
     <string name="choose">choose</string>
     <string name="loading">loading</string>
+
+    <string-array name="type_choices">
+        <item>Date</item>
+        <item>Description</item>
+        <item>Make</item>
+        <item>Value</item>
+        <item>Tag</item>
+    </string-array>
+
+    <string-array name="order_choices">
+        <item>Descending</item>
+        <item>Ascending</item>
+    </string-array>
 </resources>
