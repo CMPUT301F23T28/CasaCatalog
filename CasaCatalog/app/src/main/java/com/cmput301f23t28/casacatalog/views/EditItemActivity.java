@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -32,7 +34,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
     TextInputLayout itemNameText;
     TextInputLayout itemValueText;
-    TextInputLayout itemDateText;
     TextInputLayout itemTagsText;
     TextInputLayout itemDescriptionText;
     TextInputLayout itemMakeText;
@@ -70,13 +71,12 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             // (Max) tags was changed since I worked on this, will have to fix later.
             // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
-            //editingItem.setDate();
+            editingItem.setDate((LocalDate) extras.get("ITEM_DATE"));
 
             // Setting all the 'EditText' thingies
             itemNameText = findViewById(R.id.itemName);
             // Should check if value is actually a double (probably possible in EditText somehow)
             itemValueText = findViewById(R.id.itemEstimatedValue);
-            itemDateText = findViewById(R.id.itemPurchaseDate);
             itemDescriptionText = findViewById(R.id.itemDescription);
             itemMakeText = findViewById(R.id.itemMake);
             itemModelText = findViewById(R.id.itemModel);
@@ -87,8 +87,9 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             // Setting the text of each of the 'EditText's to whatever the item's attributes are
             itemNameText.getEditText().setText(editingItem.getName());
             itemValueText.getEditText().setText(editingItem.getPrice().toString());
-            // TODO
-            //itemDateText.getEditText().setText(stringItemDate);
+            if(editingItem.getDate() != null){
+                ((TextView)findViewById(R.id.purchaseDateText)).setText(editingItem.getFormattedDate());
+            }
             itemDescriptionText.getEditText().setText(editingItem.getDescription());
             itemMakeText.getEditText().setText(editingItem.getMake());
             itemModelText.getEditText().setText(editingItem.getModel());
@@ -134,21 +135,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
                 editingItem.setPrice(price);
             }
-
-            // adds the date (FAKE FOR NOW)
-            /*
-            editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
-            // Real date adding
-            if (!itemDateText.getEditText().getText().toString().isEmpty()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
-                try {
-                    Date date = formatter.parse(itemDateText.getEditText().getText().toString());
-                    editingItem.setDate(date);
-                } catch (ParseException e) {
-                    Log.e("ParseExceptionEdit", "ParseException" + e.toString());
-                }
-            }
-             */
 
             // Add rest of attributes as well
             TextInputLayout makeValue = findViewById(R.id.itemMake);
