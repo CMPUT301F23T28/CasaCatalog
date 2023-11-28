@@ -129,7 +129,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 editingItem.setName(itemNameText.getEditText().getText().toString());
             }
 
-
             // adds the price
             if (!itemValueText.getEditText().getText().toString().isEmpty()) {
                 double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
