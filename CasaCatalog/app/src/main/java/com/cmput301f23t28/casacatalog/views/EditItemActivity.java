@@ -70,7 +70,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             // (Max) tags was changed since I worked on this, will have to fix later.
             // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
-            editingItem.setDate();
+            //editingItem.setDate();
 
             // Setting all the 'EditText' thingies
             itemNameText = findViewById(R.id.itemName);

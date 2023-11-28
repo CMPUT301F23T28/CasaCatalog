@@ -7,14 +7,13 @@ import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,9 +61,9 @@ public class ItemDatabase {
                     Double itemPrice = doc.getDouble("price");
 
                     // Convert Date object from FireStore into LocalDateTime object
-                    LocalDateTime itemDate = LocalDateTime.now();   // fall back to current date if null
+                    LocalDate itemDate = LocalDate.now();   // fall back to current date if null
                     if(doc.getDate("date") != null) {
-                        itemDate = LocalDateTime.ofInstant(doc.getDate("date").toInstant(), ZoneId.systemDefault());
+                        itemDate = doc.getDate("date").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
 
                     String itemMake = doc.getString("make");
@@ -121,8 +120,8 @@ public class ItemDatabase {
         data.put("name", item.getName());
         data.put("price", item.getPrice());
 
-        // Firebase requires Date objects, so this converts LocalDateTime to Date
-        data.put("date", Date.from(item.getDate().atZone(ZoneId.systemDefault()).toInstant()));
+        // Firebase requires Date objects, so this converts LocalDate to Date
+        data.put("date", Date.from(item.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         data.put("make", item.getMake());
         data.put("model", item.getModel());
