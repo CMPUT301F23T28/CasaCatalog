@@ -54,7 +54,7 @@ public class EditTagsActivity extends AppCompatActivity {
 
         // Capture all selected tags from list and add to item's tag list
         // when the back button is pressed
-        findViewById(R.id.backButtonTempName).setOnClickListener(view -> {
+        findViewById(R.id.backButtonFromEditTags).setOnClickListener(view -> {
             // Delete any tags with no uses
             for (Tag tag : Database.tags.getTags()) {
                 if (tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());

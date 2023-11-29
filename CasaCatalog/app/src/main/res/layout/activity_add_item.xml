@@ -56,10 +56,23 @@
             android:layout_marginStart="20dp"
             android:hint="@string/item_purchase_date_label">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/itemPurchaseDateInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/purchaseDateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="No Date Set"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/setDateButton"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_weight="1"
+                android:text="Set Purchase Date" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
