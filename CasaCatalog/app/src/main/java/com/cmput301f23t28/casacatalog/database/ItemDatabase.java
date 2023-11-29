@@ -97,15 +97,15 @@ public class ItemDatabase {
                     addItem.setSerialNumber(itemSerialNumber);
 
                     this.itemList.add(addItem);
-
-                    // Update UI to reflect changes in state
-                    String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", Database.items.getTotalValue());
-                    totalValueText.setText(totalValueFormatted);
-
-                    // Sort item list by default settings
-                    // (this also updates adapter)
-                    this.sort(new ItemSorting());
                 }
+
+                // Update UI to reflect changes in state
+                String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", Database.items.getTotalValue());
+                totalValueText.setText(totalValueFormatted);
+
+                // Sort item list by default settings
+                // (this also updates adapter)
+                this.sort(new ItemSorting());
             }
         });
     }
