@@ -181,21 +181,19 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
         findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
 
-        // Add tag button that launches TagsActivity
+        // Receives result from EditTagsActivity
         ActivityResultLauncher<Intent> editTagsLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if(result.getResultCode() == Activity.RESULT_OK){
-                        ArrayList<Tag> newTags = result.getData().getParcelableArrayListExtra("tags");
-                        if (editingItem != null) {
-                            for (Tag tag : newTags) {
-                                tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
-                            }
+                        if(result.getData() != null) {
+                            ArrayList<Tag> newTags = result.getData().getParcelableArrayListExtra("tags");
                             editingItem.setTags(newTags);
                         }
                     }
                 }
         );
+        // Add tag button that launches TagsActivity
         findViewById(R.id.addTagButton).setOnClickListener(view -> {
             Intent i = new Intent(this, EditTagsActivity.class);
             i.putParcelableArrayListExtra("tags", editingItem.getTags());
