@@ -79,19 +79,32 @@ public class TagDatabase {
      * @return The new Tag object that was created.
      */
     public Tag createTag(String name) {
-        Tag newTag = new Tag(name);
+        return this.updateTag(name, new Tag(name));
+    }
 
+    /**
+     * Updates an existing tag in the local list and Firestore database.
+     *
+     * @param name The name of the tag to update
+     * @param tag A tag to get the new properties from
+     */
+    public Tag updateTag(String name, Tag tag) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("name", newTag.getName());
-        data.put("uses", newTag.getUses());
+        data.put("name", tag.getName());
+        data.put("uses", tag.getUses());
 
-        tagsRef.document(newTag.getName()).set(data)
+        tagsRef.document(name).set(data)
                 .addOnSuccessListener(doc -> {
-                    this.tagList.add(newTag);
-                    Log.i("Firestore", "Tag added with name: " + newTag.getName());
+                    // Update local list
+                    if(this.tagList.contains(tag)) {
+                        this.tagList.removeIf(t -> t.getName().equals(name));
+                    }
+                    this.tagList.add(tag);
+
+                    Log.i("Firestore", "Tag created or updated with name: " + tag.getName());
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Failed to add tag to the database"));
-        return newTag;
+                .addOnFailureListener(e -> Log.e("Firestore", "Failed to modify tag in database"));
+        return tag;
     }
 
     /**
