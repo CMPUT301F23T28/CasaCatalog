@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
@@ -177,44 +179,29 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             finish();
         });
 
+        findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
+
         // Add tag button that launches TagsActivity
+        ActivityResultLauncher<Intent> editTagsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == Activity.RESULT_OK){
+                        ArrayList<Tag> newTags = result.getData().getParcelableArrayListExtra("tags");
+                        if (editingItem != null) {
+                            for (Tag tag : newTags) {
+                                tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
+                            }
+                            editingItem.setTags(newTags);
+                        }
+                    }
+                }
+        );
         findViewById(R.id.addTagButton).setOnClickListener(view -> {
             Intent i = new Intent(this, EditTagsActivity.class);
-            i.putExtra("tags", editingItem.getTags());
-            // TODO: dont use deprecated method
-            startActivityForResult(i, 200);
+            i.putParcelableArrayListExtra("tags", editingItem.getTags());
+            editTagsLauncher.launch(i);
         });
 
-        findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
-    }
-
-    /**
-     * Callback for the result from launching EditTagsActivity.
-     * This method is invoked after the EditTagsActivity finishes and returns the selected tags.
-     *
-     * @param req  The integer request code originally supplied to startActivityForResult(),
-     *             allowing you to identify who this result came from.
-     * @param res  The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-     */
-    @Override
-    protected void onActivityResult(int req, int res, Intent data) {
-        super.onActivityResult(req, res, data);
-        if (req == 200) {  // TODO: enum instead of hardcoded id
-            if (res == Activity.RESULT_OK) {
-                // TODO: use parcelable instead of serializable
-                ArrayList<Tag> newTags = (ArrayList<Tag>) data.getSerializableExtra("tags");
-                // Add new tags to item, if we are editing one
-                if (editingItem != null) {
-                    for (Tag tag : newTags) {
-                        tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
-                    }
-                    editingItem.setTags(newTags);
-                }
-
-            }
-
-        }
     }
 
     @Override
