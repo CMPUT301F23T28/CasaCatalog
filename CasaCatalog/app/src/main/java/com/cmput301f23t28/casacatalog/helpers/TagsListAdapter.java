@@ -1,6 +1,7 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +57,8 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
         // Update newTags based on selection made to list checkboxes
         view.setOnClickListener(l -> {
             // Get tag object that list item refers to
-            TextView name = l.findViewById(R.id.tagName);
-            Tag tag = Database.tags.findTagByName(name.getText().toString());
+            String name = ((TextView)l.findViewById(R.id.tagName)).getText().toString();
+            Tag tag = Database.tags.findTagByName(name);
 
             // Update newTags list based on checkbox state
             CheckBox c = l.findViewById(R.id.tagCheckBox);
@@ -65,13 +66,14 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
                 if(!newTags.contains(tag)){
                     tag.setUses(tag.getUses() + 1);
                     newTags.add(tag);
+                    c.setChecked(true);
                 }
-                c.setChecked(true);
             }else{
                 tag.setUses(tag.getUses() - 1);
                 newTags.remove(tag);
                 c.setChecked(false);
             }
+            Database.tags.updateTag(name, tag);
         });
 
         return new TagHolder(view);
@@ -87,6 +89,10 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
     public void onBindViewHolder(@NonNull TagHolder holder, int position) {
         Tag tag = Database.tags.getTags().get(position);
         holder.setTagName(tag.getName());
+        holder.setUsesText(tag.getUses());
+        //holder.setChecked(true);
+        Log.e("tag in list", tag.getName());
+        Log.e("da list", this.newTags.toString());
     }
 
     /**
