@@ -61,7 +61,7 @@ public class SortDialog extends DialogFragment {
                 getActivity(),
                 R.array.order_choices,
                 android.R.layout.simple_spinner_item);
-        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         orderSpinner.setAdapter(orderSpinnerAdapter);
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

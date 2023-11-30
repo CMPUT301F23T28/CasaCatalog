@@ -45,35 +45,43 @@ public class ItemSorting {
      * Use this as a parameter for ArrayList#sort in order to sort Items correctly.
      * @return A comparator for Items
      */
-    public Comparator<Item> getComparator() {
+    public Comparator<Item> getComparator(){
         Log.i("SORTER", "Sorting by '" + this.currentType.name() + "' in '" + this.currentOrder.name() + "' order.");
+        return this.currentOrder.equals(Order.descending) ? getPartialComparator().reversed() : getPartialComparator();
+    }
+
+    /**
+     * Generates an Item comparator that sorts based on the currentType.
+     * Use this as a parameter for ArrayList#sort in order to sort Items correctly.
+     * @return A comparator for Items
+     */
+    private Comparator<Item> getPartialComparator() {
         return (a, b) -> {
             switch (this.currentType) {
                 case date:
                     if (a.getDate() != null && b.getDate() != null &&
                             !a.getDate().equals(b.getDate())) {
-                        return a.getDate().after(b.getDate()) ? -1 : 1;
+                        return a.getDate().compareTo(b.getDate());
                     }
                 case description:
                     if (a.getDescription() != null && b.getDescription() != null &&
                             !a.getDescription().equals(b.getDescription())) {
-                        return a.getDescription().compareTo(b.getDescription()) < 0 ? -1 : 1;
+                        return a.getDescription().compareTo(b.getDescription());
                     }
                 case make:
                     if (a.getMake() != null && b.getMake() != null &&
                             !a.getMake().equals(b.getMake())) {
-                        return a.getMake().compareTo(b.getMake()) < 0 ? -1 : 1;
+                        return a.getMake().compareTo(b.getMake());
                     }
                 case value:
                     if (a.getPrice() != null && b.getPrice() != null &&
                             !a.getPrice().equals(b.getPrice())) {
-                        return a.getPrice() < b.getPrice() ? -1 : 1;
+                        return Double.compare(a.getPrice(), b.getPrice());
                     }
                 case tag:
-                    // TODO: implement this correctly
                     if (a.getTags() != null && b.getTags() != null &&
                             !a.getTags().equals(b.getTags())) {
-                        return 1;
+                        return b.getTagsAsStrings().toString().compareTo(a.getTagsAsStrings().toString());
                     }
                 default:
                     return 0;

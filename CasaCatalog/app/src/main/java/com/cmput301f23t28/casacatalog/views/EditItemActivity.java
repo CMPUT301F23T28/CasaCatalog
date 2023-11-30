@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +18,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -24,16 +27,13 @@ import java.util.Locale;
  * Activity for editing an existing item. Inherits functionality from AddItemActivity
  * and repurposes it for editing items.
  */
-public class EditItemActivity extends AppCompatActivity {
+public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private int listPosition;
     private Item editingItem;
-    // Temporary solution so i dont convert string to date because im lazy
-    private String stringItemDate;
 
     TextInputLayout itemNameText;
     TextInputLayout itemValueText;
-    TextInputLayout itemDateText;
     TextInputLayout itemTagsText;
     TextInputLayout itemDescriptionText;
     TextInputLayout itemMakeText;
@@ -71,15 +71,12 @@ public class EditItemActivity extends AppCompatActivity {
             // (Max) tags was changed since I worked on this, will have to fix later.
             // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
-            // Cheating to put the date here :I
-            stringItemDate = extras.getString("ITEM_DATE");
-            editingItem.setDateFormatted(stringItemDate);
+            editingItem.setDate((LocalDate) extras.get("ITEM_DATE"));
 
             // Setting all the 'EditText' thingies
             itemNameText = findViewById(R.id.itemName);
             // Should check if value is actually a double (probably possible in EditText somehow)
             itemValueText = findViewById(R.id.itemEstimatedValue);
-            itemDateText = findViewById(R.id.itemPurchaseDate);
             itemDescriptionText = findViewById(R.id.itemDescription);
             itemMakeText = findViewById(R.id.itemMake);
             itemModelText = findViewById(R.id.itemModel);
@@ -90,9 +87,9 @@ public class EditItemActivity extends AppCompatActivity {
             // Setting the text of each of the 'EditText's to whatever the item's attributes are
             itemNameText.getEditText().setText(editingItem.getName());
             itemValueText.getEditText().setText(editingItem.getPrice().toString());
-            // SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy"); // IS BUGGING
-            // TODO: Set this to a simple date not the whole thing
-            itemDateText.getEditText().setText(stringItemDate);
+            if(editingItem.getDate() != null){
+                ((TextView)findViewById(R.id.purchaseDateText)).setText(editingItem.getFormattedDate());
+            }
             itemDescriptionText.getEditText().setText(editingItem.getDescription());
             itemMakeText.getEditText().setText(editingItem.getMake());
             itemModelText.getEditText().setText(editingItem.getModel());
@@ -107,6 +104,7 @@ public class EditItemActivity extends AppCompatActivity {
 
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
+        final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
 
         /*
         ViewGroup layout = (ViewGroup) deleteButton.getParent();
@@ -132,24 +130,10 @@ public class EditItemActivity extends AppCompatActivity {
                 editingItem.setName(itemNameText.getEditText().getText().toString());
             }
 
-
             // adds the price
             if (!itemValueText.getEditText().getText().toString().isEmpty()) {
                 double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
                 editingItem.setPrice(price);
-            }
-
-            // adds the date (FAKE FOR NOW)
-            editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
-            // Real date adding
-            if (!itemDateText.getEditText().getText().toString().isEmpty()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
-                try {
-                    Date date = formatter.parse(itemDateText.getEditText().getText().toString());
-                    editingItem.setDate(date);
-                } catch (ParseException e) {
-                    Log.e("ParseExceptionEdit", "ParseException" + e.toString());
-                }
             }
 
             // Add rest of attributes as well
@@ -183,6 +167,10 @@ public class EditItemActivity extends AppCompatActivity {
             finish();
         });
 
+        addPhotoButton.setOnClickListener(view -> {
+            new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_PHOTO");
+        });
+
         // Deletes item from database, as well as on the item list displayed in MainActivity.
         deleteButton.setOnClickListener(view -> {
             Database.items.delete(editingItem.getId());
@@ -197,6 +185,7 @@ public class EditItemActivity extends AppCompatActivity {
             startActivityForResult(i, 200);
         });
 
+        findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
     }
 
     /**
@@ -228,4 +217,8 @@ public class EditItemActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onOKPressed() {
+        Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+    }
 }
