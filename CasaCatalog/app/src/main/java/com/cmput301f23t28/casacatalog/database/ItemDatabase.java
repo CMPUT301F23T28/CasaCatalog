@@ -13,11 +13,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -37,7 +36,7 @@ public class ItemDatabase {
      */
     public ItemDatabase() {
         this.db = FirebaseFirestore.getInstance();
-        this.itemRef = db.collection("itemList");
+        this.itemRef = db.collection("items");
         this.itemList = new ArrayList<>();
     }
 
@@ -60,9 +59,14 @@ public class ItemDatabase {
                 for (QueryDocumentSnapshot doc : value) {
                     String itemID = doc.getId();
                     Log.d("ITEM ID QUERY", itemID);
-                    String itemname = doc.getString("name");
-                    Double pricename = doc.getDouble("price");
-                    String dateinstring = doc.getString("date");
+                    String itemName = doc.getString("name");
+                    Double itemPrice = doc.getDouble("price");
+
+                    // Convert Date object from FireStore into LocalDateTime object
+                    LocalDate itemDate = LocalDate.now();   // fall back to current date if null
+                    if(doc.getDate("date") != null) {
+                        itemDate = doc.getDate("date").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    }
 
                     String itemMake = doc.getString("make");
                     String itemModel = doc.getString("model");
@@ -77,26 +81,13 @@ public class ItemDatabase {
                         }
                     }
 
-                    Log.i("Firestore", String.format("Item(%s,%s) fetched", itemname, pricename));
+                    Log.i("Firestore", String.format("Item(%s,%s) fetched", itemName, itemPrice));
                     Item addItem = new Item();
                     addItem.setId(itemID);
-                    addItem.setName(itemname);
-                    addItem.setPrice(pricename);
+                    addItem.setName(itemName);
+                    addItem.setPrice(itemPrice);
                     addItem.setTags(itemTags);
-
-                    //add date to the addItem
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
-                    if (dateinstring != null) {
-                        try {
-                            Date date = sdf.parse(dateinstring);
-                            addItem.setDate(date);
-                        } catch (ParseException e) {
-                            Log.e("ParseException", "ParseException" + e.toString());
-                        }
-                    }
-                    // (Max) SSH IM NOT CHANGING THE DATE TO A STRING
-                    addItem.setDateFormatted(dateinstring);
-
+                    addItem.setDate(itemDate);
                     addItem.setMake(itemMake);
                     addItem.setModel(itemModel);
                     addItem.setDescription(itemDescription);
@@ -130,12 +121,9 @@ public class ItemDatabase {
         HashMap<String, Object> data = new HashMap<>();
         data.put("name", item.getName());
         data.put("price", item.getPrice());
-        if (item.getDate() != null) {
-            // SSSHHH I DIDNT CHANGE ANYTHING
-            //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            //data.put("date", sdf.format(item.getDate()));
-            data.put("date", item.getDateFormatted());
-        }
+
+        // Firebase requires Date objects, so this converts LocalDate to Date
+        data.put("date", Date.from(item.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         data.put("make", item.getMake());
         data.put("model", item.getModel());
