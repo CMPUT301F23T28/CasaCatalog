@@ -49,11 +49,6 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
         // and setting click listeners for handling tag selection.
         View view = LayoutInflater.from(context).inflate(R.layout.tag_row, parent, false);
 
-        // Check checkboxes corresponding to tags already in newTags
-        if( this.newTags.contains(Database.tags.findTagByName(((TextView)view.findViewById(R.id.tagName)).getText().toString()) )){
-            ((CheckBox)view.findViewById(R.id.tagCheckBox)).setChecked(true);
-        }
-
         // Update newTags based on selection made to list checkboxes
         view.setOnClickListener(l -> {
             // Get tag object that list item refers to
@@ -90,9 +85,14 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
         Tag tag = Database.tags.getTags().get(position);
         holder.setTagName(tag.getName());
         holder.setUsesText(tag.getUses());
-        //holder.setChecked(true);
-        Log.e("tag in list", tag.getName());
-        Log.e("da list", this.newTags.toString());
+
+        // Check checkboxes corresponding to tags already in newTags
+        for(Tag t : this.newTags){
+            Log.e("NEWTAG", t.getName());
+            if(t.getName().contentEquals(tag.getName())) {
+                holder.setChecked(true);
+            }
+        }
     }
 
     /**
