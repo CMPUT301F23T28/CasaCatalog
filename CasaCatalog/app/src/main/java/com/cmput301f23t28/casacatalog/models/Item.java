@@ -19,6 +19,7 @@ public class Item implements Serializable {
     private Date date;
     private String dateFormatted; // I don't want to figure out how to do this another way right now
     private ByteBuffer photo;
+    private String photoURL; // used for cloud storage reference
     private ArrayList<Tag> tags;
     private String make;
     private String model;
@@ -272,5 +273,12 @@ public class Item implements Serializable {
      */
     public void toggleSelected() {
         this.selected = !this.selected;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }
