@@ -3,6 +3,7 @@ package com.cmput301f23t28.casacatalog.database;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
@@ -19,6 +20,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * Manages the operations related to Item storage and retrieval in Firestore.
@@ -227,6 +229,11 @@ public class ItemDatabase {
      */
     public void sort(ItemSorting sorting){
         this.itemList.sort(sorting.getComparator());
+        this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
+    }
+    public void filter(Filter filter){
+//        this.itemList =
+//                new ArrayList<Item>(this.itemList.stream().filter(filter.getFilterPredicate()).collect(Collectors.toList()));
         this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
     }
 

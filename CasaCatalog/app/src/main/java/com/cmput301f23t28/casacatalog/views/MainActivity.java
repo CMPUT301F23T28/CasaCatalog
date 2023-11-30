@@ -67,5 +67,8 @@ public class MainActivity extends AppCompatActivity {
         // Register sort button to open sorting dialog
         findViewById(R.id.SortButton).setOnClickListener(v -> new SortDialog().show(getSupportFragmentManager(), SortDialog.TAG));
 
+        
+        findViewById(R.id.FilterButton).setOnClickListener(v -> new FilterDialog().show(getSupportFragmentManager(), FilterDialog.TAG));
+
     }
 }
