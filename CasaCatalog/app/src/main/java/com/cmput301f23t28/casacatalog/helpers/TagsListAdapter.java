@@ -65,7 +65,7 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
                 }
             }else{
                 tag.setUses(tag.getUses() - 1);
-                newTags.remove(tag);
+                newTags.removeIf(t -> t.getName().equals(name));
                 c.setChecked(false);
             }
             Database.tags.updateTag(name, tag);
@@ -82,13 +82,12 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
      */
     @Override
     public void onBindViewHolder(@NonNull TagHolder holder, int position) {
-        Tag tag = Database.tags.getTags().get(position);
+        Tag tag = Database.tags.getSortedTags().get(position);
         holder.setTagName(tag.getName());
         holder.setUsesText(tag.getUses());
 
         // Check checkboxes corresponding to tags already in newTags
         for(Tag t : this.newTags){
-            Log.e("NEWTAG", t.getName());
             if(t.getName().contentEquals(tag.getName())) {
                 holder.setChecked(true);
             }
@@ -104,5 +103,4 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagHolder> {
     public int getItemCount() {
         return Database.tags.getTags().size();
     }
-
 }
