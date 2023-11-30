@@ -5,11 +5,13 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.Comparator;
+
 /**
  * Represents a tag that can be associated with an item. This class implements Serializable,
  * allowing tag objects to be serialized for easy storage and transmission.
  */
-public class Tag implements Parcelable {
+public class Tag implements Comparable<Tag>, Parcelable {
 
     private final String name;
     private int uses;
@@ -99,5 +101,10 @@ public class Tag implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeInt(this.uses);
+    }
+
+    @Override
+    public int compareTo(Tag a) {
+        return Integer.compare(a.getUses(), this.getUses());
     }
 }
