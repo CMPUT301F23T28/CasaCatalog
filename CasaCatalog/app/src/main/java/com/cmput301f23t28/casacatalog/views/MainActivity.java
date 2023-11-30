@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
 
 
 
+
+
         trashButton = findViewById(R.id.delete_items_button);
         editTagsButton = findViewById(R.id.add_tag_items_button);
 

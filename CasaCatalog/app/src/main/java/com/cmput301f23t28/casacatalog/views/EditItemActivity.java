@@ -31,6 +31,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     private Item editingItem;
     // Temporary solution so i dont convert string to date because im lazy
     private String stringItemDate;
+    private String photoURL;
 
     TextInputLayout itemNameText;
     TextInputLayout itemValueText;
@@ -180,6 +181,10 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 editingItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
             }
 
+            // Set link to photo URL in cloud storage
+            if (photoURL != null) {
+                editingItem.setPhotoURL(photoURL);
+            }
             Database.items.add(editingItem);
 
             finish();
@@ -237,5 +242,14 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     @Override
     public void onOKPressed() {
         Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+    }
+
+    /**
+     * Sends back the URL of the photo in cloud storage to the activity.
+     * @param input the URL of the photo.
+     */
+    @Override
+    public void sendURL(String input) {
+        photoURL = input;
     }
 }

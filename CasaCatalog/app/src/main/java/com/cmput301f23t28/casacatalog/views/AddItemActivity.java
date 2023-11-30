@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
@@ -25,9 +28,10 @@ import java.util.Locale;
  * Activity for adding a new item to the inventory.
  * It allows users to enter item details, save the item to the database, and associate tags with the item.
  */
-public class AddItemActivity extends AppCompatActivity {
+public class AddItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private Item newItem;
+    private String photoURL;
 
     /*
     //Add when it's also in the database (not sure if it is)
@@ -59,11 +63,16 @@ public class AddItemActivity extends AppCompatActivity {
 
         final Button addButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
+        final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
 
         // Remove deletebutton (only for editing not adding)
         ViewGroup layout = (ViewGroup) deleteButton.getParent();
         if (null != layout) //for safety only  as you are doing onClick
             layout.removeView(deleteButton);
+
+        addPhotoButton.setOnClickListener(view -> {
+            new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_PHOTO");
+        });
 
         // Adds item to database, as well as the item list displayed in MainActivity.
         addButton.setOnClickListener(view -> {
@@ -117,6 +126,9 @@ public class AddItemActivity extends AppCompatActivity {
                 newItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
             }
 
+            // Set link to photo URL in cloud storage
+            newItem.setPhotoURL(photoURL);
+
             Database.items.add(newItem);
 
             finish();
@@ -161,4 +173,17 @@ public class AddItemActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onOKPressed() {
+        Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+    }
+
+    /**
+     * Receives back the URL of the photo in cloud storage to the activity.
+     * @param input the URL of the photo.
+     */
+    @Override
+    public void sendURL(String input) {
+        photoURL = input;
+    }
 }

@@ -49,6 +49,14 @@ public class AddPhotoFragment extends DialogFragment {
     // instance for firebase storage and StorageReference (no idea if i need these here or in main?)
     FirebaseStorage storage;
     StorageReference storageReference;
+    String photoURL; // should probs be an array in case person chooses multiple photos
+
+    // To send string from fragment to activity (SO DIFFICULT FOR NO REASON)
+    public interface OnOKListener {
+        void sendURL(String input);
+    }
+    public OnFragmentInteractionListener mOnFragmentInteractionListener;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -57,6 +65,15 @@ public class AddPhotoFragment extends DialogFragment {
             listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context + "OnFragmentInteractionListener is not implemented");
+        }
+
+        try {
+            mOnFragmentInteractionListener
+                    = (OnFragmentInteractionListener)getActivity();
+        }
+        catch (ClassCastException e) {
+            Log.e("PHOTO FRAGMENT", "onAttach: ClassCastException: "
+                    + e.getMessage());
         }
     }
 
@@ -70,6 +87,7 @@ public class AddPhotoFragment extends DialogFragment {
 
         cameraButton = view.findViewById(R.id.camera_button);
         galleryButton = view.findViewById(R.id.gallery_button);
+
 
         cameraButton.setOnClickListener(v -> {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -187,6 +205,7 @@ public class AddPhotoFragment extends DialogFragment {
                                                         "Image Uploaded!!",
                                                         Toast.LENGTH_SHORT)
                                                 .show();
+                                        getDialog().dismiss();
                                     }
                                 })
 
@@ -202,8 +221,17 @@ public class AddPhotoFragment extends DialogFragment {
                                                 "Failed " + e.getMessage(),
                                                 Toast.LENGTH_SHORT)
                                         .show();
+                                getDialog().dismiss();
                             }
                         });
+                // Get URL from cloud storage
+                // Need to attach to item after uploading
+                photoURL = ref.getDownloadUrl().toString();
+                Log.d("PHOTO_URL", photoURL);
+                if (photoURL != null) {
+                    mOnFragmentInteractionListener.sendURL(photoURL);
+                }
+
             }
             else {
                 Toast
@@ -241,5 +269,8 @@ public class AddPhotoFragment extends DialogFragment {
 
     public interface OnFragmentInteractionListener {
         void onOKPressed(/*City city*/);
+
+        void sendURL(String URL);
     }
+
 }
