@@ -70,8 +70,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             editingItem.setSerialNumber(extras.getString("ITEM_SERIAL_NUMBER"));
             editingItem.setComment(extras.getString("ITEM_COMMENT"));
             editingItem.setDescription(extras.getString("ITEM_DESCRIPTION"));
-            // (Max) tags was changed since I worked on this, will have to fix later.
-            // editingItem.setTags(extras.getString("ITEM_TAGS"));
+            editingItem.setTags(extras.getParcelableArrayList("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
             editingItem.setDate((LocalDate) extras.get("ITEM_DATE"));
 
@@ -196,7 +195,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         // Add tag button that launches TagsActivity
         findViewById(R.id.addTagButton).setOnClickListener(view -> {
             Intent i = new Intent(this, EditTagsActivity.class);
-            i.putParcelableArrayListExtra("tags", editingItem.getTags());
+            i.putExtra("tags", editingItem.getTags());
             editTagsLauncher.launch(i);
         });
 

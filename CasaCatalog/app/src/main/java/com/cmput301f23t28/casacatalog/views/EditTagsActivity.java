@@ -38,7 +38,7 @@ public class EditTagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_tags);
 
         // Get passed in item from intent, if there is one
-        this.tags = (ArrayList<Tag>) getIntent().getSerializableExtra("tags");
+        this.tags = getIntent().getParcelableArrayListExtra("tags");
 
         tagAdapter = new TagsListAdapter(this, tags);
         tagsListView = findViewById(R.id.tags_list);
