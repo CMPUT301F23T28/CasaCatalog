@@ -1,10 +1,15 @@
 package com.cmput301f23t28.casacatalog.models;
 
-import java.io.Serializable;
+import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.cmput301f23t28.casacatalog.helpers.DateFormatter;
+import com.cmput301f23t28.casacatalog.views.MainActivity;
+import com.google.android.material.chip.Chip;
+
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +18,7 @@ import java.util.stream.Collectors;
  * Represents an item with various properties such as name, price, tags, and more.
  * This class implements Serializable, allowing its instances to be serialized for storage or transmission.
  */
-public class Item implements Serializable {
+public class Item implements Parcelable {
 
     private String id;
     private String name;
@@ -28,6 +33,7 @@ public class Item implements Serializable {
     private String comment;
     private String serialNumber;
     private Boolean selected = false;
+    private String owner;
 
     /**
      * Default constructor initializing the tags list.
@@ -41,13 +47,15 @@ public class Item implements Serializable {
         this.model = "";
         this.description = "";
         this.comment = "";
+        this.owner = MainActivity.deviceId;
+        // TODO: add photo URL stuff
     }
 
     /**
      * Gets the unique identifier of the item.
      * @return A string representing the item's ID.
      */
-    public  String getId() {
+    public String getId() {
         return id;
     }
 
@@ -90,8 +98,7 @@ public class Item implements Serializable {
      * @return A String representing a formatted date of when the item was acquired.
      */
     public String getFormattedDate() {
-        // TODO: probably define this format in an xml
-        return this.date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
+        return DateFormatter.getFormattedDate(this.date);
     }
 
 
@@ -145,12 +152,30 @@ public class Item implements Serializable {
     }
 
     /**
+     * Gets the list of tags as a list of Chips.
+     * Used primarily for rendering.
+     * @return An ArrayList of Chip objects, one for each Tag
+     */
+    public ArrayList<Chip> getTagsAsChips(Context context) {
+        ArrayList<Chip> chips = new ArrayList<>();
+
+        // Create chips for each tag, add to chip group
+        for(Tag tag : getTags()) {
+            Chip c = new Chip(context);
+            c.setText(tag.getName());
+            chips.add(c);
+        }
+
+        return chips;
+    }
+
+    /**
      * Converts the list of tags to an alphabetically sorted list of strings representing tag names.
      * This method is used for database storage and sorting.
      * @return A List of strings representing the names of the tags.
      */
     public List<String> getTagsAsStrings(){
-        return tags.stream().map(Tag::getName).sorted().collect(Collectors.toList());
+        return tags != null ? tags.stream().map(Tag::getName).sorted().collect(Collectors.toList()) : new ArrayList<>();
     }
 
     /**
@@ -289,5 +314,87 @@ public class Item implements Serializable {
     }
     public void setPhotoURLs(List<String> photoURL) {
         this.photoURL = photoURL;
+    }
+    /**
+     * Retrieves the owner of this item.
+     * @return A device ID unique to the creator of the item.
+     */
+    public String getOwner(){
+        return this.owner;
+    }
+
+    /**
+     * Sets the owner of this item.
+     * @return A device ID unique to the creator of the item.
+     */
+    public void setOwner(String owner){
+        this.owner = owner;
+    }
+
+    // Parcelable implementations
+
+    /**
+     * A description of the contents of the Parcelable
+     * @return Zero
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Creates parcelable object using passed data
+     */
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
+        }
+
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
+
+    /**
+     * Special Item constructor used by Parcelable logic only
+     * @param in A parcel containing the Item data
+     */
+    protected Item(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        price = in.readDouble();
+        date = LocalDate.ofEpochDay(in.readLong());
+        make = in.readString();
+        model = in.readString();
+        description = in.readString();
+        comment = in.readString();
+        serialNumber = in.readString();
+        tags = in.createTypedArrayList(Tag.CREATOR);
+        //photo = in.readByte();
+        // TODO: add photo URLs here
+    }
+
+    /**
+     * Defines which values should be serialized into the parceable
+     * @param dest The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeDouble(this.price);
+        dest.writeLong(this.date.toEpochDay());
+        dest.writeString(this.make);
+        dest.writeString(this.model);
+        dest.writeString(this.description);
+        dest.writeString(this.comment);
+        dest.writeString(this.serialNumber);
+        dest.writeTypedList(this.tags);
+        // TODO: photo URLS
+        //dest.writeValue(this.photo);  // TODO: fix (also 'writeValue' probably won't work)
     }
 }
