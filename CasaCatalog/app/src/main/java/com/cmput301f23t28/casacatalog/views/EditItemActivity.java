@@ -3,9 +3,7 @@ package com.cmput301f23t28.casacatalog.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -18,12 +16,7 @@ import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Activity for editing an existing item. Inherits functionality from AddItemActivity
@@ -31,17 +24,7 @@ import java.util.Locale;
  */
 public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
-    private int listPosition;
     private Item editingItem;
-
-    TextInputLayout itemNameText;
-    TextInputLayout itemValueText;
-    TextInputLayout itemTagsText;
-    TextInputLayout itemDescriptionText;
-    TextInputLayout itemMakeText;
-    TextInputLayout itemModelText;
-    TextInputLayout itemSerialNumberText;
-    TextInputLayout itemCommentText;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -55,89 +38,55 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-        editingItem = new Item();
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            // I now realize this was a terrible way of doing this
-            // But I'm too deep. Adds attributes to 'editingItem' for admittedly no reason
-            // Since it gets overwritten afterwards anyways.
-            listPosition = extras.getInt("ITEM_POSITION");
-            editingItem.setName(extras.getString("ITEM_NAME"));
-            editingItem.setPrice(extras.getDouble("ITEM_PRICE"));
-            editingItem.setMake(extras.getString("ITEM_MAKE"));
-            editingItem.setModel(extras.getString("ITEM_MODEL"));
-            editingItem.setSerialNumber(extras.getString("ITEM_SERIAL_NUMBER"));
-            editingItem.setComment(extras.getString("ITEM_COMMENT"));
-            editingItem.setDescription(extras.getString("ITEM_DESCRIPTION"));
-            editingItem.setTags(extras.getParcelableArrayList("ITEM_TAGS"));
-            editingItem.setId(extras.getString("ITEM_ID"));
-            editingItem.setDate((LocalDate) extras.get("ITEM_DATE"));
+        this.editingItem = getIntent().getParcelableExtra("item");
 
-            // Setting all the 'EditText' thingies
-            itemNameText = findViewById(R.id.itemName);
-            // Should check if value is actually a double (probably possible in EditText somehow)
-            itemValueText = findViewById(R.id.itemEstimatedValue);
-            itemDescriptionText = findViewById(R.id.itemDescription);
-            itemMakeText = findViewById(R.id.itemMake);
-            itemModelText = findViewById(R.id.itemModel);
-            itemSerialNumberText = findViewById(R.id.itemSerialNumber);
-            itemCommentText = findViewById(R.id.itemComments);
-            itemTagsText = findViewById(R.id.itemTags);
-
-            // Setting the text of each of the 'EditText's to whatever the item's attributes are
-            itemNameText.getEditText().setText(editingItem.getName());
-            itemValueText.getEditText().setText(editingItem.getPrice().toString());
-            if(editingItem.getDate() != null){
-                ((TextView)findViewById(R.id.purchaseDateText)).setText(editingItem.getFormattedDate());
-            }
-            itemDescriptionText.getEditText().setText(editingItem.getDescription());
-            itemMakeText.getEditText().setText(editingItem.getMake());
-            itemModelText.getEditText().setText(editingItem.getModel());
-            itemSerialNumberText.getEditText().setText(editingItem.getSerialNumber());
-            itemCommentText.getEditText().setText(editingItem.getComment());
-            if (editingItem.getComment() != null) {
-                Log.d("ITEM_COMMENT_EDIT_ITEM", editingItem.getComment());
-            }
-
-            //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
-        }
+        // Setting the text of each of the 'EditText's to whatever the item's attributes are
+        // TODO: hydrate commented sections
+        ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(editingItem.getName());
+        ((TextInputLayout) findViewById(R.id.itemEstimatedValue)).getEditText().setText(editingItem.getPrice().toString());
+        //itemDateText.getEditText().setText(stringItemDate);
+        ((TextInputLayout) findViewById(R.id.itemDescription)).getEditText().setText(editingItem.getDescription());
+        ((TextInputLayout) findViewById(R.id.itemMake)).getEditText().setText(editingItem.getMake());
+        ((TextInputLayout) findViewById(R.id.itemModel)).getEditText().setText(editingItem.getModel());
+        ((TextInputLayout) findViewById(R.id.itemSerialNumber)).getEditText().setText(editingItem.getSerialNumber());
+        ((TextInputLayout) findViewById(R.id.itemComments)).getEditText().setText(editingItem.getComment());
+        //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
 
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
         final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
 
-        /*
-        ViewGroup layout = (ViewGroup) deleteButton.getParent();
-        Button btnTag = new Button(this);
-        btnTag.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        btnTag.setText("Delete Item");
-        btnTag.setId(some_random_id);
-        //add button to the layout
-        layout.addView(btnTag);
-        */
-
         editButton.setText(R.string.item_edit_button_text);
         // Edits item in database, as well as on the item list displayed in MainActivity.
+
         editButton.setOnClickListener(view -> {
-            // Feel free to get rid of below if it's not necessary (the javadoc)
-
-            // Add rest of attributes as well (make model desc. comment etc)
-
-            // Delete item from database, and add new item with new attributes
-            Database.items.delete(editingItem.getId());
-            // Now add new item
+            TextInputLayout itemNameText = findViewById(R.id.itemName);
             if (itemNameText.getEditText().getText().toString() != null) {
                 editingItem.setName(itemNameText.getEditText().getText().toString());
             }
 
-            // adds the price
+            TextInputLayout itemValueText = findViewById(R.id.itemEstimatedValue);
             if (!itemValueText.getEditText().getText().toString().isEmpty()) {
                 double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
                 editingItem.setPrice(price);
             }
 
-            // Add rest of attributes as well
+            // adds the date (FAKE FOR NOW)
+            /*
+            editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
+            // Real date adding
+            if (!itemDateText.getEditText().getText().toString().isEmpty()) {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
+                try {
+                    Date date = formatter.parse(itemDateText.getEditText().getText().toString());
+                    editingItem.setDate(date);
+                } catch (ParseException e) {
+                    Log.e("ParseExceptionEdit", "ParseException" + e.toString());
+                }
+            }
+             */
+
             TextInputLayout makeValue = findViewById(R.id.itemMake);
             if (makeValue.getEditText().getText().toString() != null) {
                 editingItem.setMake(makeValue.getEditText().getText().toString());
@@ -163,7 +112,10 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 editingItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
             }
 
-            Database.items.add(editingItem);
+            // Send new item copy back
+            Intent ret = new Intent();
+            ret.putExtra("item", editingItem);
+            setResult(Activity.RESULT_OK, ret);
 
             finish();
         });
