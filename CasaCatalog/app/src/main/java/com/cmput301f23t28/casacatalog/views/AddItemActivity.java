@@ -18,6 +18,7 @@ import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import java.util.Locale;
 public class AddItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private Item newItem;
-    private String photoURL;
+    private ArrayList<String> photoURLs = new ArrayList<>();
 
     /*
     //Add when it's also in the database (not sure if it is)
@@ -127,7 +128,9 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
             }
 
             // Set link to photo URL in cloud storage
-            newItem.setPhotoURL(photoURL);
+            if (photoURLs.size() > 0) {
+                newItem.setPhotoURLs(photoURLs);
+            }
 
             Database.items.add(newItem);
 
@@ -184,6 +187,7 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
      */
     @Override
     public void sendURL(String input) {
-        photoURL = input;
+        photoURLs.add(input);
+        Log.d("PHOTOURL", "received " + input);
     }
 }
