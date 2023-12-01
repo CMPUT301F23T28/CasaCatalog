@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Tag;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class EditTagsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_tags);
+        ToolbarBuilder.create(this, getString(R.string.title_edit_tags));
 
         // Get passed in item from intent, if there is one
         ArrayList<Tag> tags = getIntent().getParcelableArrayListExtra("tags");

@@ -11,6 +11,8 @@
         android:orientation="vertical"
         tools:context="AddItemActivity">
 
+        <include layout="@layout/layout_toolbar"/>
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="15dp"/>

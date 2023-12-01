@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 
 /**
  * Represents an activity for user interactions within the app.
@@ -35,6 +36,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        ToolbarBuilder.create(this, getString(R.string.title_profile));
 
         userProfileImage = findViewById(R.id.userProfileImage);
         usernameTextView = findViewById(R.id.usernameTextView);
@@ -44,7 +46,5 @@ public class UserActivity extends AppCompatActivity {
         }
         // Set the profile image, if you have different images for different users
         userProfileImage.setImageResource(R.drawable.profile);
-
-        findViewById(R.id.backButton).setOnClickListener(view -> finish());
     }
 }
