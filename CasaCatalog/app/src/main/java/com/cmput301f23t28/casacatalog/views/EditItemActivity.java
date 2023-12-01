@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -31,7 +32,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     private Item editingItem;
     // Temporary solution so i dont convert string to date because im lazy
     private String stringItemDate;
-    private String photoURL;
+    private List<String> photoURLs = new ArrayList<>();
 
     TextInputLayout itemNameText;
     TextInputLayout itemValueText;
@@ -182,8 +183,8 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             }
 
             // Set link to photo URL in cloud storage
-            if (photoURL != null) {
-                editingItem.setPhotoURL(photoURL);
+            if (photoURLs.size() > 0) {
+                editingItem.setPhotoURLs(photoURLs);
             }
             Database.items.add(editingItem);
 
@@ -233,9 +234,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                     }
                     editingItem.setTags(newTags);
                 }
-
             }
-
         }
     }
 
@@ -250,6 +249,8 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
      */
     @Override
     public void sendURL(String input) {
-        photoURL = input;
+        Log.d("PHOTOURL", "Received " + input);
+        photoURLs.add(input);
     }
+
 }

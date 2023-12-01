@@ -134,7 +134,7 @@ public class ItemDatabase {
         data.put("comments", item.getComment());
         data.put("serialNumber", item.getSerialNumber());
         data.put("tags", item.getTagsAsStrings());
-        data.put("photos", item.getPhotoURL());
+        data.put("photos", item.getPhotoURLs());
 
         this.itemRef
                 .add(data)

@@ -25,8 +25,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -49,7 +52,7 @@ public class AddPhotoFragment extends DialogFragment {
     // instance for firebase storage and StorageReference (no idea if i need these here or in main?)
     FirebaseStorage storage;
     StorageReference storageReference;
-    String photoURL; // should probs be an array in case person chooses multiple photos
+    String photoURL;
 
     // To send string from fragment to activity (SO DIFFICULT FOR NO REASON)
     public interface OnOKListener {
@@ -188,49 +191,73 @@ public class AddPhotoFragment extends DialogFragment {
 
                 // adding listeners on upload
                 // or failure of image
-                ref.putFile(filePath)
-                        .addOnSuccessListener(
-                                new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                                    @Override
-                                    public void onSuccess(
-                                            UploadTask.TaskSnapshot taskSnapshot)
-                                    {
-
-                                        // Image uploaded successfully
-                                        // Dismiss dialog
-                                        progressDialog.dismiss();
-                                        Toast
-                                                .makeText(getActivity(),
-                                                        "Image Uploaded!!",
-                                                        Toast.LENGTH_SHORT)
-                                                .show();
-                                        getDialog().dismiss();
-                                    }
-                                })
-
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e)
-                            {
-
-                                // Error, Image not uploaded
-                                progressDialog.dismiss();
-                                Toast
-                                        .makeText(getActivity(),
-                                                "Failed " + e.getMessage(),
-                                                Toast.LENGTH_SHORT)
-                                        .show();
-                                getDialog().dismiss();
-                            }
-                        });
+                UploadTask uploadTask = ref.putFile(filePath);
+//                        .addOnSuccessListener(
+//                                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//
+//                                    @Override
+//                                    public void onSuccess(
+//                                            UploadTask.TaskSnapshot taskSnapshot)
+//                                    {
+//
+//                                        // Image uploaded successfully
+//                                        // Dismiss dialog
+//                                        progressDialog.dismiss();
+//                                        Toast
+//                                                .makeText(getActivity(),
+//                                                        "Image Uploaded!!",
+//                                                        Toast.LENGTH_SHORT)
+//                                                .show();
+//                                        getDialog().dismiss();
+//                                    }
+//                                })
+//
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e)
+//                            {
+//
+//                                // Error, Image not uploaded
+//                                progressDialog.dismiss();
+//                                Toast
+//                                        .makeText(getActivity(),
+//                                                "Failed " + e.getMessage(),
+//                                                Toast.LENGTH_SHORT)
+//                                        .show();
+//                                getDialog().dismiss();
+//                            }
+//                        });
                 // Get URL from cloud storage
                 // Need to attach to item after uploading
-                photoURL = ref.getDownloadUrl().toString();
-                Log.d("PHOTO_URL", photoURL);
-                if (photoURL != null) {
-                    mOnFragmentInteractionListener.sendURL(photoURL);
-                }
+
+                // Get the download URL
+                uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        // Continue with the task to get the download URL
+                        return ref.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            // The download URL of the image
+                            progressDialog.dismiss();
+                            Uri downloadUri = task.getResult();
+                            photoURL = downloadUri.toString();
+                            mOnFragmentInteractionListener.sendURL(photoURL);
+
+                            Log.d("Download URL", photoURL);
+
+                        } else {
+                            // Handle failures
+                            Log.e("Download URL", "Failed to get download URL");
+                        }
+                    }
+                });
 
             }
             else {
@@ -240,7 +267,6 @@ public class AddPhotoFragment extends DialogFragment {
                             Toast.LENGTH_SHORT)
                     .show();
             }
-
         }
     }
 
@@ -269,7 +295,6 @@ public class AddPhotoFragment extends DialogFragment {
 
     public interface OnFragmentInteractionListener {
         void onOKPressed(/*City city*/);
-
         void sendURL(String URL);
     }
 

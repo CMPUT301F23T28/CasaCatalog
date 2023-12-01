@@ -19,7 +19,7 @@ public class Item implements Serializable {
     private Date date;
     private String dateFormatted; // I don't want to figure out how to do this another way right now
     private ByteBuffer photo;
-    private String photoURL; // used for cloud storage reference
+    private List<String> photoURL; // used for cloud storage reference
     private ArrayList<Tag> tags;
     private String make;
     private String model;
@@ -275,10 +275,10 @@ public class Item implements Serializable {
         this.selected = !this.selected;
     }
 
-    public String getPhotoURL() {
+    public List<String> getPhotoURLs() {
         return photoURL;
     }
-    public void setPhotoURL(String photoURL) {
+    public void setPhotoURLs(List<String> photoURL) {
         this.photoURL = photoURL;
     }
 }
