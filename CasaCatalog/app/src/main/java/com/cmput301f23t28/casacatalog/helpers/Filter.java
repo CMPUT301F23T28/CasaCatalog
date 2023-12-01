@@ -1,14 +1,20 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
+import android.util.Log;
+
 import com.cmput301f23t28.casacatalog.models.Item;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class Filter {
     public enum Type { date, description, make, value, tag }
-    public enum Order { ascending, descending }
-    private ItemSorting.Type currentType;
-    private ItemSorting.Order currentOrder;
+    public enum FilterType {equals, notequals, contains, notcontains, lessthan, greaterthan,
+        between, notbetween}
+    private Filter.Type currentType;
+    private Filter.FilterType currentFilterType;
 
     /**
      * Given strings for what to sort by and in what order,
@@ -17,11 +23,11 @@ public class Filter {
      * @param order A String sorting order, either "ascending" or "descending"
      */
     public Filter(String type, String order){
-        for(ItemSorting.Type t : ItemSorting.Type.values()){
+        for(Filter.Type t : Filter.Type.values()){
             if( type.equalsIgnoreCase(t.name()) ) currentType = t;
         }
-        for(ItemSorting.Order o : ItemSorting.Order.values()){
-            if( order.equalsIgnoreCase(o.name()) ) currentOrder = o;
+        for(Filter.FilterType o : Filter.FilterType.values()){
+            if( order.equalsIgnoreCase(o.name()) ) currentFilterType = o;
         }
     }
 
@@ -30,9 +36,59 @@ public class Filter {
      * sorts by date in descending order.
      */
     public Filter(){
-        this.currentType = ItemSorting.Type.date;
-        this.currentOrder = ItemSorting.Order.descending;
+        this.currentType = Type.date;
+        this.currentFilterType = FilterType.equals;
     }
-//    public Predicate<Item> getFilterPredicate(){
-//    }
+    public Predicate<Item> getFilterPredicate(String val1, String val2){
+                Item item = new Item();
+                switch (this.currentType) {
+                    case date:
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate startDate = LocalDate.parse(val1, formatter);
+                        if (this.currentFilterType == FilterType.between) {
+                            LocalDate endDate = LocalDate.parse(val2, formatter);
+                            return x -> !x.getDate().isBefore(startDate) && !x.getDate().isAfter(endDate);
+                        } else if (this.currentFilterType == FilterType.equals) {
+                            return x -> x.getDate().isEqual(startDate);
+                        }
+
+                    case description:
+                        if (this.currentFilterType == FilterType.contains){
+                            return x -> x.getDescription().contains(val1);
+                        } else if (this.currentFilterType == FilterType.notcontains){
+                            return x -> !x.getDescription().contains(val1);
+                        }
+                    case make:
+                        if (this.currentFilterType == FilterType.contains){
+                            return x -> x.getMake().contains(val1);
+                        }else if (this.currentFilterType == FilterType.notcontains){
+                            return x -> !x.getMake().contains(val1);
+                        }
+                    case value:
+                        final Double item_value;
+                        try{
+                            item_value = Double.parseDouble(val1);
+                        }catch (NumberFormatException e){
+                            Log.e("FILTER", "item value/price is not a double " + val1);
+                            return Predicate.isEqual(0);
+                        }
+                        if (this.currentFilterType == FilterType.equals){
+//                            item_value = 123.0;
+                            return x -> (x.getPrice() == item_value.doubleValue());
+                        } else if (this.currentFilterType == FilterType.notequals){
+                            return x -> x.getPrice() != item_value.doubleValue();
+                        }
+                    case tag:
+                        Log.i("PREDICATE","Tag is equal to " + val1);
+                        if (this.currentFilterType == FilterType.equals){
+                            return x -> x.getTagsAsStrings().contains(val1);
+                        } else if (this.currentFilterType == FilterType.notequals){
+                            return x -> !x.getTagsAsStrings().contains(val1);
+                        }
+
+            };
+                Log.e("PREDICATE","Failed to return a predicate");
+            return Predicate.isEqual(0);
+    }
+
 }
