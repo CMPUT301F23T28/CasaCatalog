@@ -31,6 +31,7 @@ import java.util.Locale;
 public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private int listPosition;
+    private List<String> photoURLs = new ArrayList<>();
     private Item editingItem;
     TextInputLayout itemNameText;
     TextInputLayout itemValueText;
@@ -72,6 +73,12 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             // editingItem.setTags(extras.getString("ITEM_TAGS"));
             editingItem.setId(extras.getString("ITEM_ID"));
             editingItem.setDate((LocalDate) extras.get("ITEM_DATE"));
+            int listSize = extras.getInt("ITEM_PHOTO_LIST_SIZE");
+            for (int i = 0; i < listSize; i++) {
+                photoURLs.add(extras.getString("ITEM_PHOTO_URL+"+i));
+            }
+            editingItem.setPhotoURLs(photoURLs);
+
 
             // Setting all the 'EditText' thingies
             itemNameText = findViewById(R.id.itemName);
