@@ -8,6 +8,8 @@ import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 
 import java.nio.ByteBuffer;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -36,16 +38,9 @@ public class ItemTest {
 
     @Test
     public void testSetAndGetDate() {
-        Date now = new Date();
-        item.setDate(now);
-        assertEquals(now, item.getDate());
-    }
-
-    @Test
-    public void testSetAndGetDateFormatted() {
-        String dateFormatted = "2023-11-10";
-        item.setDateFormatted(dateFormatted);
-        assertEquals(dateFormatted, item.getDateFormatted());
+        LocalDate date = LocalDate.of(1996, Month.JUNE, 23);
+        item.setDate(date);
+        assertEquals(date, item.getDate());
     }
 
     @Test
