@@ -7,6 +7,7 @@ import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,6 +38,7 @@ public class ItemDatabase {
     public static final String COMMENT_KEY = "comments";
     public static final String SERIAL_KEY = "serialNumber";
     public static final String TAGS_KEY = "tags";
+    public static final String OWNER_KEY = "owner";
 
     /**
      * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection, setting up real-time data synchronization.
@@ -113,6 +115,7 @@ public class ItemDatabase {
                     }
 
                     addItem.setSerialNumber(itemSerialNumber);
+                    addItem.setOwner(doc.getString("owner"));
 
                     this.itemList.add(addItem);
                 }
@@ -147,6 +150,7 @@ public class ItemDatabase {
         data.put(COMMENT_KEY, item.getComment());
         data.put(SERIAL_KEY, item.getSerialNumber());
         data.put(TAGS_KEY, item.getTagsAsStrings());
+        data.put(OWNER_KEY, item.getOwner());
         return data;
     }
 
@@ -178,6 +182,11 @@ public class ItemDatabase {
 
                     item.setId(generatedDocumentId);
                     data.put("Id", item.getId());
+
+                    // Set owner to current user
+                    item.setOwner(MainActivity.deviceId);
+                    data.put("owner", MainActivity.deviceId);
+
                     documentReference.set(data)
                             .addOnSuccessListener(aVoid -> {
                                 Log.i("Firestore", "ID field updated in Firestore document");
@@ -223,6 +232,7 @@ public class ItemDatabase {
      */
     public double getTotalValue() {
         double totalValue = 0;
+        // TODO: use itemlist of only items user owns
         for (Item item : this.itemList) {
             if (item.getPrice() != null) {
                 totalValue += item.getPrice();
@@ -233,8 +243,7 @@ public class ItemDatabase {
 
     /**
      * Retrieves a reference to the item list
-     *
-     * @return the itemList arraylist
+     * @return A ArrayList of Items
      */
     public ArrayList<Item> getItems() {
         return this.itemList;

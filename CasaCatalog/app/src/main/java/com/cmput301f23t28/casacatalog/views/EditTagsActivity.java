@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Tag;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class EditTagsActivity extends AppCompatActivity {
 
         // Capture all selected tags from list and add to item's tag list
         // when the back button is pressed
-        findViewById(R.id.backButtonFromEditTags).setOnClickListener(view -> {
+        ToolbarBuilder.create(this, getString(R.string.title_edit_tags), view -> {
             // Delete any tags with no uses
             for (Tag tag : Database.tags.getTags()) {
                 if (tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());

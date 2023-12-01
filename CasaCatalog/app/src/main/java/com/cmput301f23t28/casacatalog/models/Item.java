@@ -4,11 +4,12 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.cmput301f23t28.casacatalog.helpers.DateFormatter;
+import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.android.material.chip.Chip;
 
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class Item implements Parcelable {
     private String comment;
     private String serialNumber;
     private Boolean selected = false;
+    private String owner;
 
     /**
      * Default constructor initializing the tags list.
@@ -44,6 +46,7 @@ public class Item implements Parcelable {
         this.model = "";
         this.description = "";
         this.comment = "";
+        this.owner = MainActivity.deviceId;
     }
 
     /**
@@ -93,8 +96,7 @@ public class Item implements Parcelable {
      * @return A String representing a formatted date of when the item was acquired.
      */
     public String getFormattedDate() {
-        // TODO: probably define this format in an xml
-        return this.date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
+        return DateFormatter.getFormattedDate(this.date);
     }
 
 
@@ -303,6 +305,22 @@ public class Item implements Parcelable {
      */
     public void toggleSelected() {
         this.selected = !this.selected;
+    }
+
+    /**
+     * Retrieves the owner of this item.
+     * @return A device ID unique to the creator of the item.
+     */
+    public String getOwner(){
+        return this.owner;
+    }
+
+    /**
+     * Sets the owner of this item.
+     * @return A device ID unique to the creator of the item.
+     */
+    public void setOwner(String owner){
+        this.owner = owner;
     }
 
     // Parcelable implementations

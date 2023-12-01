@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
@@ -41,6 +42,8 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+        ToolbarBuilder.create(this, getString(R.string.title_add_item));
+
         newItem = new Item();
 
         final Button addButton = findViewById(R.id.addItemToListBtn);

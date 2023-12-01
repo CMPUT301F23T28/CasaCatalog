@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
@@ -43,6 +44,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         setContentView(R.layout.activity_add_item);
 
         this.editingItem = getIntent().getParcelableExtra("item");
+        ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
 
         // Setting the text of each of the 'EditText's to whatever the item's attributes are
         ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(editingItem.getName());
