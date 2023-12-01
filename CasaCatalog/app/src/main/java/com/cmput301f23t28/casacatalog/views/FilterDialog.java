@@ -2,13 +2,11 @@ package com.cmput301f23t28.casacatalog.views;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.transition.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -18,7 +16,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
+import com.google.android.material.textfield.TextInputLayout;
 
 /**
  * The sorting dialog fragment is presented when the user requests to sort the item list
@@ -26,8 +26,8 @@ import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
  */
 public class FilterDialog extends DialogFragment {
     public static final String TAG = "DIALOG_FILTER";
-    private static String sortByType = ItemSorting.Type.date.name();
-    private static String sortOrder = ItemSorting.Order.descending.name();
+    private static String filterByType = ItemSorting.Type.date.name();
+    private static String filterCom = ItemSorting.Order.descending.name();
 
     /**
      * Initializes the activity, registers listeners to allow inputting into spinners.
@@ -41,6 +41,9 @@ public class FilterDialog extends DialogFragment {
 //        getDialog().getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, 700);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_filter, null);
 
+        TextInputLayout inputValue1 = view.findViewById(R.id.filter_value_1);
+        TextInputLayout inputValue2 = view.findViewById(R.id.filter_value_2);
+
         Spinner typeSpinner = view.findViewById(R.id.spinner_filter_type);
         ArrayAdapter<CharSequence> typeSpinnerAdapter = ArrayAdapter.createFromResource(
                 getActivity(),
@@ -51,35 +54,43 @@ public class FilterDialog extends DialogFragment {
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sortByType = parent.getSelectedItem().toString();
+                filterByType = parent.getSelectedItem().toString();
+                if (filterByType.toLowerCase().equals("date")){
+                    inputValue2.setVisibility(View.VISIBLE);
+                } else{
+                    inputValue2.setVisibility(View.GONE);
+                }
             }
 
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        Spinner orderSpinner = view.findViewById(R.id.spinner_filter_comp);
+        Spinner filterSpinner = view.findViewById(R.id.spinner_filter_comp);
         ArrayAdapter<CharSequence> orderSpinnerAdapter = ArrayAdapter.createFromResource(
                 getActivity(),
-                R.array.order_choices,
+                R.array.filter_comp_choices,
                 android.R.layout.simple_spinner_item);
         typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        orderSpinner.setAdapter(orderSpinnerAdapter);
-        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        filterSpinner.setAdapter(orderSpinnerAdapter);
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sortOrder = parent.getSelectedItem().toString();
+                filterCom = parent.getSelectedItem().toString();
             }
 
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+//        TextInputLayout inputValue2 = view.findViewById(R.id.filter_input_value_2);
         // Creating dialog menu
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(view);
         builder.setTitle("Filter by");  // TODO: extract to string resource file
         builder.setNegativeButton(getString(android.R.string.no), null);
         builder.setPositiveButton(getString(android.R.string.yes), (dialogInterface, i) -> {
-            Database.items.sort(new ItemSorting(sortByType, sortOrder));
+            String val1Str = inputValue1.getEditText().getText().toString();
+            String val2Str = inputValue2.getEditText().getText().toString();
+            Database.items.filter(new Filter(filterByType, filterCom), val1Str, val2Str);
             Toast.makeText(this.getContext(), "Filtered items.", Toast.LENGTH_SHORT).show();
         });
         return builder.create();

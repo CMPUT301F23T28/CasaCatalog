@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -217,11 +218,15 @@ public class ItemDatabase {
      */
     public void sort(ItemSorting sorting){
         this.itemList.sort(sorting.getComparator());
+
         this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
     }
-    public void filter(Filter filter){
-//        this.itemList =
-//                new ArrayList<Item>(this.itemList.stream().filter(filter.getFilterPredicate()).collect(Collectors.toList()));
+    public void filter(Filter filter, String val1, String val2){
+        //TODO: add guards to repull the database before filtering
+        List<Item> filteritemlist =
+                this.itemList.stream().filter(filter.getFilterPredicate(val1,val2)).collect(Collectors.toList());
+        this.itemList.clear();
+        this.itemList.addAll(filteritemlist);
         this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
     }
 
