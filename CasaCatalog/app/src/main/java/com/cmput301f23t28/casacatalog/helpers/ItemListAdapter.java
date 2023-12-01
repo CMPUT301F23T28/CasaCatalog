@@ -144,6 +144,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
         editItemActivityIntent.putExtra("ITEM_MODEL", item.getModel());
         editItemActivityIntent.putExtra("ITEM_SERIAL_NUMBER", item.getSerialNumber());
         editItemActivityIntent.putExtra("ITEM_COMMENT", item.getComment());
+        editItemActivityIntent.putExtra("ITEM_PHOTO_LIST_SIZE", item.getPhotoURLs().size());
+        for (int i = 0; i < item.getPhotoURLs().size(); i++) {
+            editItemActivityIntent.putExtra("ITEM_PHOTO_URL_"+i, item.getPhotoURLs().get(i));
+        }
+
         // TODO: Figure out whether we need to pass the tags here or not
         //editItemActivityIntent.putExtra("ITEM_TAGS", item.getTags());
         context.startActivity(editItemActivityIntent);
