@@ -29,11 +29,23 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 
-
+/**
+ * TextRecognitionHelper provides functionalities for text recognition in images using
+ * Google's ML Kit Text Recognition API.
+ * <p>
+ * This class includes methods to handle text recognition from images, considering
+ * the device's orientation and camera characteristics. It is designed to be used
+ * within an Android application context.
+ */
 public class TextRecognitionHelper {
     private Context context;
     private TextRecognizer recognizer;
 
+    /**
+     * Constructor for TextRecognitionHelper.
+     *
+     * @param context The Android context, usually provided by an Activity or Application.
+     */
     public TextRecognitionHelper(Context context) {
         this.context = context;
         this.recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
@@ -49,8 +61,13 @@ public class TextRecognitionHelper {
     }
 
     /**
-     * Get the angle by which an image must be rotated given the device's current
-     * orientation.
+     * Calculates the rotation compensation for an image based on the device's current orientation.
+     *
+     * @param cameraId       The ID of the camera being used.
+     * @param activity       The activity context, used to access system services.
+     * @param isFrontFacing  Boolean indicating if the camera is front-facing.
+     * @return The rotation compensation angle in degrees.
+     * @throws CameraAccessException If the camera ID is not valid or access is not available.
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private int getRotationCompensation(String cameraId, Activity activity, boolean isFrontFacing)
@@ -75,12 +92,23 @@ public class TextRecognitionHelper {
         return rotationCompensation;
     }
 
+    /**
+     * Determines the current rotation degree of the device.
+     *
+     * @return The rotation degree (0, 90, 180, 270) of the device.
+     */
     private int getRotationDegree() {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int deviceRotation = windowManager.getDefaultDisplay().getRotation();
         return ORIENTATIONS.get(deviceRotation);
     }
 
+    /**
+     * Recognizes and processes text from a predefined image resource.
+     * <p>
+     * This method handles text recognition from an image, processes the recognized text,
+     * and logs the results. It uses a sample image resource defined in R.drawable.sample_serial.
+     */
     public void recognizeTextFromImage() {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.sample_serial);
         int rotationDegree = getRotationDegree();
@@ -121,6 +149,11 @@ public class TextRecognitionHelper {
                                 });
     }
 
+    /**
+     * Processes and logs the extracted text from the image.
+     *
+     * @param text The extracted text from the image.
+     */
     private void processExtractedText(String text) {
         Log.d("TextRecognition", "Text From Image: " + text);
     }

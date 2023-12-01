@@ -2,8 +2,10 @@ package com.cmput301f23t28.casacatalog.models;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +18,7 @@ public class Item implements Serializable {
     private String id;
     private String name;
     private Double price;
-    private Date date;
-    private String dateFormatted; // I don't want to figure out how to do this another way right now
+    private LocalDate date;
     private ByteBuffer photo;
     private ArrayList<Tag> tags;
     private String make;
@@ -31,7 +32,14 @@ public class Item implements Serializable {
      * Default constructor initializing the tags list.
      */
     public Item(){
+        // Defaults
         this.tags = new ArrayList<>();
+        this.date = LocalDate.now();
+        this.price = 0.0;
+        this.make = "";
+        this.model = "";
+        this.description = "";
+        this.comment = "";
     }
 
     /**
@@ -52,10 +60,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the name of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's name.
      */
     public String getName() {
-        return name;
+        return this.name != null ? this.name : "";
     }
 
     /**
@@ -68,42 +77,38 @@ public class Item implements Serializable {
 
     /**
      * Gets the purchase or acquisition date of the item.
-     * @return A Date object representing when the item was acquired.
+     * Returns current date if there is no date set.
+     * @return A LocalDateTime object representing when the item was acquired.
      */
-    public Date getDate() {
-        return date;
+    public LocalDate getDate() {
+        return this.date;
     }
 
     /**
      * Gets the formatted purchase or acquisition date of the item.
      * @return A String representing a formatted date of when the item was acquired.
      */
-    public String getDateFormatted() { // (Max) Im doing this for the editItem i cannot be bothered
-        return dateFormatted;
+    public String getFormattedDate() {
+        // TODO: probably define this format in an xml
+        return this.date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
     }
 
-    /**
-     * Sets the formatted purchase or acquisition date of the item.
-     * @param dateFormatted A String representing a formatted date of when the item was acquired.
-     */
-    public void setDateFormatted(String dateFormatted) {
-        this.dateFormatted = dateFormatted;
-    }
 
     /**
      * Sets the purchase or acquisition date of the item.
-     * @param date A Date object containing the new acquisition date of the item.
+     * @param date A LocalDateTime object containing the new acquisition date of the item.
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
     /**
      * Gets the price of the item.
+     * Returns 0 if there is no price set.
      * @return A Double representing the item's price.
      */
     public Double getPrice() {
-        return price;
+        return this.price;
     }
 
     /**
@@ -139,12 +144,12 @@ public class Item implements Serializable {
     }
 
     /**
-     * Converts the list of tags to a list of strings representing tag names.
-     * This method is used for database storage.
+     * Converts the list of tags to an alphabetically sorted list of strings representing tag names.
+     * This method is used for database storage and sorting.
      * @return A List of strings representing the names of the tags.
      */
     public List<String> getTagsAsStrings(){
-        return tags.stream().map(Tag::getName).collect(Collectors.toList());
+        return tags.stream().map(Tag::getName).sorted().collect(Collectors.toList());
     }
 
     /**
@@ -173,10 +178,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the make of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's make.
      */
     public String getMake() {
-        return make;
+        return this.make;
     }
 
     /**
@@ -189,10 +195,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the model of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's model.
      */
     public String getModel() {
-        return model;
+        return this.model;
     }
 
     /**
@@ -205,10 +212,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the description of the item.
+     * Returns empty string if there is none set.
      * @return A string representing the item's description.
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -221,10 +229,11 @@ public class Item implements Serializable {
 
     /**
      * Gets the comment associated with the item.
+     * Returns empty string if there is none set.
      * @return A string representing any comments associated with the item.
      */
     public String getComment() {
-        return comment;
+        return this.comment;
     }
 
     /**

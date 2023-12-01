@@ -1,12 +1,15 @@
 package com.cmput301f23t28.casacatalog.views;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));
+        itemListView.setItemAnimator(null);     // fixes bug in Android
         Database.items.registerListener(itemAdapter, findViewById(R.id.InventoryValueNumber));
 
         // Sends the user to the 'add item' activity, allowing them to input their item and all of its relevant details.
@@ -100,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         // Find the userProfileImage view by its ID and set an OnClickListener
         CircleImageView userProfileImage = findViewById(R.id.userProfileImage);
         userProfileImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, UserActivity.class)));
+
+        // Register sort button to open sorting dialog
+        findViewById(R.id.SortButton).setOnClickListener(v -> new SortDialog().show(getSupportFragmentManager(), SortDialog.TAG));
 
     }
 

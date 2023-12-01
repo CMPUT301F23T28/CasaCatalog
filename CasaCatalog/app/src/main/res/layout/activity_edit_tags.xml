@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tags_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toEndOf="@+id/backButtonTempName"
+        app:layout_constraintStart_toEndOf="@+id/backButtonFromEditTags"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -38,10 +38,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButtonTempName" />
+        app:layout_constraintTop_toBottomOf="@+id/backButtonFromEditTags" />
 
     <ImageButton
-        android:id="@+id/backButtonTempName"
+        android:id="@+id/backButtonFromEditTags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
