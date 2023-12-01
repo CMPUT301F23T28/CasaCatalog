@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -14,6 +15,8 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -42,16 +45,16 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         this.editingItem = getIntent().getParcelableExtra("item");
 
         // Setting the text of each of the 'EditText's to whatever the item's attributes are
-        // TODO: hydrate commented sections
         ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(editingItem.getName());
         ((TextInputLayout) findViewById(R.id.itemEstimatedValue)).getEditText().setText(editingItem.getPrice().toString());
-        //itemDateText.getEditText().setText(stringItemDate);
+        ((TextView) findViewById(R.id.purchaseDateText)).setText(editingItem.getFormattedDate());
         ((TextInputLayout) findViewById(R.id.itemDescription)).getEditText().setText(editingItem.getDescription());
         ((TextInputLayout) findViewById(R.id.itemMake)).getEditText().setText(editingItem.getMake());
         ((TextInputLayout) findViewById(R.id.itemModel)).getEditText().setText(editingItem.getModel());
         ((TextInputLayout) findViewById(R.id.itemSerialNumber)).getEditText().setText(editingItem.getSerialNumber());
         ((TextInputLayout) findViewById(R.id.itemComments)).getEditText().setText(editingItem.getComment());
-        //itemTagsText.getEditText().setText(editingItem.getTags()); // not working
+
+        hydrateTagList(editingItem, findViewById(R.id.itemTagsList));
 
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
@@ -71,21 +74,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 double price = Double.parseDouble(itemValueText.getEditText().getText().toString());
                 editingItem.setPrice(price);
             }
-
-            // adds the date (FAKE FOR NOW)
-            /*
-            editingItem.setDateFormatted(itemDateText.getEditText().getText().toString());
-            // Real date adding
-            if (!itemDateText.getEditText().getText().toString().isEmpty()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
-                try {
-                    Date date = formatter.parse(itemDateText.getEditText().getText().toString());
-                    editingItem.setDate(date);
-                } catch (ParseException e) {
-                    Log.e("ParseExceptionEdit", "ParseException" + e.toString());
-                }
-            }
-             */
 
             TextInputLayout makeValue = findViewById(R.id.itemMake);
             if (makeValue.getEditText().getText().toString() != null) {
@@ -140,6 +128,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                         if(result.getData() != null) {
                             ArrayList<Tag> newTags = result.getData().getParcelableArrayListExtra("tags");
                             editingItem.setTags(newTags);
+                            hydrateTagList(editingItem, findViewById(R.id.itemTagsList));
                         }
                     }
                 }
@@ -151,6 +140,17 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             editTagsLauncher.launch(i);
         });
 
+    }
+
+    /**
+     * Hydrates ChipGroup with the current item tags
+     */
+    private void hydrateTagList(Item item, ChipGroup group){
+        // Preview tags as chips
+        if(item.getTags() != null) {
+            group.removeAllViews();
+            for(Chip c : item.getTagsAsChips(this)) group.addView(c);
+        }
     }
 
     @Override
