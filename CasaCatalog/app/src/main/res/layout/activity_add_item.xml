@@ -175,7 +175,20 @@
                 android:id="@+id/itemCommentsInput"
                 android:layout_width="250dp"
                 android:layout_height="50dp" />
+
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tagsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="Tags"
+            android:textSize="30dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemTags"
@@ -184,12 +197,20 @@
             android:layout_marginStart="20dp"
             android:hint="@string/item_tag_label">
 
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/itemTagsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </com.google.android.material.chip.ChipGroup>
+
             <Button
                 android:id="@+id/addTagButton"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="0dp"
                 android:layout_weight="1"
                 android:text="Add tags" />
         </com.google.android.material.textfield.TextInputLayout>

@@ -1,36 +1,25 @@
 package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Activity for adding a new item to the inventory.
@@ -59,6 +48,8 @@ public class AddItemActivity extends AppCompatActivity {
 
         // Set date preview to current date
         ((TextView)findViewById(R.id.purchaseDateText)).setText(newItem.getFormattedDate());
+
+        hydrateTagList(newItem, findViewById(R.id.itemTagsList));
 
         // Remove deletebutton (only for editing not adding)
         ViewGroup layout = (ViewGroup) deleteButton.getParent();
@@ -110,47 +101,39 @@ public class AddItemActivity extends AppCompatActivity {
             finish();
         });
 
-        // Add tag button that launches TagsActivity
-        // TODO: reuse this for when EditItemActivity is working
-        findViewById(R.id.addTagButton).setOnClickListener(view -> {
-            Intent i = new Intent(this, EditTagsActivity.class);
-            i.putExtra("tags", newItem.getTags());
-            // TODO: dont use deprecated method
-            startActivityForResult(i, 200);
-        });
-
         // Handles purchase date picker
         // If new item, initialize to current date
         findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, newItem, findViewById(R.id.purchaseDateText)));
+
+        // Receives result from EditTagsActivity
+        ActivityResultLauncher<Intent> editTagsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == Activity.RESULT_OK){
+                        if(result.getData() != null) {
+                            ArrayList<Tag> newTags = result.getData().getParcelableArrayListExtra("tags");
+                            newItem.setTags(newTags);
+                            hydrateTagList(newItem, findViewById(R.id.itemTagsList));
+                        }
+                    }
+                }
+        );
+        // Add tag button that launches TagsActivity
+        findViewById(R.id.addTagButton).setOnClickListener(view -> {
+            Intent i = new Intent(this, EditTagsActivity.class);
+            i.putExtra("tags", newItem.getTags());
+            editTagsLauncher.launch(i);
+        });
     }
 
     /**
-     * Callback for the result from launching EditTagsActivity.
-     * This method is invoked after the EditTagsActivity finishes and returns the selected tags.
-     *
-     * @param req  The integer request code originally supplied to startActivityForResult(),
-     *             allowing you to identify who this result came from.
-     * @param res  The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     * Hydrates ChipGroup with the current item tags
      */
-    @Override
-    protected void onActivityResult(int req, int res, Intent data) {
-        super.onActivityResult(req, res, data);
-        if (req == 200) {  // TODO: enum instead of hardcoded id
-            if (res == Activity.RESULT_OK) {
-                // TODO: use parcelable instead of serializable
-                ArrayList<Tag> newTags = (ArrayList<Tag>) data.getSerializableExtra("tags");
-                // Add new tags to item, if we are editing one
-                if (newItem != null) {
-                    for (Tag tag : newTags) {
-                        tag.setUses(tag.getUses() + 1); // TODO: decrease uses when tag is removed
-                    }
-                    newItem.setTags(newTags);
-                }
-
-            }
-
+    private void hydrateTagList(Item item, ChipGroup group){
+        // Preview tags as chips
+        if(item.getTags() != null) {
+            group.removeAllViews();
+            for(Chip c : item.getTagsAsChips(this)) group.addView(c);
         }
     }
-
 }

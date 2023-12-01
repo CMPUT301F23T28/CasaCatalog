@@ -22,10 +22,6 @@ import java.util.ArrayList;
  */
 public class EditTagsActivity extends AppCompatActivity {
 
-    private ArrayList<Tag> tags;
-    private RecyclerView tagsListView;
-    private TagsListAdapter tagAdapter;
-
     /**
      * Initializes the activity, sets up the RecyclerView for tags, and handles creation and deletion of tags.
      *
@@ -38,12 +34,13 @@ public class EditTagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_tags);
 
         // Get passed in item from intent, if there is one
-        this.tags = (ArrayList<Tag>) getIntent().getSerializableExtra("tags");
+        ArrayList<Tag> tags = getIntent().getParcelableArrayListExtra("tags");
 
-        tagAdapter = new TagsListAdapter(this, tags);
-        tagsListView = findViewById(R.id.tags_list);
+        TagsListAdapter tagAdapter = new TagsListAdapter(this, tags);
+        RecyclerView tagsListView = findViewById(R.id.tags_list);
         tagsListView.setAdapter(tagAdapter);
         tagsListView.setLayoutManager(new LinearLayoutManager(this));
+        tagAdapter.notifyDataSetChanged();
 
         // Create new tag when add button is pressed
         findViewById(R.id.createTagButton).setOnClickListener(view -> {
