@@ -17,7 +17,6 @@ import com.cmput301f23t28.casacatalog.models.Tag;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.android.material.chip.Chip;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -83,8 +82,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
             holder.setItemPrice(item.getPrice().toString());
         }
         if (item.getDate() != null){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
-            holder.setItemPurchaseDate(sdf.format(item.getDate()));
+            holder.setItemPurchaseDate(item.getFormattedDate());
         }
 
         Log.e("Shown", "Item" + item.getName());
@@ -139,7 +137,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
         editItemActivityIntent.putExtra("ITEM_NAME", item.getName());
         editItemActivityIntent.putExtra("ITEM_PRICE", item.getPrice());
         if (item.getDate() != null) {
-            editItemActivityIntent.putExtra("ITEM_DATE", item.getDateFormatted());
+            editItemActivityIntent.putExtra("ITEM_DATE", item.getDate());
         }
         editItemActivityIntent.putExtra("ITEM_DESCRIPTION", item.getDescription());
         editItemActivityIntent.putExtra("ITEM_MAKE", item.getMake());

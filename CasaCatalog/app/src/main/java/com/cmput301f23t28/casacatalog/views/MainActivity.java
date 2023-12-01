@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TextRecognitionHelper textHelper = new TextRecognitionHelper(this);
+        textHelper.recognizeTextFromImage();
+
         // Record device identifier
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));
+        itemListView.setItemAnimator(null);     // fixes bug in Android
         Database.items.registerListener(itemAdapter, findViewById(R.id.InventoryValueNumber));
 
         // Sends the user to the 'add item' activity, allowing them to input their item and all of its relevant details.
@@ -101,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         // Find the userProfileImage view by its ID and set an OnClickListener
         CircleImageView userProfileImage = findViewById(R.id.userProfileImage);
         userProfileImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, UserActivity.class)));
+
+        // Register sort button to open sorting dialog
+        findViewById(R.id.SortButton).setOnClickListener(v -> new SortDialog().show(getSupportFragmentManager(), SortDialog.TAG));
 
     }
 
