@@ -33,7 +33,6 @@ public class EditTagsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_tags);
-        ToolbarBuilder.create(this, getString(R.string.title_edit_tags));
 
         // Get passed in item from intent, if there is one
         ArrayList<Tag> tags = getIntent().getParcelableArrayListExtra("tags");
@@ -53,7 +52,7 @@ public class EditTagsActivity extends AppCompatActivity {
 
         // Capture all selected tags from list and add to item's tag list
         // when the back button is pressed
-        findViewById(R.id.backButtonFromEditTags).setOnClickListener(view -> {
+        ToolbarBuilder.create(this, getString(R.string.title_edit_tags), view -> {
             // Delete any tags with no uses
             for (Tag tag : Database.tags.getTags()) {
                 if (tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());
