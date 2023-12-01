@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
-import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.database.UserDatabase;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 
@@ -17,9 +16,6 @@ import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
  * and username, as well as handling the back button functionality.
  */
 public class UserActivity extends AppCompatActivity {
-
-    private ImageView userProfileImage;
-    private TextView usernameTextView;
 
     /**
      * Called when the activity is starting.
@@ -39,11 +35,11 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
         ToolbarBuilder.create(this, getString(R.string.title_profile));
 
-        userProfileImage = findViewById(R.id.userProfileImage);
-        usernameTextView = findViewById(R.id.usernameTextView);
-        usernameTextView.setText(UserDatabase.getUserName());
+        // Hydrate views
+        ((TextView) findViewById(R.id.userNameTextView)).setText(UserDatabase.getUserName());
+        ((TextView) findViewById(R.id.userCreatedTextView)).setText(getString(R.string.user_profile_created_text, UserDatabase.getCreated()));
 
         // Set the profile image, if you have different images for different users
-        userProfileImage.setImageResource(R.drawable.profile);
+        ((ImageView) findViewById(R.id.userProfileImage)).setImageResource(R.drawable.profile);
     }
 }

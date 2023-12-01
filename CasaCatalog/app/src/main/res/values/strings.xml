@@ -46,4 +46,6 @@
         <item>Descending</item>
         <item>Ascending</item>
     </string-array>
+
+    <string name="user_profile_created_text">Member since %1$s</string>
 </resources>
