@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.cmput301f23t28.casacatalog.helpers.DateFormatter;
 import com.google.android.material.chip.Chip;
 
 import java.nio.ByteBuffer;
@@ -93,8 +94,7 @@ public class Item implements Parcelable {
      * @return A String representing a formatted date of when the item was acquired.
      */
     public String getFormattedDate() {
-        // TODO: probably define this format in an xml
-        return this.date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
+        return DateFormatter.getFormattedDate(this.date);
     }
 
 
