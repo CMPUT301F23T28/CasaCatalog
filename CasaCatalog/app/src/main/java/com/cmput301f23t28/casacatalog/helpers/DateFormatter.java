@@ -12,10 +12,20 @@ public class DateFormatter {
      */
     private DateFormatter(){}
 
+    /**
+     * Given a date, returns a formatted string representing said date.
+     * @param date A LocalDate object
+     * @return String of formatted date
+     */
     public static String getFormattedDate(LocalDate date){
         return date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
     }
 
+    /**
+     * Given a date, returns a formatted string representing said date.
+     * @param date A Date object
+     * @return String of formatted date
+     */
     public static String getFormattedDate(Date date){
         return getFormattedDate(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
     }
