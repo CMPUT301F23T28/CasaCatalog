@@ -22,12 +22,20 @@ public class TagDatabase {
     private ArrayList<Tag> tagList;
 
     /**
-     * Constructs a TagDatabase and initializes the connection to Firestore's tag collection,
-     * setting up real-time data synchronization.
+     * Constructs a TagDatabase and initializes the connection to Firestore's tag collection, setting up real-time data synchronization.
      */
-    public TagDatabase() {
+    public TagDatabase(){
+        this("tags");
+    }
+
+    /**
+     * Constructs a TagDatabase and initializes the connection to Firestore's tag collection, setting up real-time data synchronization.
+     * Directly using this constructor is not recommended, it allows setting a custom collection for the purposes of unit tests
+     * @param collectionName Collection name of database
+    **/
+    public TagDatabase(String collectionName) {
         this.db = FirebaseFirestore.getInstance();
-        this.tagsRef = db.collection("tags");
+        this.tagsRef = db.collection(collectionName);
         this.tagList = new ArrayList<>();
 
         // Read tags from database into tagList
