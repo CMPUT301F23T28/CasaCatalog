@@ -1,7 +1,10 @@
 package com.cmput301f23t28.casacatalog.models;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.android.material.chip.Chip;
 
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
@@ -142,6 +145,24 @@ public class Item implements Parcelable {
      */
     public ArrayList<Tag> getTags() {
         return tags;
+    }
+
+    /**
+     * Gets the list of tags as a list of Chips.
+     * Used primarily for rendering.
+     * @return An ArrayList of Chip objects, one for each Tag
+     */
+    public ArrayList<Chip> getTagsAsChips(Context context) {
+        ArrayList<Chip> chips = new ArrayList<>();
+
+        // Create chips for each tag, add to chip group
+        for(Tag tag : getTags()) {
+            Chip c = new Chip(context);
+            c.setText(tag.getName());
+            chips.add(c);
+        }
+
+        return chips;
     }
 
     /**

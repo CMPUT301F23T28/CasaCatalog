@@ -1,15 +1,10 @@
 package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,21 +15,11 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.checkerframework.common.returnsreceiver.qual.This;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Activity for adding a new item to the inventory.
@@ -63,6 +48,8 @@ public class AddItemActivity extends AppCompatActivity {
 
         // Set date preview to current date
         ((TextView)findViewById(R.id.purchaseDateText)).setText(newItem.getFormattedDate());
+
+        hydrateTagList(newItem, findViewById(R.id.itemTagsList));
 
         // Remove deletebutton (only for editing not adding)
         ViewGroup layout = (ViewGroup) deleteButton.getParent();
@@ -126,6 +113,7 @@ public class AddItemActivity extends AppCompatActivity {
                         if(result.getData() != null) {
                             ArrayList<Tag> newTags = result.getData().getParcelableArrayListExtra("tags");
                             newItem.setTags(newTags);
+                            hydrateTagList(newItem, findViewById(R.id.itemTagsList));
                         }
                     }
                 }
@@ -136,5 +124,16 @@ public class AddItemActivity extends AppCompatActivity {
             i.putExtra("tags", newItem.getTags());
             editTagsLauncher.launch(i);
         });
+    }
+
+    /**
+     * Hydrates ChipGroup with the current item tags
+     */
+    private void hydrateTagList(Item item, ChipGroup group){
+        // Preview tags as chips
+        if(item.getTags() != null) {
+            group.removeAllViews();
+            for(Chip c : item.getTagsAsChips(this)) group.addView(c);
+        }
     }
 }

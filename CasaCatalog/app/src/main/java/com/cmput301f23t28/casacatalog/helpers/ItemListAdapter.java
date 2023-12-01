@@ -93,16 +93,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
 //        holder.setItemPurchaseDate(item.getDate().toString());
 
         if( item.getTags() != null ){
-            ArrayList<Chip> chips = new ArrayList<>();
-
-            // Create chips for each tag, add to chip group
-            for(Tag tag : item.getTags()) {
-                Chip c = new Chip(context);
-                c.setText(tag.getName());
-                chips.add(c);
-            }
-
-            holder.setItemTags(chips);
+            holder.setItemTags(item.getTagsAsChips(context));
         }
     }
 
