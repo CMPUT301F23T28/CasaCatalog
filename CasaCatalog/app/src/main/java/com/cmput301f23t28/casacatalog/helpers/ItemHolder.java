@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     private TextView ItemName;
     private TextView ItemPurchaseDate;
     private TextView ItemPrice;
+    private ImageView ItemImage;
     private ChipGroup ItemTags;
     private ItemListClickListener mListener;
     private ConstraintLayout ItemContainer;
@@ -46,6 +48,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         ItemPurchaseDate = itemView.findViewById(R.id.ItemPurchaseDate);
         ItemPrice = itemView.findViewById(R.id.ItemPrice);
         ItemTags = itemView.findViewById(R.id.ItemTags);
+        ItemImage = itemView.findViewById(R.id.ItemImage);
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
@@ -69,6 +72,14 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         if (ItemPurchaseDate != null) {
             ItemPurchaseDate.setText(itemPurchaseDate);
         }
+    }
+
+    /**
+     * Sets the image in the list of items based off the first URL in the item database
+     * @param imageURL
+     */
+    public void setItemImage(String imageURL) {
+        
     }
 
     /**
