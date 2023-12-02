@@ -206,7 +206,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         editingItem.addPhoto(photo);
     }
 
-
     @Override
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");
@@ -220,6 +219,14 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 changeDefaultButton.setVisibility(View.VISIBLE);
                 trashButton.setVisibility(View.VISIBLE);
             }
+        }
+    }
+    @Override
+    public void onSerialNumberRecognized(String serialNumber) {
+        editingItem.setSerialNumber(serialNumber);
+        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
+        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
+            serialNumberInput.getEditText().setText(serialNumber);
         }
     }
 }
