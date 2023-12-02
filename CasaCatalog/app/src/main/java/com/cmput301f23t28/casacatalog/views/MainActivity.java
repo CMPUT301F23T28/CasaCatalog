@@ -1,6 +1,6 @@
 package com.cmput301f23t28.casacatalog.views;
 
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,8 +80,18 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         trashButton = findViewById(R.id.delete_items_button);
         editTagsButton = findViewById(R.id.add_tag_items_button);
 
+        // Item list logic
+        ActivityResultLauncher<Intent> editItemLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == Activity.RESULT_OK){
+                        Item item = result.getData().getParcelableExtra("item");
+                        Database.items.update(item.getId(), item);
+                    }
+                }
+        );
 
-        itemAdapter = new ItemListAdapter(this, Database.items.getItems(), this);
+        itemAdapter = new ItemListAdapter(this, Database.items.getItems(), editItemLauncher, this);
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));

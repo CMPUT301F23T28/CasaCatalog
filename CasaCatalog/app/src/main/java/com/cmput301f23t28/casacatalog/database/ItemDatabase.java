@@ -7,6 +7,7 @@ import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,13 +29,33 @@ public class ItemDatabase {
     private ArrayList<Item> itemList;
     private ItemListAdapter adapter;
 
+    public static final String NAME_KEY = "name";
+    public static final String PRICE_KEY = "price";
+    public static final String DATE_KEY = "date";
+    public static final String MAKE_KEY = "make";
+    public static final String MODEL_KEY = "model";
+    public static final String DESCRIPTION_KEY = "description";
+    public static final String COMMENT_KEY = "comments";
+    public static final String SERIAL_KEY = "serialNumber";
+    public static final String TAGS_KEY = "tags";
+    public static final String OWNER_KEY = "owner";
+    public static final String PHOTO_URL_KEY = "photoURLs";
+
     /**
-     * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection,
-     * setting up real-time data synchronization.
+     * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection, setting up real-time data synchronization.
      */
-    public ItemDatabase() {
+    public ItemDatabase(){
+        this("items");
+    }
+
+    /**
+     * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection, setting up real-time data synchronization.
+     * Directly using this constructor is not recommended, it allows setting a custom collection for the purposes of unit tests
+     * @param collectionName Collection name of database
+     */
+    public ItemDatabase(String collectionName) {
         this.db = FirebaseFirestore.getInstance();
-        this.itemRef = db.collection("items");
+        this.itemRef = db.collection(collectionName);
         this.itemList = new ArrayList<>();
     }
 
@@ -57,27 +78,36 @@ public class ItemDatabase {
                 for (QueryDocumentSnapshot doc : value) {
                     String itemID = doc.getId();
                     Log.d("ITEM ID QUERY", itemID);
-                    String itemName = doc.getString("name");
-                    Double itemPrice = doc.getDouble("price");
+                    String itemName = doc.getString(NAME_KEY);
+                    Double itemPrice = doc.getDouble(PRICE_KEY);
 
                     // Convert Date object from FireStore into LocalDateTime object
                     LocalDate itemDate = LocalDate.now();   // fall back to current date if null
-                    if(doc.getDate("date") != null) {
-                        itemDate = doc.getDate("date").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    if(doc.getDate(DATE_KEY) != null) {
+                        itemDate = doc.getDate(DATE_KEY).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
 
-                    String itemMake = doc.getString("make");
-                    String itemModel = doc.getString("model");
-                    String itemDescription = doc.getString("description");
-                    String itemComment = doc.getString("comments");
-                    String itemSerialNumber = doc.getString("serialNumber");
-                    ArrayList<String> itemTagStrings = (ArrayList<String>) doc.get("tags");
+                    String itemMake = doc.getString(MAKE_KEY);
+                    String itemModel = doc.getString(MODEL_KEY);
+                    String itemDescription = doc.getString(DESCRIPTION_KEY);
+                    String itemComment = doc.getString(COMMENT_KEY);
+                    String itemSerialNumber = doc.getString(SERIAL_KEY);
+                    ArrayList<String> itemTagStrings = (ArrayList<String>) doc.get(TAGS_KEY);
                     ArrayList<Tag> itemTags = new ArrayList<>();
                     if (itemTagStrings != null && itemTagStrings.size() > 0) {
                         for (String t : itemTagStrings) {
                             itemTags.add(new Tag(t));
                         }
                     }
+                    ArrayList<String> itemPhotoURLStrings = (ArrayList<String>) doc.get(PHOTO_URL_KEY);
+                    /*
+                    if (itemPhotoURLStrings != null && itemPhotoURLStrings.size() > 0) {
+                        for (String t : itemPhotoURLStrings) {
+
+                            itemTags.add(new Tag(t));
+                        }
+                    }
+                     */
 
                     Log.i("Firestore", String.format("Item(%s,%s) fetched", itemName, itemPrice));
                     Item addItem = new Item();
@@ -90,46 +120,72 @@ public class ItemDatabase {
                     addItem.setModel(itemModel);
                     addItem.setDescription(itemDescription);
                     addItem.setComment(itemComment);
+                    addItem.setPhotoURLs(itemPhotoURLStrings);
                     if (itemComment != null) {
                         Log.d("ITEM_COMMENT_MAIN", itemComment);
                     }
 
                     addItem.setSerialNumber(itemSerialNumber);
+                    addItem.setOwner(doc.getString("owner"));
 
                     this.itemList.add(addItem);
-
-                    // Update UI to reflect changes in state
-                    String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", Database.items.getTotalValue());
-                    totalValueText.setText(totalValueFormatted);
-
-                    // Sort item list by default settings
-                    // (this also updates adapter)
-                    this.sort(new ItemSorting());
                 }
+
+                // Update UI to reflect changes in state
+                String totalValueFormatted = String.format(Locale.ENGLISH, "$%.2f", Database.items.getTotalValue());
+                totalValueText.setText(totalValueFormatted);
+
+                // Sort item list by default settings
+                // (this also updates adapter)
+                this.sort(new ItemSorting());
             }
         });
     }
 
     /**
-     * Adds an item to the Firestore database.
-     *
-     * @param item The Item object to be added.
+     * Serializes an Item into a Firebase data object
+     * @param item The Item object
+     * @return Firebase compatible HashMap
      */
-    public void add(Item item) {
+    private HashMap<String, Object> toData(Item item){
         HashMap<String, Object> data = new HashMap<>();
-        data.put("name", item.getName());
-        data.put("price", item.getPrice());
+        data.put(NAME_KEY, item.getName());
+        data.put(PRICE_KEY, item.getPrice());
 
         // Firebase requires Date objects, so this converts LocalDate to Date
-        data.put("date", Date.from(item.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        data.put(DATE_KEY, Date.from(item.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        data.put("make", item.getMake());
-        data.put("model", item.getModel());
-        data.put("description", item.getDescription());
-        data.put("comments", item.getComment());
-        data.put("serialNumber", item.getSerialNumber());
-        data.put("tags", item.getTagsAsStrings());
+        data.put(MAKE_KEY, item.getMake());
+        data.put(MODEL_KEY, item.getModel());
+        data.put(DESCRIPTION_KEY, item.getDescription());
+        data.put(COMMENT_KEY, item.getComment());
+        data.put(SERIAL_KEY, item.getSerialNumber());
+        data.put(TAGS_KEY, item.getTagsAsStrings());
+        data.put(OWNER_KEY, item.getOwner());
+        data.put(PHOTO_URL_KEY, item.getPhotoURLsAsStrings());
+        return data;
+    }
 
+    /**
+     * Updates an item in the Firestore database to match a given Item.
+     * @param id The identifier of the Item to update.
+     * @param item The Item object to be retrieve new values from.
+     */
+    public void update(String id, Item item){
+        HashMap<String, Object> data = toData(item);
+        this.itemRef.document(id).set(data)
+                .addOnSuccessListener(doc -> {
+                    Log.i("Firestore", "Item updated with id: " + id);
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Failed to update item in database"));
+    }
+
+    /**
+     * Adds an item to the Firestore database.
+     * @param item The Item object to be added.
+     */
+    public void add(Item item){
+        HashMap<String, Object> data = toData(item);
         this.itemRef
                 .add(data)
                 .addOnSuccessListener(documentReference -> {
@@ -138,6 +194,11 @@ public class ItemDatabase {
 
                     item.setId(generatedDocumentId);
                     data.put("Id", item.getId());
+
+                    // Set owner to current user
+                    item.setOwner(MainActivity.deviceId);
+                    data.put("owner", MainActivity.deviceId);
+
                     documentReference.set(data)
                             .addOnSuccessListener(aVoid -> {
                                 Log.i("Firestore", "ID field updated in Firestore document");
@@ -183,6 +244,7 @@ public class ItemDatabase {
      */
     public double getTotalValue() {
         double totalValue = 0;
+        // TODO: use itemlist of only items user owns
         for (Item item : this.itemList) {
             if (item.getPrice() != null) {
                 totalValue += item.getPrice();
@@ -193,8 +255,7 @@ public class ItemDatabase {
 
     /**
      * Retrieves a reference to the item list
-     *
-     * @return the itemList arraylist
+     * @return A ArrayList of Items
      */
     public ArrayList<Item> getItems() {
         return this.itemList;
