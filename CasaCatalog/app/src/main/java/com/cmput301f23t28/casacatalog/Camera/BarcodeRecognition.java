@@ -1,139 +1,113 @@
 package com.cmput301f23t28.casacatalog.Camera;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.Rect;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.SparseIntArray;
-import android.view.Surface;
+import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.cmput301f23t28.casacatalog.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.mlkit.vision.barcode.
-import com.google.mlkit.vision.barcode.BarcodeScanner;
-import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.util.List;
 
-public class BarcodeRecognition {
+public class BarcodeRecognition extends AppCompatActivity {
 
-    //If we use CameraX
-//    private class YourAnalyzer implements ImageAnalysis.Analyzer {
-//
-//        @Override
-//        public void analyze(ImageProxy imageProxy) {
-//            Image mediaImage = imageProxy.getImage();
-//            if (mediaImage != null) {
-//                InputImage image =
-//                        InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
-//                // Pass image to an ML Kit Vision API
-//                // ...
-//            }
-//        }
-//    }
-//
+    private Context context;
+    private BarcodeRecognition recognizer;
 
-    /**
-     * Create input image object and image's rotation
-     */
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 0);
-        ORIENTATIONS.append(Surface.ROTATION_90, 90);
-        ORIENTATIONS.append(Surface.ROTATION_180, 180);
-        ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    public BarcodeRecognition(Context context) {
+        this.context = context;
     }
 
-    /**
-     * Get the angle by which an image must be rotated given the device's current
-     * orientation.
-     */
-    private int getRotationCompensation(String cameraId, Activity activity, boolean isFrontFacing) throws CameraAccessException {
-            // Get the device's current rotation relative to its "native" orientation.
-            // Then, from the ORIENTATIONS table, look up the angle the image must be
-            // rotated to compensate for the device's rotation.
-            int deviceRotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-            int rotationCompensation = ORIENTATIONS.get(deviceRotation);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-            // Get the device's sensor orientation.
-            CameraManager cameraManager = (CameraManager) activity.getSystemService(CAMERA_SERVICE);
-            int sensorOrientation = cameraManager
-                    .getCameraCharacteristics(cameraId)
-                    .get(CameraCharacteristics.SENSOR_ORIENTATION);
-
-            if (isFrontFacing) {
-                rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
-            } else { // back-facing
-                rotationCompensation = (sensorOrientation - rotationCompensation + 360) % 360;
-            }
-            return rotationCompensation;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void scanBarcodes(InputImage image) {
+        // [START set_detector_options]
+        BarcodeScannerOptions options =
+                new BarcodeScannerOptions.Builder()
+                        .setBarcodeFormats(
+                                Barcode.FORMAT_QR_CODE,
+                                Barcode.FORMAT_AZTEC,
+                                Barcode.FORMAT_UPC_A,
+                                Barcode.FORMAT_UPC_E)
+                        .build();
+        // [END set_detector_options]
 
-
-
-    //pass the media.Image object and the rotation degree value
-    public void processImage(Bitmap bitmap, int rotationDegree, Activity activity) {
-        InputImage image = InputImage.fromBitmap(bitmap, rotationDegree);
-
+        // [START get_detector]
         BarcodeScanner scanner = BarcodeScanning.getClient();
         // Or, to specify the formats to recognize:
         // BarcodeScanner scanner = BarcodeScanning.getClient(options);
-    }
-    /**
-     * Get Instance of barcode scanner
-     */
-    Task<List<Barcode>> result = scanner.process(image)
-            .addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
-                @Override
-                public void onSuccess(List<Barcode> barcodes) {
-                    // Task completed successfully
-                    // ...
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Task failed with an exception
-                    // ...
-                }
-            });
+        // [END get_detector]
 
-    /**
-     * Get information from barcode
-     */
+        // [START run_detector]
+        Task<List<Barcode>> result = scanner.process(image)
+                .addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
+                    @Override
+                    public void onSuccess(List<Barcode> barcodes) {
+                        // Task completed successfully
+                        // [START_EXCLUDE]
+                        // [START get_barcodes]
+                        for (Barcode barcode: barcodes) {
+                            String rawValue = barcode.getRawValue();
+                            Log.d("BarcodeValue", "Barcode value: " + rawValue);
 
-    for (Barcode barcode: barcodes) {
-        Rect bounds = barcode.getBoundingBox();
-        Point[] corners = barcode.getCornerPoints();
+                            // Optionally update the UI, such as displaying the barcode value in a TextView
+                            // textView.setText(rawValue);
+                        }
+//                        for (Barcode barcode: barcodes) {
+//                            Rect bounds = barcode.getBoundingBox();
+//                            Point[] corners = barcode.getCornerPoints();
+//
+//                            String rawValue = barcode.getRawValue();
+//
+//                            int valueType = barcode.getValueType();
+//                            // See API reference for complete list of supported types
+//                            switch (valueType) {
+//                                case Barcode.TYPE_WIFI:
+//                                    String ssid = barcode.getWifi().getSsid();
+//                                    String password = barcode.getWifi().getPassword();
+//                                    int type = barcode.getWifi().getEncryptionType();
+//                                    break;
+//                                case Barcode.TYPE_URL:
+//                                    String title = barcode.getUrl().getTitle();
+//                                    String url = barcode.getUrl().getUrl();
+//                                    break;
+//                            }
+//                        }
+                        // [END get_barcodes]
+                        // [END_EXCLUDE]
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Task failed with an exception
+                        // ...
+                        Log.e("Barcode Scanning", "Error scanning barcodes", e);
+                    }
+                });
 
-        String rawValue = barcode.getRawValue();
-
-        int valueType = barcode.getValueType();
-        // See API reference for complete list of supported types
-        switch (valueType) {
-            case Barcode.TYPE_WIFI:
-                String ssid = barcode.getWifi().getSsid();
-                String password = barcode.getWifi().getPassword();
-                int type = barcode.getWifi().getEncryptionType();
-                break;
-            case Barcode.TYPE_URL:
-                String title = barcode.getUrl().getTitle();
-                String url = barcode.getUrl().getUrl();
-                break;
-        }
+        // [END run_detector]
     }
 
 }
