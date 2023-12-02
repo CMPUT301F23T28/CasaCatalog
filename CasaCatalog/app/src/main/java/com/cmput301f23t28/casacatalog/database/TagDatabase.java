@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -21,12 +22,20 @@ public class TagDatabase {
     private ArrayList<Tag> tagList;
 
     /**
-     * Constructs a TagDatabase and initializes the connection to Firestore's tag collection,
-     * setting up real-time data synchronization.
+     * Constructs a TagDatabase and initializes the connection to Firestore's tag collection, setting up real-time data synchronization.
      */
-    public TagDatabase() {
+    public TagDatabase(){
+        this("tags");
+    }
+
+    /**
+     * Constructs a TagDatabase and initializes the connection to Firestore's tag collection, setting up real-time data synchronization.
+     * Directly using this constructor is not recommended, it allows setting a custom collection for the purposes of unit tests
+     * @param collectionName Collection name of database
+    **/
+    public TagDatabase(String collectionName) {
         this.db = FirebaseFirestore.getInstance();
-        this.tagsRef = db.collection("tags");
+        this.tagsRef = db.collection(collectionName);
         this.tagList = new ArrayList<>();
 
         // Read tags from database into tagList
@@ -36,6 +45,9 @@ public class TagDatabase {
                 return;
             }
             if (value != null) {
+                // Clear local taglist before reading from database
+                this.tagList.clear();
+
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
                         Tag newTag = new Tag(doc.getId());
@@ -43,6 +55,8 @@ public class TagDatabase {
                             newTag.setUses(doc.getLong("uses").intValue());
                         }
                         Log.i("Firestore", String.format("Tag(%s,%s) fetched", newTag.getName(), newTag.getUses()));
+
+                        // Update local taglist accordingly
                         this.tagList.add(newTag);
                     }
                 }
@@ -52,11 +66,20 @@ public class TagDatabase {
 
     /**
      * Retrieves a copy of the local list of tags.
-     *
      * @return An ArrayList of Tag objects currently in the local list.
      */
     public ArrayList<Tag> getTags() {
         return this.tagList;
+    }
+
+    /**
+     * Retrieves a copy of the local list of tags, sorted.
+     * @return A sorted ArrayList of Tag objects currently in the local list.
+     */
+    public ArrayList<Tag> getSortedTags() {
+        ArrayList<Tag> tags = this.getTags();
+        Collections.sort(tags);
+        return tags;
     }
 
     /**
@@ -66,7 +89,7 @@ public class TagDatabase {
      * @return The Tag object if found, null otherwise.
      */
     public Tag findTagByName(String name) {
-        for (Tag t : Database.tags.getTags()) {
+        for (Tag t : getTags()) {
             if (t.getName().contentEquals(name)) return t;
         }
         return null;
@@ -79,19 +102,26 @@ public class TagDatabase {
      * @return The new Tag object that was created.
      */
     public Tag createTag(String name) {
-        Tag newTag = new Tag(name);
+        return this.updateTag(name, new Tag(name));
+    }
 
+    /**
+     * Updates an existing tag in the local list and Firestore database.
+     *
+     * @param name The name of the tag to update
+     * @param tag A tag to get the new properties from
+     */
+    public Tag updateTag(String name, Tag tag) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("name", newTag.getName());
-        data.put("uses", newTag.getUses());
+        data.put("name", tag.getName());
+        data.put("uses", tag.getUses());
 
-        tagsRef.document(newTag.getName()).set(data)
+        tagsRef.document(name).set(data)
                 .addOnSuccessListener(doc -> {
-                    this.tagList.add(newTag);
-                    Log.i("Firestore", "Tag added with name: " + newTag.getName());
+                    Log.i("Firestore", "Tag created or updated with name: " + tag.getName());
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Failed to add tag to the database"));
-        return newTag;
+                .addOnFailureListener(e -> Log.e("Firestore", "Failed to modify tag in database"));
+        return tag;
     }
 
     /**
@@ -107,9 +137,6 @@ public class TagDatabase {
                 if (document.exists()) {
                     doc.delete()
                             .addOnSuccessListener(unused -> {
-                                // Update local taglist accordingly
-                                this.tagList.removeIf(tag -> tag.getName().equals(name));
-
                                 Log.i("Firestore", "Tag deleted from the database");
                             })
                             .addOnFailureListener(e -> Log.e("Firestore", "Failed to delete tag from the database"));

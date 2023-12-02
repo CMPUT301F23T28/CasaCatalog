@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Tag;
 
 import java.util.ArrayList;
@@ -21,10 +22,6 @@ import java.util.ArrayList;
  * Allows users to add new tags and modify existing ones.
  */
 public class EditTagsActivity extends AppCompatActivity {
-
-    private ArrayList<Tag> tags;
-    private RecyclerView tagsListView;
-    private TagsListAdapter tagAdapter;
 
     /**
      * Initializes the activity, sets up the RecyclerView for tags, and handles creation and deletion of tags.
@@ -38,12 +35,13 @@ public class EditTagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_tags);
 
         // Get passed in item from intent, if there is one
-        this.tags = (ArrayList<Tag>) getIntent().getSerializableExtra("tags");
+        ArrayList<Tag> tags = getIntent().getParcelableArrayListExtra("tags");
 
-        tagAdapter = new TagsListAdapter(this, tags);
-        tagsListView = findViewById(R.id.tags_list);
+        TagsListAdapter tagAdapter = new TagsListAdapter(this, tags);
+        RecyclerView tagsListView = findViewById(R.id.tags_list);
         tagsListView.setAdapter(tagAdapter);
         tagsListView.setLayoutManager(new LinearLayoutManager(this));
+        tagAdapter.notifyDataSetChanged();
 
         // Create new tag when add button is pressed
         findViewById(R.id.createTagButton).setOnClickListener(view -> {
@@ -54,7 +52,7 @@ public class EditTagsActivity extends AppCompatActivity {
 
         // Capture all selected tags from list and add to item's tag list
         // when the back button is pressed
-        findViewById(R.id.backButtonFromEditTags).setOnClickListener(view -> {
+        ToolbarBuilder.create(this, getString(R.string.title_edit_tags), view -> {
             // Delete any tags with no uses
             for (Tag tag : Database.tags.getTags()) {
                 if (tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());
