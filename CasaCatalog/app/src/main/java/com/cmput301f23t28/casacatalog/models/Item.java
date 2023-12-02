@@ -11,6 +11,7 @@ import com.google.android.material.chip.Chip;
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -178,6 +179,7 @@ public class Item implements Parcelable {
         return tags != null ? tags.stream().map(Tag::getName).sorted().collect(Collectors.toList()) : new ArrayList<>();
     }
 
+
     /**
      * Sets the list of tags associated with the item.
      * @param tags An ArrayList of Tag objects to associate with the item.
@@ -202,6 +204,22 @@ public class Item implements Parcelable {
         this.tags.remove(tag);
     }
 
+    /**
+     * Converts list of URLs to list of strings to where the photos of the respective item are stored.
+     * @return
+     */
+    public List<String> getPhotoURLsAsStrings() {
+
+        return photoURL != null ? new ArrayList<>(photoURL) : new ArrayList<>();
+    }
+
+    /**
+     * Sets photo URL list to specified list.
+     * @param photoURL An ArrayList of photo URLs in cloud storage for the item.
+     */
+    public void setPhotoURLs(List<String> photoURL) {
+        this.photoURL = photoURL;
+    }
     /**
      * Gets the make of the item.
      * Returns empty string if there is none set.
@@ -309,12 +327,7 @@ public class Item implements Parcelable {
         this.selected = !this.selected;
     }
 
-    public List<String> getPhotoURLs() {
-        return photoURL;
-    }
-    public void setPhotoURLs(List<String> photoURL) {
-        this.photoURL = photoURL;
-    }
+
     /**
      * Retrieves the owner of this item.
      * @return A device ID unique to the creator of the item.
@@ -373,7 +386,17 @@ public class Item implements Parcelable {
         serialNumber = in.readString();
         tags = in.createTypedArrayList(Tag.CREATOR);
         //photo = in.readByte();
-        // TODO: add photo URLs here
+
+        // Read the size of the List
+        int photoUrlListSize = in.readInt();
+        // Read each URL and add it to the List<String>
+        List<String> photoUrls = new ArrayList<>();
+        for (int i = 0; i < photoUrlListSize; i++) {
+            String photoUrl = in.readString();
+            photoUrls.add(photoUrl);
+        }
+        // Set the List<String> in your Item object
+        photoURL = photoUrls;
     }
 
     /**
@@ -394,7 +417,13 @@ public class Item implements Parcelable {
         dest.writeString(this.comment);
         dest.writeString(this.serialNumber);
         dest.writeTypedList(this.tags);
-        // TODO: photo URLS
+        // Write the size of the List
+        dest.writeInt(photoURL.size());
+
+        // Write each URL to the Parcel
+        for (String photoUrl : photoURL) {
+            dest.writeString(photoUrl);
+        }
         //dest.writeValue(this.photo);  // TODO: fix (also 'writeValue' probably won't work)
     }
 }
