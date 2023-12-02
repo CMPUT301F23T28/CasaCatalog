@@ -29,7 +29,7 @@ public class NewUserActivity extends AppCompatActivity {
             EditText nameInput = findViewById(R.id.editNewName);
 
             // TODO: validate input
-            Database.users.createUser(MainActivity.deviceId, nameInput.getText().toString());
+            Database.users.createUser(nameInput.getText().toString());
             finish();
         });
     }
