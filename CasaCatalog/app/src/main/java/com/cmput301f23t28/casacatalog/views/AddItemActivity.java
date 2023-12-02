@@ -173,4 +173,12 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         Log.d("PHOTOURL", "received " + input);
     }
 
+    @Override
+    public void onSerialNumberRecognized(String serialNumber) {
+        newItem.setSerialNumber(serialNumber);
+        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
+        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
+            serialNumberInput.getEditText().setText(serialNumber);
+        }
+    }
 }

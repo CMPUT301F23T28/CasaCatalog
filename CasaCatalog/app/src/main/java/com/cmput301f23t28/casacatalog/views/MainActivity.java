@@ -2,6 +2,8 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
@@ -21,6 +24,7 @@ import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.mlkit.vision.common.InputImage;
 
 import java.util.List;
 
@@ -48,6 +52,15 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BarcodeRecognition barcodeRecognition = new BarcodeRecognition(this);
+        // Load the test image from drawable
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.barcode);
+        // Create an InputImage object from the Bitmap
+        InputImage image = InputImage.fromBitmap(bitmap, 0);
+        // Now call the scanBarcodes method with this image
+        barcodeRecognition.scanBarcodes(image);
+
 
         TextRecognitionHelper textHelper = new TextRecognitionHelper(this);
         textHelper.recognizeTextFromImage();
