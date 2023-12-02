@@ -131,7 +131,7 @@ public class AddPhotoFragment extends DialogFragment {
                 .setTitle("Add photo")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", (dialog, which) -> {
-                    listener.onOKPressed(/* new City(name, province) */);
+                    listener.onOKPressed();
                 }).create();
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -13,14 +14,20 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
+import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -30,10 +37,14 @@ import java.util.List;
  * Activity for editing an existing item. Inherits functionality from AddItemActivity
  * and repurposes it for editing items.
  */
-public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
+public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item editingItem;
     private Uri photoURI;
+    private RecyclerView itemPhotoContainer;
+    private PhotoListAdapter photoListAdapter;
+    private FloatingActionButton changeDefaultButton;
+    private FloatingActionButton trashButton;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -50,6 +61,9 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
         this.editingItem = getIntent().getParcelableExtra("item");
         ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
+        trashButton = findViewById(R.id.delete_pictures_button);
+        changeDefaultButton = findViewById(R.id.change_default_button);
+
 
         // Setting the text of each of the 'EditText's to whatever the item's attributes are
         ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(editingItem.getName());
@@ -60,6 +74,14 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         ((TextInputLayout) findViewById(R.id.itemModel)).getEditText().setText(editingItem.getModel());
         ((TextInputLayout) findViewById(R.id.itemSerialNumber)).getEditText().setText(editingItem.getSerialNumber());
         ((TextInputLayout) findViewById(R.id.itemComments)).getEditText().setText(editingItem.getComment());
+
+        // set up adapter for photos
+        if (editingItem.getPhotos() != null && editingItem.getPhotos().size() > 0) {
+            photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
+            itemPhotoContainer = findViewById(R.id.item_images_container);
+            itemPhotoContainer.setAdapter(photoListAdapter);
+            itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
+        }
 
         hydrateTagList(editingItem, findViewById(R.id.itemTagsList));
 
@@ -167,7 +189,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
     @Override
     public void onOKPressed() {
-        Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+        photoListAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -177,9 +199,8 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     @Override
     public void sendURL(String input) {
         Log.d("PHOTOURL", "Received " + input);
-        List<String> photoURLs = editingItem.getPhotoURLsAsStrings();
-        photoURLs.add(input);
-        editingItem.setPhotoURLs(photoURLs);
+        Photo photo = new Photo(input);
+        editingItem.addPhoto(photo);
     }
 
     @Override
@@ -187,6 +208,21 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         Log.d("PHOTOURI", "Received " + URI);
         photoURI = URI;
     }
+    public void toggleVisibility() {
+        Log.i("Ryan", "Visibility method");
+        if (changeDefaultButton != null && trashButton != null) {
+            if (changeDefaultButton.getVisibility() == View.VISIBLE && trashButton.getVisibility() == View.VISIBLE) {
+                Log.i("Ryan", "INVisible buttons");
+                changeDefaultButton.setVisibility(View.GONE);
+                trashButton.setVisibility(View.GONE);
+            } else {
+                Log.i("Ryan", "Visible buttons");
+                changeDefaultButton.setVisibility(View.VISIBLE);
+                trashButton.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+    @Override
     public void onSerialNumberRecognized(String serialNumber) {
         editingItem.setSerialNumber(serialNumber);
         TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
@@ -194,5 +230,4 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             serialNumberInput.getEditText().setText(serialNumber);
         }
     }
-
 }

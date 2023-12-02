@@ -1,11 +1,8 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +12,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
-import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -30,7 +26,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     private TextView ItemPrice;
     private ImageView ItemImage;
     private ChipGroup ItemTags;
-    private ItemListClickListener mListener;
+    private ListClickListener mListener;
     private ConstraintLayout ItemContainer;
     private int backgroundColor = Color.WHITE;
 
@@ -38,7 +34,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
      * Constructor for ItemHolder. Basically connects the UI elements to an in code reference.
      * @param itemView The item view.
      */
-    public ItemHolder(@NonNull View itemView, ItemListClickListener listener) {
+    public ItemHolder(@NonNull View itemView, ListClickListener listener) {
         super(itemView);
 
         this.mListener = listener;
