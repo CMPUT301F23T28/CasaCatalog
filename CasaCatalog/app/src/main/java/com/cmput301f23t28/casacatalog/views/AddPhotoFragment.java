@@ -251,11 +251,9 @@ public class AddPhotoFragment extends DialogFragment {
         return image;
     }
 
-
     public interface OnFragmentInteractionListener {
         void onOKPressed(/*City city*/);
         void sendURL(String URL);
         void sendURI(Uri URI);
     }
-
 }
