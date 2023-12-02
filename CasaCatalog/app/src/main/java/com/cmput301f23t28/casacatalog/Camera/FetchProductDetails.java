@@ -14,15 +14,26 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+/**
+ * AsyncTask for fetching product details based on a barcode number using UPCitemdb API.
+ */
 public class FetchProductDetails extends AsyncTask<String, Void, String> {
 
     private String barcodeNumber;
 
-
+    /**
+     * Constructor for FetchProductDetails.
+     * @param barcodeNumber The barcode number to lookup in the UPCitemdb.
+     */
     public FetchProductDetails(String barcodeNumber) {
         this.barcodeNumber = barcodeNumber;
     }
 
+    /**
+     * Performs the network request in the background.
+     * @param params Parameters of the task. Not used in this implementation.
+     * @return The response from the UPCitemdb API as a String.
+     */
     @Override
     protected String doInBackground(String... params) {
         String apiKey = "YOUR_UPCITEMDB_API_KEY"; // Replace with your actual API key
@@ -56,6 +67,11 @@ public class FetchProductDetails extends AsyncTask<String, Void, String> {
         }
     }
 
+    /**
+     * Processes the API response after the network request is complete.
+     * Parses the JSON response and logs the product name.
+     * @param result The JSON response string from the API.
+     */
     @Override
     protected void onPostExecute(String result) {
         if (result == null) {
@@ -65,13 +81,11 @@ public class FetchProductDetails extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject jsonResponse = new JSONObject(result);
-            // Parsing logic might change depending on UPCitemdb's response structure
             JSONArray items = jsonResponse.getJSONArray("items");
             if (items.length() > 0) {
                 JSONObject item = items.getJSONObject(0);
                 String productName = item.optString("title"); // Assuming the field name is "title"
 
-                // Log the productName in Logcat
                 Log.d("ProductInfo", "Product Name: " + productName);
             } else {
                 Log.d("ProductInfo", "No products found.");
