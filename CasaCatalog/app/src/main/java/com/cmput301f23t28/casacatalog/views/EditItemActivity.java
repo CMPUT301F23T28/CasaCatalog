@@ -2,9 +2,11 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +65,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
         final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
+        final ImageButton addSerialNumberButton = findViewById(R.id.serialNumberButton);
 
         editButton.setText(R.string.item_edit_button_text);
         // Edits item in database, as well as on the item list displayed in MainActivity.
@@ -122,6 +125,10 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             finish();
         });
 
+        addSerialNumberButton.setOnClickListener(view -> {
+            new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_SERIAL_NUMBER");
+        });
+
         findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
 
         // Receives result from EditTagsActivity
@@ -172,6 +179,14 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         List<String> photoURLs = editingItem.getPhotoURLsAsStrings();
         photoURLs.add(input);
         editingItem.setPhotoURLs(photoURLs);
+    }
+
+    @Override
+    public void sendURI(Uri URI) {
+        Log.d("PHOTOURI", "Received " + URI);
+//        List<String> photoURLs = editingItem.getPhotoURLsAsStrings();
+//        photoURLs.add(URI);
+//        editingItem.setPhotoURLs(photoURLs);
     }
 
 }
