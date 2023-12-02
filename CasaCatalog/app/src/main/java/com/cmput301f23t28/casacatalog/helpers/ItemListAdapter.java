@@ -125,7 +125,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
 
         // TODO: Figure out whether we need to pass the tags here or not
         //editItemActivityIntent.putExtra("ITEM_TAGS", item.getTags());
-        context.startActivity(editItemActivityIntent);
+        //context.startActivity(editItemActivityIntent);
         // Pressing an item triggers edit item activity populated with item data
 
         Intent i = new Intent(context, EditItemActivity.class);

@@ -39,6 +39,7 @@ public class ItemDatabase {
     public static final String SERIAL_KEY = "serialNumber";
     public static final String TAGS_KEY = "tags";
     public static final String OWNER_KEY = "owner";
+    public static final String PHOTO_URL_KEY = "photoURLs";
 
     /**
      * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection, setting up real-time data synchronization.
@@ -98,6 +99,15 @@ public class ItemDatabase {
                             itemTags.add(new Tag(t));
                         }
                     }
+                    ArrayList<String> itemPhotoURLStrings = (ArrayList<String>) doc.get(PHOTO_URL_KEY);
+                    /*
+                    if (itemPhotoURLStrings != null && itemPhotoURLStrings.size() > 0) {
+                        for (String t : itemPhotoURLStrings) {
+
+                            itemTags.add(new Tag(t));
+                        }
+                    }
+                     */
 
                     Log.i("Firestore", String.format("Item(%s,%s) fetched", itemName, itemPrice));
                     Item addItem = new Item();
@@ -110,6 +120,7 @@ public class ItemDatabase {
                     addItem.setModel(itemModel);
                     addItem.setDescription(itemDescription);
                     addItem.setComment(itemComment);
+                    addItem.setPhotoURLs(itemPhotoURLStrings);
                     if (itemComment != null) {
                         Log.d("ITEM_COMMENT_MAIN", itemComment);
                     }
@@ -151,6 +162,7 @@ public class ItemDatabase {
         data.put(SERIAL_KEY, item.getSerialNumber());
         data.put(TAGS_KEY, item.getTagsAsStrings());
         data.put(OWNER_KEY, item.getOwner());
+        data.put(PHOTO_URL_KEY, item.getPhotoURLsAsStrings());
         return data;
     }
 
