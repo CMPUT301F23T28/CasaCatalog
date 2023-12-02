@@ -33,6 +33,7 @@ import java.util.List;
 public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private Item editingItem;
+    private Uri photoURI;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -184,9 +185,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     @Override
     public void sendURI(Uri URI) {
         Log.d("PHOTOURI", "Received " + URI);
-//        List<String> photoURLs = editingItem.getPhotoURLsAsStrings();
-//        photoURLs.add(URI);
-//        editingItem.setPhotoURLs(photoURLs);
+        photoURI = URI;
     }
 
 }

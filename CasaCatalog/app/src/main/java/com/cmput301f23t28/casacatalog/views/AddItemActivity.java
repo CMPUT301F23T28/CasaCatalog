@@ -36,6 +36,7 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
 
     private Item newItem;
     private ArrayList<String> photoURLs = new ArrayList<>();
+    private Uri photoURI;
 
     /**
      * Called when the activity is starting. This method is where most initialization should go:
@@ -180,5 +181,6 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
     public void sendURI(Uri URI) {
         //photoURLs.add(input);
         Log.d("PHOTOURI", "received " + URI);
+        photoURI = URI;
     }
 }
