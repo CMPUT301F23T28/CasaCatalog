@@ -50,6 +50,7 @@ public class Item implements Parcelable {
         this.comment = "";
         this.owner = MainActivity.deviceId;
         // TODO: add photo URL stuff
+        this.photoURL = new ArrayList<>();
     }
 
     /**
@@ -385,18 +386,8 @@ public class Item implements Parcelable {
         comment = in.readString();
         serialNumber = in.readString();
         tags = in.createTypedArrayList(Tag.CREATOR);
-        //photo = in.readByte();
-
-        // Read the size of the List
-        int photoUrlListSize = in.readInt();
-        // Read each URL and add it to the List<String>
-        List<String> photoUrls = new ArrayList<>();
-        for (int i = 0; i < photoUrlListSize; i++) {
-            String photoUrl = in.readString();
-            photoUrls.add(photoUrl);
-        }
-        // Set the List<String> in your Item object
-        photoURL = photoUrls;
+        photoURL = in.createStringArrayList();
+        
     }
 
     /**
@@ -417,13 +408,8 @@ public class Item implements Parcelable {
         dest.writeString(this.comment);
         dest.writeString(this.serialNumber);
         dest.writeTypedList(this.tags);
-        // Write the size of the List
-        dest.writeInt(photoURL.size());
+        dest.writeStringList(this.photoURL);
 
-        // Write each URL to the Parcel
-        for (String photoUrl : photoURL) {
-            dest.writeString(photoUrl);
-        }
         //dest.writeValue(this.photo);  // TODO: fix (also 'writeValue' probably won't work)
     }
 }
