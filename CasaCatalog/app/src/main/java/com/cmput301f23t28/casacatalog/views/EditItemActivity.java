@@ -187,5 +187,12 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         Log.d("PHOTOURI", "Received " + URI);
         photoURI = URI;
     }
+    public void onSerialNumberRecognized(String serialNumber) {
+        editingItem.setSerialNumber(serialNumber);
+        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
+        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
+            serialNumberInput.getEditText().setText(serialNumber);
+        }
+    }
 
 }
