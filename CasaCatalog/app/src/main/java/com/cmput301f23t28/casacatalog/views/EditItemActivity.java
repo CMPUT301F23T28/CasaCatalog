@@ -21,6 +21,7 @@ import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -37,7 +38,6 @@ import java.util.List;
 public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item editingItem;
-    // Temporary solution so i dont convert string to date because im lazy
     private String stringItemDate;
 
     TextInputLayout itemNameText;
@@ -83,14 +83,13 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         ((TextInputLayout) findViewById(R.id.itemSerialNumber)).getEditText().setText(editingItem.getSerialNumber());
         ((TextInputLayout) findViewById(R.id.itemComments)).getEditText().setText(editingItem.getComment());
 
-            if (photoURLS != null && photoURLS.size() > 0) {
-                photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
-                itemPhotoContainer = findViewById(R.id.item_images_container);
-                itemPhotoContainer.setAdapter(photoListAdapter);
-                itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
-
-            }
-
+        // set up adapter for photos
+        if (editingItem.getPhotos() != null && editingItem.getPhotos().size() > 0) {
+            photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
+            itemPhotoContainer = findViewById(R.id.item_images_container);
+            itemPhotoContainer.setAdapter(photoListAdapter);
+            itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
+        }
 
         hydrateTagList(editingItem, findViewById(R.id.itemTagsList));
 
@@ -203,9 +202,8 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     @Override
     public void sendURL(String input) {
         Log.d("PHOTOURL", "Received " + input);
-        List<String> photoURLs = editingItem.getPhotoURLsAsStrings();
-        photoURLs.add(input);
-        editingItem.setPhotoURLs(photoURLs);
+        Photo photo = new Photo(input);
+        editingItem.addPhoto(photo);
     }
 
 

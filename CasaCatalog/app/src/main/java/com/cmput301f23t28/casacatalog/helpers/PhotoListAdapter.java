@@ -15,14 +15,15 @@ import com.cmput301f23t28.casacatalog.models.Photo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoHolder> implements ListClickListener<PhotoHolder> {
     private final Context context;
-    private final ArrayList<Photo> photos;
+    private final List<Photo> photos;
     private boolean isEditingState = false;
     private final VisibilityCallback mVisibilityCallback;
 
-    public PhotoListAdapter(Context context, ArrayList<Photo> photos, VisibilityCallback visibilityCallback) {
+    public PhotoListAdapter(Context context, List<Photo> photos, VisibilityCallback visibilityCallback) {
         this.context = context;
         this.photos = photos;
         this.mVisibilityCallback = visibilityCallback;

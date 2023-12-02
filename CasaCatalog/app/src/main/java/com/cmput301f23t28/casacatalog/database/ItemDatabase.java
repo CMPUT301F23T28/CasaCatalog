@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.firebase.firestore.CollectionReference;
@@ -39,7 +40,7 @@ public class ItemDatabase {
     public static final String SERIAL_KEY = "serialNumber";
     public static final String TAGS_KEY = "tags";
     public static final String OWNER_KEY = "owner";
-    public static final String PHOTO_URL_KEY = "photoURLs";
+    public static final String PHOTOS_KEY = "photoURLs";
 
     /**
      * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection, setting up real-time data synchronization.
@@ -93,23 +94,14 @@ public class ItemDatabase {
                     String itemComment = doc.getString(COMMENT_KEY);
                     String itemSerialNumber = doc.getString(SERIAL_KEY);
                     ArrayList<String> itemTagStrings = (ArrayList<String>) doc.get(TAGS_KEY);
-                    ArrayList<String> itemPhotos = (ArrayList<String>) doc.get("photos");
                     ArrayList<Tag> itemTags = new ArrayList<>();
                     if (itemTagStrings != null && itemTagStrings.size() > 0) {
                         for (String t : itemTagStrings) {
                             itemTags.add(new Tag(t));
                         }
                     }
-                    ArrayList<String> itemPhotoURLStrings = (ArrayList<String>) doc.get(PHOTO_URL_KEY);
-                    /*
-                    if (itemPhotoURLStrings != null && itemPhotoURLStrings.size() > 0) {
-                        for (String t : itemPhotoURLStrings) {
-
-                            itemTags.add(new Tag(t));
-                        }
-                    }
-                     */
-
+                    ArrayList<String> itemPhotos = (ArrayList<String>) doc.get(PHOTOS_KEY);
+                    // need fix here???
                     Log.i("Firestore", String.format("Item(%s,%s) fetched", itemName, itemPrice));
                     Item addItem = new Item();
                     addItem.setId(itemID);
@@ -122,7 +114,6 @@ public class ItemDatabase {
                     addItem.setModel(itemModel);
                     addItem.setDescription(itemDescription);
                     addItem.setComment(itemComment);
-                    addItem.setPhotoURLs(itemPhotoURLStrings);
                     if (itemComment != null) {
                         Log.d("ITEM_COMMENT_MAIN", itemComment);
                     }
@@ -164,7 +155,7 @@ public class ItemDatabase {
         data.put(SERIAL_KEY, item.getSerialNumber());
         data.put(TAGS_KEY, item.getTagsAsStrings());
         data.put(OWNER_KEY, item.getOwner());
-        data.put(PHOTO_URL_KEY, item.getPhotoURLsAsStrings());
+        data.put(PHOTOS_KEY, item.getPhotos());
         return data;
     }
 
