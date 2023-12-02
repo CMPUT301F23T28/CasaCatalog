@@ -174,4 +174,13 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         editingItem.setPhotoURLs(photoURLs);
     }
 
+    @Override
+    public void onSerialNumberRecognized(String serialNumber) {
+        editingItem.setSerialNumber(serialNumber);
+        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
+        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
+            serialNumberInput.getEditText().setText(serialNumber);
+        }
+    }
+
 }

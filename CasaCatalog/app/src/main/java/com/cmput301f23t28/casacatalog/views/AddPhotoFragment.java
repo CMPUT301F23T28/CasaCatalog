@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
+import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.google.android.gms.tasks.Continuation;
@@ -175,6 +176,22 @@ public class AddPhotoFragment extends DialogFragment {
             }
 
             if (filePath != null) {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Initialize TextRecognitionHelper and perform text recognition
+                TextRecognitionHelper textHelper = new TextRecognitionHelper(getContext());
+                textHelper.recognizeTextFromBitmap(bitmap, recognizedText -> {
+                    // Use recognized text
+                    if (!recognizedText.isEmpty()) {
+                        // Send recognized text to the activity, handle accordingly
+                        listener.onSerialNumberRecognized(recognizedText);
+                    }
+                });
                 Log.d("FILE_PATH", filePath.toString());
                 // Code for showing progressDialog while uploading
                 ProgressDialog progressDialog
@@ -296,6 +313,8 @@ public class AddPhotoFragment extends DialogFragment {
     public interface OnFragmentInteractionListener {
         void onOKPressed(/*City city*/);
         void sendURL(String URL);
+
+        abstract void onSerialNumberRecognized(String serialNumber);
     }
 
 }
