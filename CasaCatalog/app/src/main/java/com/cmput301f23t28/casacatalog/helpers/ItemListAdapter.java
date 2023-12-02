@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +18,6 @@ import com.cmput301f23t28.casacatalog.models.Tag;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
 import com.google.android.material.chip.Chip;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +25,9 @@ import java.util.ArrayList;
  */
 public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements ListClickListener<ItemHolder> {
     private final Context context;
-    private ArrayList<Item> itemList;
+    private final ArrayList<Item> itemList;
+
+    private final ActivityResultLauncher<Intent> editItemLauncher;
 
     private final VisibilityCallback mVisibilityCallback;
     private boolean isEditingState = false;
@@ -36,11 +38,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
      * @param itemList The list of items.
      * @param visibilityCallback Callback interface for handling visibility changes in the activity.
      */
-    public ItemListAdapter(Context context, ArrayList<Item> itemList, VisibilityCallback visibilityCallback) {
+    public ItemListAdapter(Context context, ArrayList<Item> itemList, ActivityResultLauncher<Intent> editItemLauncher, VisibilityCallback visibilityCallback) {
         super();
         this.context = context;
         this.itemList = itemList;
         this.mVisibilityCallback = visibilityCallback;
+        this.editItemLauncher = editItemLauncher;
     }
 
     /**
@@ -83,24 +86,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
             holder.setItemPrice(item.getPrice().toString());
         }
         if (item.getDate() != null){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
-            holder.setItemPurchaseDate(sdf.format(item.getDate()));
+            holder.setItemPurchaseDate(item.getFormattedDate());
         }
 
         Log.e("Shown", "Item" + item.getName());
 //        holder.setItemPurchaseDate(item.getDate().toString());
 
         if( item.getTags() != null ){
-            ArrayList<Chip> chips = new ArrayList<>();
-
-            // Create chips for each tag, add to chip group
-            for(Tag tag : item.getTags()) {
-                Chip c = new Chip(context);
-                c.setText(tag.getName());
-                chips.add(c);
-            }
-
-            holder.setItemTags(chips);
+            holder.setItemTags(item.getTagsAsChips(context));
         }
     }
 
@@ -113,43 +106,32 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
          * Sends the user to the 'edit item' activity, allowing them to edit their current
          * item and all of its relevant details.
          */
+        Item item = itemList.get(position);
 
         // behaviour if following a long click event.
         if (isEditingState) {
 //            holder.toggleSelected();
-            Item item = itemList.get(position);
             item.toggleSelected();
             notifyDataSetChanged();
             return;
         }
+        /*
+        editItemActivityIntent.putExtra("ITEM_PHOTO_LIST_SIZE", item.getPhotoURLs().size());
+        for (int i = 0; i < item.getPhotoURLs().size(); i++) {
+            editItemActivityIntent.putExtra("ITEM_PHOTO_URL_"+i, item.getPhotoURLs().get(i));
+        }
+        */
 
-        // NOTE: Not a great way to do this (clicking item). Apparently there's a much better
-        // way so I can implement this inside of the activity but I'm in a rush.
-        Item item = itemList.get(position);
-        Intent editItemActivityIntent = new Intent(context, EditItemActivity.class);
-        // Tests (is null at the moment?? no idea why??)
-        if (item.getId() != null) {
-            Log.d("ITEM ID ADAPTER", item.getId());
-        }
-        else {
-            Log.d("ITEM ID ADAPTER", "NULL");
-        }
-        editItemActivityIntent.putExtra("ITEM_ID", item.getId());
-        editItemActivityIntent.putExtra("ITEM_POSITION", position);
-        editItemActivityIntent.putExtra("ITEM_NAME", item.getName());
-        editItemActivityIntent.putExtra("ITEM_PRICE", item.getPrice());
-        if (item.getDate() != null) {
-            editItemActivityIntent.putExtra("ITEM_DATE", item.getDateFormatted());
-        }
-        editItemActivityIntent.putExtra("ITEM_DESCRIPTION", item.getDescription());
-        editItemActivityIntent.putExtra("ITEM_MAKE", item.getMake());
-        editItemActivityIntent.putExtra("ITEM_MODEL", item.getModel());
-        editItemActivityIntent.putExtra("ITEM_SERIAL_NUMBER", item.getSerialNumber());
-        editItemActivityIntent.putExtra("ITEM_COMMENT", item.getComment());
+
         editItemActivityIntent.putExtra("ITEM_PHOTOS", item.getPhotosURL());
         // TODO: Figure out whether we need to pass the tags here or not
         //editItemActivityIntent.putExtra("ITEM_TAGS", item.getTags());
-        context.startActivity(editItemActivityIntent);
+        //context.startActivity(editItemActivityIntent);
+        // Pressing an item triggers edit item activity populated with item data
+
+        Intent i = new Intent(context, EditItemActivity.class);
+        i.putExtra("item", item);
+        this.editItemLauncher.launch(i);
     }
 
     @Override
