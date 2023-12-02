@@ -7,7 +7,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
-import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.database.UserDatabase;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 
 /**
  * Represents an activity for user interactions within the app.
@@ -15,9 +16,6 @@ import com.cmput301f23t28.casacatalog.database.Database;
  * and username, as well as handling the back button functionality.
  */
 public class UserActivity extends AppCompatActivity {
-
-    private ImageView userProfileImage;
-    private TextView usernameTextView;
 
     /**
      * Called when the activity is starting.
@@ -35,16 +33,13 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        ToolbarBuilder.create(this, getString(R.string.title_profile));
 
-        userProfileImage = findViewById(R.id.userProfileImage);
-        usernameTextView = findViewById(R.id.usernameTextView);
+        // Hydrate views
+        ((TextView) findViewById(R.id.userNameTextView)).setText(UserDatabase.getUserName());
+        ((TextView) findViewById(R.id.userCreatedTextView)).setText(getString(R.string.user_profile_created_text, UserDatabase.getCreated()));
 
-        if(Database.users != null && Database.users.getCurrentUser(this) != null && Database.users.getCurrentUser(this).getName() != null){
-            usernameTextView.setText(Database.users.getCurrentUser(this).getName());
-        }
         // Set the profile image, if you have different images for different users
-        userProfileImage.setImageResource(R.drawable.profile);
-
-        findViewById(R.id.backButton).setOnClickListener(view -> finish());
+        ((ImageView) findViewById(R.id.userProfileImage)).setImageResource(R.drawable.profile);
     }
 }
