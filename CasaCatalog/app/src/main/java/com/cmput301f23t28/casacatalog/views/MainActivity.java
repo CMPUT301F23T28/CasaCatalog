@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
+import com.cmput301f23t28.casacatalog.Camera.FetchProductDetails;
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
