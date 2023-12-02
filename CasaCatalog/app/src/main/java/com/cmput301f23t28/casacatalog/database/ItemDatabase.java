@@ -101,7 +101,6 @@ public class ItemDatabase {
                         }
                     }
                     ArrayList<String> itemPhotos = (ArrayList<String>) doc.get(PHOTOS_KEY);
-                    // need fix here???
                     Log.i("Firestore", String.format("Item(%s,%s) fetched", itemName, itemPrice));
                     Item addItem = new Item();
                     addItem.setId(itemID);
