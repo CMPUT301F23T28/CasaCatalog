@@ -158,4 +158,24 @@ public class TextRecognitionHelper {
         Log.d("TextRecognition", "Text From Image: " + text);
     }
 
+    public interface TextRecognitionListener {
+        void onTextRecognized(String recognizedText);
+    }
+
+    public void recognizeTextFromBitmap(Bitmap bitmap, TextRecognitionListener listener) {
+        InputImage image = InputImage.fromBitmap(bitmap, 0);
+        recognizer.process(image)
+                .addOnSuccessListener(visionText -> {
+                    StringBuilder extractedText = new StringBuilder();
+                    for (Text.TextBlock block : visionText.getTextBlocks()) {
+                        extractedText.append(block.getText()).append("\n");
+                    }
+                    listener.onTextRecognized(extractedText.toString().trim());
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                    listener.onTextRecognized("");
+                });
+    }
+
 }
