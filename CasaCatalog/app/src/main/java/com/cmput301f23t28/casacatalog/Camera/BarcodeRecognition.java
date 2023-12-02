@@ -26,27 +26,52 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.util.List;
 
+/**
+ * An AppCompatActivity class for recognizing barcodes in images.
+ */
 public class BarcodeRecognition extends AppCompatActivity {
 
     private Context context;
     private String barcodeNumber;
 
+    /**
+     * Constructor for BarcodeRecognition.
+     *
+     * @param context The context where this class is being used.
+     */
     public BarcodeRecognition(Context context) {
         this.context = context;
     }
 
+    /**
+     * Retrieves the barcode number scanned.
+     *
+     * @return The scanned barcode number as a String.
+     */
     public String getBarcodeNumber() {
         return barcodeNumber;
     }
 
+    /**
+     * Initializes the activity.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     *                           shut down, this Bundle contains the most recent data supplied
+     *                           in onSaveInstanceState(Bundle). Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
+    /**
+     * Scans barcodes from the given image and processes them.
+     * On success, updates the barcodeNumber field and optionally updates the UI.
+     * On failure, logs an error.
+     *
+     * @param image The InputImage to scan barcodes from.
+     */
     public void scanBarcodes(InputImage image) {
-        // [START set_detector_options]
         BarcodeScannerOptions options =
                 new BarcodeScannerOptions.Builder()
                         .setBarcodeFormats(
@@ -55,65 +80,30 @@ public class BarcodeRecognition extends AppCompatActivity {
                                 Barcode.FORMAT_UPC_A,
                                 Barcode.FORMAT_UPC_E)
                         .build();
-        // [END set_detector_options]
 
-        // [START get_detector]
         BarcodeScanner scanner = BarcodeScanning.getClient();
         // Or, to specify the formats to recognize:
         // BarcodeScanner scanner = BarcodeScanning.getClient(options);
-        // [END get_detector]
 
-        // [START run_detector]
         Task<List<Barcode>> result = scanner.process(image)
                 .addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
                     @Override
                     public void onSuccess(List<Barcode> barcodes) {
-                        // Task completed successfully
-                        // [START_EXCLUDE]
-                        // [START get_barcodes]
-                        for (Barcode barcode: barcodes) {
+                        for (Barcode barcode : barcodes) {
                             barcodeNumber = barcode.getRawValue();
-                            barcodeNumber = "041278000064";
                             Log.d("BarcodeValue", "Barcode value: " + barcodeNumber);
-
                             // Optionally update the UI, such as displaying the barcode value in a TextView
                             // textView.setText(rawValue);
                         }
                         new FetchProductDetails(barcodeNumber).execute();
-//                        for (Barcode barcode: barcodes) {
-//                            Rect bounds = barcode.getBoundingBox();
-//                            Point[] corners = barcode.getCornerPoints();
-//
-//                            String rawValue = barcode.getRawValue();
-//
-//                            int valueType = barcode.getValueType();
-//                            // See API reference for complete list of supported types
-//                            switch (valueType) {
-//                                case Barcode.TYPE_WIFI:
-//                                    String ssid = barcode.getWifi().getSsid();
-//                                    String password = barcode.getWifi().getPassword();
-//                                    int type = barcode.getWifi().getEncryptionType();
-//                                    break;
-//                                case Barcode.TYPE_URL:
-//                                    String title = barcode.getUrl().getTitle();
-//                                    String url = barcode.getUrl().getUrl();
-//                                    break;
-//                            }
-//                        }
-                        // [END get_barcodes]
-                        // [END_EXCLUDE]
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Task failed with an exception
-                        // ...
                         Log.e("Barcode Scanning", "Error scanning barcodes", e);
                     }
                 });
-
-        // [END run_detector]
     }
-
 }
