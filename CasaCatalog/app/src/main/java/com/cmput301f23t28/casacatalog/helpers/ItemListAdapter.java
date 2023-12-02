@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * A RecyclerView adapter linking ItemHolder's data to the ItemList
  */
-public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements ItemListClickListener {
+public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements ListClickListener<ItemHolder> {
     private final Context context;
     private final ArrayList<Item> itemList;
 
@@ -121,7 +121,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
             editItemActivityIntent.putExtra("ITEM_PHOTO_URL_"+i, item.getPhotoURLs().get(i));
         }
         */
-
 
         // TODO: Figure out whether we need to pass the tags here or not
         //editItemActivityIntent.putExtra("ITEM_TAGS", item.getTags());
