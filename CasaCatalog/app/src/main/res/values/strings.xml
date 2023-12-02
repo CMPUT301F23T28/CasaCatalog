@@ -3,6 +3,11 @@
     <string name="user_profile_picture">User profile picture</string>
     <string name="back_button">Back button</string>
 
+    <string name="title_add_item">Add a new item</string>
+    <string name="title_edit_item">Edit %1$s</string>
+    <string name="title_edit_tags">Edit tags</string>
+    <string name="title_profile">Your profile</string>
+
     <string name="item_details_text">Details</string>
     <string name="item_name_label">Item Name</string>
     <string name="item_value_label">Estimated Value</string>
@@ -22,9 +27,25 @@
     <string name="item_photos_text">Photos</string>
 
     <string name="item_edit_button_text">Edit Item</string>
+
     <string name="camera">c</string>
     <string name="gallery">g</string>
     <string name="cancel">@android:string/cancel</string>
     <string name="choose">choose</string>
     <string name="loading">loading</string>
+
+    <string-array name="type_choices">
+        <item>Date</item>
+        <item>Description</item>
+        <item>Make</item>
+        <item>Value</item>
+        <item>Tag</item>
+    </string-array>
+
+    <string-array name="order_choices">
+        <item>Descending</item>
+        <item>Ascending</item>
+    </string-array>
+
+    <string name="user_profile_created_text">Member since %1$s</string>
 </resources>
