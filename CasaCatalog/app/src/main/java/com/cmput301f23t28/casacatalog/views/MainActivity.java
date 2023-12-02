@@ -27,6 +27,8 @@ import com.cmput301f23t28.casacatalog.models.Item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.mlkit.vision.common.InputImage;
 
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**

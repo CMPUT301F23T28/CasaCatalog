@@ -138,8 +138,7 @@ public class AddPhotoFragment extends DialogFragment {
 //                    if (name.isEmpty() || province.isEmpty()) {
 //                        return;
 //                    }
-                    Toast.makeText(getActivity(), "hello", Toast.LENGTH_LONG).show();
-                    listener.onOKPressed(/* new City(name, province) */);
+                    listener.onOKPressed();
                 }).create();
     }
 
