@@ -22,6 +22,8 @@ import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
                     }
                 }
         );
-
+        List<Item> test = Database.items.getItems();
         itemAdapter = new ItemListAdapter(this, Database.items.getItems(), editItemLauncher, this);
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);

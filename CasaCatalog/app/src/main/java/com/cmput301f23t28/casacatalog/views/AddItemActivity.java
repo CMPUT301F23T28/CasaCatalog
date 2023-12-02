@@ -20,6 +20,7 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 public class AddItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private Item newItem;
-    private ArrayList<String> photoURLs = new ArrayList<>();
+    private ArrayList<Photo> photos = new ArrayList<>();
 
     /**
      * Called when the activity is starting. This method is where most initialization should go:
@@ -111,8 +112,10 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
             }
 
             // Set link to photo URL in cloud storage
-            if (photoURLs.size() > 0) {
-                newItem.setPhotoURLs(photoURLs);
+            if (photos.size() > 0) {
+                newItem.setPhotoURLs(photos);
+//                TODO: Ryan remove
+//                newItem.setPhotoURLs(photoURLs);
             }
 
             Database.items.add(newItem);
@@ -167,7 +170,8 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
      */
     @Override
     public void sendURL(String input) {
-        photoURLs.add(input);
+        Photo photo = new Photo(input);
+        photos.add(photo);
         Log.d("PHOTOURL", "received " + input);
     }
 }
