@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -169,5 +170,15 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
     public void sendURL(String input) {
         photoURLs.add(input);
         Log.d("PHOTOURL", "received " + input);
+    }
+
+    /**
+     * Receives back the URL of the photo in cloud storage to the activity.
+     * @param URI the URL of the photo.
+     */
+    @Override
+    public void sendURI(Uri URI) {
+        //photoURLs.add(input);
+        Log.d("PHOTOURI", "received " + URI);
     }
 }

@@ -54,10 +54,6 @@ public class AddPhotoFragment extends DialogFragment {
     StorageReference storageReference;
     String photoURL;
 
-    // To send string from fragment to activity (SO DIFFICULT FOR NO REASON)
-    public interface OnOKListener {
-        void sendURL(String input);
-    }
     public OnFragmentInteractionListener mOnFragmentInteractionListener;
 
 
@@ -134,10 +130,6 @@ public class AddPhotoFragment extends DialogFragment {
                 .setTitle("Add photo")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", (dialog, which) -> {
-//                    if (name.isEmpty() || province.isEmpty()) {
-//                        return;
-//                    }
-                    Toast.makeText(getActivity(), "hello", Toast.LENGTH_LONG).show();
                     listener.onOKPressed(/* new City(name, province) */);
                 }).create();
     }
@@ -189,44 +181,7 @@ public class AddPhotoFragment extends DialogFragment {
                                 "images/"
                                         + UUID.randomUUID().toString());
 
-                // adding listeners on upload
-                // or failure of image
                 UploadTask uploadTask = ref.putFile(filePath);
-//                        .addOnSuccessListener(
-//                                new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//
-//                                    @Override
-//                                    public void onSuccess(
-//                                            UploadTask.TaskSnapshot taskSnapshot)
-//                                    {
-//
-//                                        // Image uploaded successfully
-//                                        // Dismiss dialog
-//                                        progressDialog.dismiss();
-//                                        Toast
-//                                                .makeText(getActivity(),
-//                                                        "Image Uploaded!!",
-//                                                        Toast.LENGTH_SHORT)
-//                                                .show();
-//                                        getDialog().dismiss();
-//                                    }
-//                                })
-//
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e)
-//                            {
-//
-//                                // Error, Image not uploaded
-//                                progressDialog.dismiss();
-//                                Toast
-//                                        .makeText(getActivity(),
-//                                                "Failed " + e.getMessage(),
-//                                                Toast.LENGTH_SHORT)
-//                                        .show();
-//                                getDialog().dismiss();
-//                            }
-//                        });
                 // Get URL from cloud storage
                 // Need to attach to item after uploading
 
@@ -250,7 +205,9 @@ public class AddPhotoFragment extends DialogFragment {
                             photoURL = downloadUri.toString();
                             mOnFragmentInteractionListener.sendURL(photoURL);
 
+
                             Log.d("Download URL", photoURL);
+
 
                         } else {
                             // Handle failures
@@ -259,6 +216,8 @@ public class AddPhotoFragment extends DialogFragment {
                     }
                 });
 
+                mOnFragmentInteractionListener.sendURI(filePath);
+                Log.d("File URI", filePath.toString());
             }
             else {
                 Toast
@@ -296,6 +255,7 @@ public class AddPhotoFragment extends DialogFragment {
     public interface OnFragmentInteractionListener {
         void onOKPressed(/*City city*/);
         void sendURL(String URL);
+        void sendURI(Uri URI);
     }
 
 }
