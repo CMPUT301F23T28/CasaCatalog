@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
                     }
                 }
         );
-        List<Item> test = Database.items.getItems();
+
         itemAdapter = new ItemListAdapter(this, Database.items.getItems(), editItemLauncher, this);
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
