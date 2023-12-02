@@ -29,10 +29,14 @@ import java.util.List;
 public class BarcodeRecognition extends AppCompatActivity {
 
     private Context context;
-    private BarcodeRecognition recognizer;
+    private String barcodeNumber;
 
     public BarcodeRecognition(Context context) {
         this.context = context;
+    }
+
+    public String getBarcodeNumber() {
+        return barcodeNumber;
     }
 
     @Override
@@ -68,12 +72,14 @@ public class BarcodeRecognition extends AppCompatActivity {
                         // [START_EXCLUDE]
                         // [START get_barcodes]
                         for (Barcode barcode: barcodes) {
-                            String rawValue = barcode.getRawValue();
-                            Log.d("BarcodeValue", "Barcode value: " + rawValue);
+                            barcodeNumber = barcode.getRawValue();
+                            barcodeNumber = "041278000064";
+                            Log.d("BarcodeValue", "Barcode value: " + barcodeNumber);
 
                             // Optionally update the UI, such as displaying the barcode value in a TextView
                             // textView.setText(rawValue);
                         }
+                        new FetchProductDetails(barcodeNumber).execute();
 //                        for (Barcode barcode: barcodes) {
 //                            Rect bounds = barcode.getBoundingBox();
 //                            Point[] corners = barcode.getCornerPoints();
