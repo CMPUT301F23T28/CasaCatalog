@@ -192,7 +192,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
     @Override
     public void onOKPressed() {
-        Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+        photoListAdapter.notifyDataSetChanged();
     }
 
     /**

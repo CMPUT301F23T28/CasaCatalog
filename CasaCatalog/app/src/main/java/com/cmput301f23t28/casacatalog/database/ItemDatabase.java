@@ -155,7 +155,7 @@ public class ItemDatabase {
         data.put(SERIAL_KEY, item.getSerialNumber());
         data.put(TAGS_KEY, item.getTagsAsStrings());
         data.put(OWNER_KEY, item.getOwner());
-        data.put(PHOTOS_KEY, item.getPhotos());
+        data.put(PHOTOS_KEY, item.getPhotosURL());
         return data;
     }
 

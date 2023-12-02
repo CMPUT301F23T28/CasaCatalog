@@ -114,8 +114,6 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
             // Set link to photo URL in cloud storage
             if (photos.size() > 0) {
                 newItem.setPhotoURLs(photos);
-//                TODO: Ryan remove
-//                newItem.setPhotoURLs(photoURLs);
             }
 
             Database.items.add(newItem);
@@ -161,7 +159,7 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
 
     @Override
     public void onOKPressed() {
-        Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+
     }
 
     /**
@@ -174,4 +172,5 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         photos.add(photo);
         Log.d("PHOTOURL", "received " + input);
     }
+
 }
