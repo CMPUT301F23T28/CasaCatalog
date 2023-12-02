@@ -3,6 +3,7 @@ package com.cmput301f23t28.casacatalog.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity for editing an existing item. Inherits functionality from AddItemActivity
@@ -159,4 +161,17 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     public void onOKPressed() {
         Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
     }
+
+    /**
+     * Sends back the URL of the photo in cloud storage to the activity.
+     * @param input the URL of the photo.
+     */
+    @Override
+    public void sendURL(String input) {
+        Log.d("PHOTOURL", "Received " + input);
+        List<String> photoURLs = editingItem.getPhotoURLsAsStrings();
+        photoURLs.add(input);
+        editingItem.setPhotoURLs(photoURLs);
+    }
+
 }

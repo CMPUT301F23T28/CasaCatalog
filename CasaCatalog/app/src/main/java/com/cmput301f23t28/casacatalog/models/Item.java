@@ -11,6 +11,7 @@ import com.google.android.material.chip.Chip;
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ public class Item implements Parcelable {
     private Double price;
     private LocalDate date;
     private ByteBuffer photo;
+    private List<String> photoURL; // used for cloud storage reference
     private ArrayList<Tag> tags;
     private String make;
     private String model;
@@ -47,6 +49,8 @@ public class Item implements Parcelable {
         this.description = "";
         this.comment = "";
         this.owner = MainActivity.deviceId;
+        // TODO: add photo URL stuff
+        this.photoURL = new ArrayList<>();
     }
 
     /**
@@ -176,6 +180,7 @@ public class Item implements Parcelable {
         return tags != null ? tags.stream().map(Tag::getName).sorted().collect(Collectors.toList()) : new ArrayList<>();
     }
 
+
     /**
      * Sets the list of tags associated with the item.
      * @param tags An ArrayList of Tag objects to associate with the item.
@@ -200,6 +205,22 @@ public class Item implements Parcelable {
         this.tags.remove(tag);
     }
 
+    /**
+     * Converts list of URLs to list of strings to where the photos of the respective item are stored.
+     * @return
+     */
+    public List<String> getPhotoURLsAsStrings() {
+
+        return photoURL != null ? new ArrayList<>(photoURL) : new ArrayList<>();
+    }
+
+    /**
+     * Sets photo URL list to specified list.
+     * @param photoURL An ArrayList of photo URLs in cloud storage for the item.
+     */
+    public void setPhotoURLs(List<String> photoURL) {
+        this.photoURL = photoURL;
+    }
     /**
      * Gets the make of the item.
      * Returns empty string if there is none set.
@@ -307,6 +328,7 @@ public class Item implements Parcelable {
         this.selected = !this.selected;
     }
 
+
     /**
      * Retrieves the owner of this item.
      * @return A device ID unique to the creator of the item.
@@ -364,7 +386,8 @@ public class Item implements Parcelable {
         comment = in.readString();
         serialNumber = in.readString();
         tags = in.createTypedArrayList(Tag.CREATOR);
-        //photo = in.readByte();
+        photoURL = in.createStringArrayList();
+        
     }
 
     /**
@@ -385,6 +408,8 @@ public class Item implements Parcelable {
         dest.writeString(this.comment);
         dest.writeString(this.serialNumber);
         dest.writeTypedList(this.tags);
+        dest.writeStringList(this.photoURL);
+
         //dest.writeValue(this.photo);  // TODO: fix (also 'writeValue' probably won't work)
     }
 }
