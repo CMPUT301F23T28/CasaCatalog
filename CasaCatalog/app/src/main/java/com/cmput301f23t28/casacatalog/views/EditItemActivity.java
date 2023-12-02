@@ -103,7 +103,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             if (serialNumberValue.getEditText().getText().toString() != null) {
                 editingItem.setSerialNumber(serialNumberValue.getEditText().getText().toString());
             }
-            
+
             // Send new item copy back
             Intent ret = new Intent();
             ret.putExtra("item", editingItem);
