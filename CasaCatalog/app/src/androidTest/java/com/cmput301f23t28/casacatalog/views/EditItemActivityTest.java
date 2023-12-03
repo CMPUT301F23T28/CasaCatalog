@@ -168,4 +168,18 @@ public class EditItemActivityTest {
         onView(withId(R.id.addItemToListBtn)).perform(click());
     }
 
+    @Test
+    public void navigateToGalleryCameraPicker() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.items_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
+        onView(withId(R.id.addPhotoToItem)).perform(ViewActions.scrollTo());
+        onView(withId(R.id.addPhotoToItem)).perform(click());
+        onView(withText("Add photo")).check(matches(isDisplayed()));
+        onView(withText("Cancel")).check(matches(isDisplayed()));
+    }
+
 }

@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Photos are used with an Items photo collection
+ */
 public class Photo implements Parcelable {
     String url;
     Boolean isSelected = false;
@@ -18,6 +21,10 @@ public class Photo implements Parcelable {
         isSelected = tmpIsSelected == 0 ? null : tmpIsSelected == 1;
     }
 
+    /**
+     *
+     * @return returns the selected status of the photo
+     */
     public Boolean getSelected() {
         return isSelected;
     }
@@ -37,14 +44,17 @@ public class Photo implements Parcelable {
         this.isSelected = !this.isSelected;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
+    /**
+     *
+     * @return gets the URL of the photo
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Magic code to implement the parcelable interface.
+     */
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
         @Override
         public Photo createFromParcel(Parcel in) {
@@ -57,11 +67,18 @@ public class Photo implements Parcelable {
         }
     };
 
+    /**
+     * Parcelable implementation details
+     * @return parcelable contents return
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Parcelable implementation details
+     */
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(url);

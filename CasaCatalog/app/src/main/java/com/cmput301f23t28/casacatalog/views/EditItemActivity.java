@@ -46,7 +46,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     private boolean isBarcode; // whether bitmap is barcode or not
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
-    private FloatingActionButton changeDefaultButton;
     private FloatingActionButton trashButton;
     private Button barcodeButton;
 
@@ -66,7 +65,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         this.editingItem = getIntent().getParcelableExtra("item");
         ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
         trashButton = findViewById(R.id.delete_pictures_button);
-        changeDefaultButton = findViewById(R.id.change_default_button);
         barcodeButton = findViewById(R.id.BarcodeButton);
 
         // Remove barcode button (only for adding not editing)
@@ -87,12 +85,11 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         ((TextInputLayout) findViewById(R.id.itemComments)).getEditText().setText(editingItem.getComment());
 
         // set up adapter for photos
-        if (editingItem.getPhotos() != null && editingItem.getPhotos().size() > 0) {
-            photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
-            itemPhotoContainer = findViewById(R.id.item_images_container);
-            itemPhotoContainer.setAdapter(photoListAdapter);
-            itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
-        }
+        photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
+        itemPhotoContainer = findViewById(R.id.item_images_container);
+        itemPhotoContainer.setAdapter(photoListAdapter);
+        itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
+
 
         hydrateTagList(editingItem, findViewById(R.id.itemTagsList));
 
@@ -185,6 +182,34 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             editTagsLauncher.launch(i);
         });
 
+
+        // Handles the deletion of photos
+        trashButton.setOnClickListener(v -> {
+            boolean anySelected = false;
+
+            List<Photo> photosToRemove = new ArrayList<>();
+
+            for(Photo photo: editingItem.getPhotos()) {
+                if (photo.getSelected()) {
+                    anySelected = true;
+                    photosToRemove.add(photo);
+                }
+            }
+
+            for (Photo photo : photosToRemove) {
+                Log.i("CRUD", "Deleted photo. Name: " + photo.getUrl());
+                editingItem.removePhoto(photo.getUrl());
+            }
+
+            if (!anySelected) {
+                String text = "No photos were selected.";
+                Toast.makeText(EditItemActivity.this, text, Toast.LENGTH_LONG).show();
+            }
+            // hide buttons
+            photoListAdapter.setEditingState(false);
+            photoListAdapter.notifyDataSetChanged();
+            toggleVisibility();
+        });
     }
 
     /**
@@ -198,6 +223,9 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         }
     }
 
+    /**
+     * Connected to the listener in the AddPhotoFragment to handle OK being pressed.
+      */
     @Override
     public void onOKPressed() {
         photoListAdapter.notifyDataSetChanged();
@@ -214,6 +242,17 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         editingItem.addPhoto(photo);
     }
 
+    @Override
+    public void onSerialNumberRecognized(String serialNumber) {
+        editingItem.setSerialNumber(serialNumber);
+        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
+        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
+            serialNumberInput.getEditText().setText(serialNumber);
+        }
+    }
+    /**
+     * handles visibility of the delete photo icon
+     */
     /**
      * Receives back the bitmap of the photo in local storage to the activity.
      * @param bitmap the bitmap of the photo.
@@ -227,24 +266,15 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     }
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");
-        if (changeDefaultButton != null && trashButton != null) {
-            if (changeDefaultButton.getVisibility() == View.VISIBLE && trashButton.getVisibility() == View.VISIBLE) {
+        if (trashButton != null) {
+            if (trashButton.getVisibility() == View.VISIBLE) {
                 Log.i("Ryan", "INVisible buttons");
-                changeDefaultButton.setVisibility(View.GONE);
                 trashButton.setVisibility(View.GONE);
+
             } else {
                 Log.i("Ryan", "Visible buttons");
-                changeDefaultButton.setVisibility(View.VISIBLE);
                 trashButton.setVisibility(View.VISIBLE);
             }
-        }
-    }
-    @Override
-    public void onSerialNumberRecognized(String serialNumber) {
-        editingItem.setSerialNumber(serialNumber);
-        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
-        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
-            serialNumberInput.getEditText().setText(serialNumber);
         }
     }
 }
