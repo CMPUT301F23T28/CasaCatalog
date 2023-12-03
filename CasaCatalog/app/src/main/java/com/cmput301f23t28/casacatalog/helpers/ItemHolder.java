@@ -3,7 +3,9 @@ package com.cmput301f23t28.casacatalog.helpers;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -23,6 +26,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     private TextView ItemName;
     private TextView ItemPurchaseDate;
     private TextView ItemPrice;
+    private ImageView ItemImage;
     private ChipGroup ItemTags;
     private ListClickListener mListener;
     private ConstraintLayout ItemContainer;
@@ -42,6 +46,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         ItemPurchaseDate = itemView.findViewById(R.id.ItemPurchaseDate);
         ItemPrice = itemView.findViewById(R.id.ItemPrice);
         ItemTags = itemView.findViewById(R.id.ItemTags);
+        ItemImage = itemView.findViewById(R.id.ItemImage);
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
@@ -64,6 +69,29 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     public void setItemPurchaseDate(String itemPurchaseDate) {
         if (ItemPurchaseDate != null) {
             ItemPurchaseDate.setText(itemPurchaseDate);
+        }
+    }
+
+    /**
+     * Sets the image in the list of items based off the first URL in the item database
+     * @param imageURL
+     */
+    public void setItemImage(String imageURL) {
+        /*
+        Picasso picasso = new Picasso.Builder(context)
+                .listener((picasso1, uri, exception) -> {
+                    Log.i("Picasso", "uri: " + uri);
+                    Log.i("Picasso", "Exception: " + exception);
+                })
+                .build();
+
+         */
+
+        if (imageURL != "") {
+            Picasso.get()
+                    .load(imageURL)
+                    //.placeholder(context.getResources().getDrawable(R.drawable.ic_launcher_foreground))//it will show placeholder image when url is not valid.
+                    .into(ItemImage);
         }
     }
 
