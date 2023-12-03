@@ -15,6 +15,8 @@ public class Filter {
         between, notbetween}
     private Filter.Type currentType;
     private Filter.FilterType currentFilterType;
+    String val1;
+    String val2;
 
     /**
      * Given strings for what to sort by and in what order,
@@ -22,7 +24,9 @@ public class Filter {
      * @param type A String name for the item property to sort by
      * @param order A String sorting order, either "ascending" or "descending"
      */
-    public Filter(String type, String order){
+    public Filter(String type, String order, String val1, String val2){
+        this.val1 = val1;
+        this.val2 = val2;
         for(Filter.Type t : Filter.Type.values()){
             if( type.equalsIgnoreCase(t.name()) ) currentType = t;
         }
@@ -36,10 +40,12 @@ public class Filter {
      * sorts by date in descending order.
      */
     public Filter(){
+        this.val1 = "";
+        this.val2 = "";
         this.currentType = Type.date;
         this.currentFilterType = FilterType.equals;
     }
-    public Predicate<Item> getFilterPredicate(String val1, String val2){
+    public Predicate<Item> getFilterPredicate(){
                 Item item = new Item();
                 switch (this.currentType) {
                     case date:

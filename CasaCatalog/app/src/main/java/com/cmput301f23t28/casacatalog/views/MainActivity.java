@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         final FloatingActionButton addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddItemActivity.class)));
 
+        findViewById(R.id.FilterButton).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, FilterPage.class)));
+
         // handles deletion of selection items
         trashButton.setOnClickListener(v -> {
             boolean anySelected = false;
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         findViewById(R.id.SortButton).setOnClickListener(v -> new SortDialog().show(getSupportFragmentManager(), SortDialog.TAG));
 
         
-        findViewById(R.id.FilterButton).setOnClickListener(v -> new FilterDialog().show(getSupportFragmentManager(), FilterDialog.TAG));
+//        findViewById(R.id.FilterButton).setOnClickListener(v -> new FilterDialog().show(getSupportFragmentManager(), FilterDialog.TAG));
 
     }
 
