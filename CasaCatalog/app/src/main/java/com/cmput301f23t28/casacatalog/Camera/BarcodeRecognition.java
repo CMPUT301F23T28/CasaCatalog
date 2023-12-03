@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.models.Item;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -71,7 +73,8 @@ public class BarcodeRecognition extends AppCompatActivity {
      *
      * @param image The InputImage to scan barcodes from.
      */
-    public void scanBarcodes(InputImage image) {
+    public Item scanBarcodes(InputImage image) {
+        Item newItem = new Item();
         BarcodeScannerOptions options =
                 new BarcodeScannerOptions.Builder()
                         .setBarcodeFormats(
@@ -95,7 +98,8 @@ public class BarcodeRecognition extends AppCompatActivity {
                             // Optionally update the UI, such as displaying the barcode value in a TextView
                             // textView.setText(rawValue);
                         }
-                        new FetchProductDetails(barcodeNumber).execute();
+                        new FetchProductDetails(barcodeNumber, newItem).execute();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -105,5 +109,6 @@ public class BarcodeRecognition extends AppCompatActivity {
                         Log.e("Barcode Scanning", "Error scanning barcodes", e);
                     }
                 });
+        return newItem;
     }
 }
