@@ -16,6 +16,7 @@ import com.cmput301f23t28.casacatalog.views.AddItemActivity;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
 
@@ -24,14 +25,30 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
     Spinner filtertype;
     Spinner filtercomp;
 
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 //        public Spinner spinner;
 //        public TextInputEditText textInput;
+        TextInputLayout val1_input;
+        TextInputLayout val2_input;
+        Filter filter;
 
         public MyViewHolder(View v) {
             super(v);
 //            spinner = v.findViewById(v.R.id.spinner);
-//            textInput = v.findViewById(v.R.id.textInputEditText);
+            val1_input = v.findViewById(R.id.filter_value_1);
+            val2_input = v.findViewById(R.id.filter_value_2);
+
+        }
+
+        public Filter getFilter() {
+            filter.setVal1(val1_input.getEditText().getText().toString());
+            filter.setVal2(val2_input.getEditText().getText().toString());
+            return filter;
+        }
+
+        public void bindData(Filter fil){
+            filter = fil;
         }
     }
 
@@ -63,6 +80,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 // An item was selected. Retrieve the selected item using parent.getItemAtPosition(pos)
                 String strfiltertype = parent.getItemAtPosition(position).toString();
                 // Do something with the selected item
+                dataObject.setCurrentType(strfiltertype);
             }
 
             @Override
@@ -86,7 +104,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 // An item was selected. Retrieve the selected item using parent.getItemAtPosition(pos)
                 String strfiltercomp = parent.getItemAtPosition(position).toString();
                 // Do something with the selected item
-
+                dataObject.setCurrentFilterType(strfiltercomp);
             }
 
             @Override
@@ -95,7 +113,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
             }
         });
-
+        holder.bindData(dataObject);
     }
 
     @Override
