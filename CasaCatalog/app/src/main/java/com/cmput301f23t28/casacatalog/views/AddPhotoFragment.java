@@ -49,12 +49,9 @@ public class AddPhotoFragment extends DialogFragment {
     static final int GALLERY_CODE = 0;
     private Uri filePath; // filepath of image to be uploaded/selected
     private String currentPhotoPath;
-
     // instance for firebase storage and StorageReference (no idea if i need these here or in main?)
-    FirebaseStorage storage;
     StorageReference storageReference;
     String photoURL;
-
     public OnFragmentInteractionListener mOnFragmentInteractionListener;
 
 
@@ -166,83 +163,92 @@ public class AddPhotoFragment extends DialogFragment {
                     break;
                     //mImageView.setImageURI(filePath);
             }
+            if (getFragmentManager().findFragmentByTag("ADD_PHOTO") == this) {
+                Log.d("ADDING PHOTO", "You are indeed adding a photo");
 
-            if (filePath != null) {
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (filePath != null) {
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    // Initialize TextRecognitionHelper and perform text recognition
+                    TextRecognitionHelper textHelper = new TextRecognitionHelper(getContext());
+                    textHelper.recognizeTextFromBitmap(bitmap, recognizedText -> {
+                        // Use recognized text
+                        if (!recognizedText.isEmpty()) {
+                            // Send recognized text to the activity, handle accordingly
+                            listener.onSerialNumberRecognized(recognizedText);
+                        }
+                    });
+                    Log.d("FILE_PATH", filePath.toString());
+                    // Code for showing progressDialog while uploading
+                    ProgressDialog progressDialog
+                            = new ProgressDialog(getActivity());
+                    progressDialog.setTitle("Uploading...");
+                    progressDialog.show();
+
+                    // Defining the child of storageReference
+                    StorageReference ref
+                            = storageReference
+                            .child(
+                                    "images/"
+                                            + UUID.randomUUID().toString());
+
+                    UploadTask uploadTask = ref.putFile(filePath);
+                    // Get URL from cloud storage
+                    // Need to attach to item after uploading
+
+                    // Get the download URL
+                    uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+                            // Continue with the task to get the download URL
+                            return ref.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                // The download URL of the image
+                                progressDialog.dismiss();
+                                Uri downloadUri = task.getResult();
+                                photoURL = downloadUri.toString();
+                                mOnFragmentInteractionListener.sendURL(photoURL);
+
+
+                                Log.d("Download URL", photoURL);
+
+
+                            } else {
+                                // Handle failures
+                                Log.e("Download URL", "Failed to get download URL");
+                            }
+                        }
+                    });
+
+                    mOnFragmentInteractionListener.sendURI(filePath);
+                    Log.d("File URI", filePath.toString());
                 }
-
-                // Initialize TextRecognitionHelper and perform text recognition
-                TextRecognitionHelper textHelper = new TextRecognitionHelper(getContext());
-                textHelper.recognizeTextFromBitmap(bitmap, recognizedText -> {
-                    // Use recognized text
-                    if (!recognizedText.isEmpty()) {
-                        // Send recognized text to the activity, handle accordingly
-                        listener.onSerialNumberRecognized(recognizedText);
-                    }
-                });
-                Log.d("FILE_PATH", filePath.toString());
-                // Code for showing progressDialog while uploading
-                ProgressDialog progressDialog
-                        = new ProgressDialog(getActivity());
-                progressDialog.setTitle("Uploading...");
-                progressDialog.show();
-
-                // Defining the child of storageReference
-                StorageReference ref
-                        = storageReference
-                        .child(
-                                "images/"
-                                        + UUID.randomUUID().toString());
-
-                UploadTask uploadTask = ref.putFile(filePath);
-                // Get URL from cloud storage
-                // Need to attach to item after uploading
-
-                // Get the download URL
-                uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-                        // Continue with the task to get the download URL
-                        return ref.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            // The download URL of the image
-                            progressDialog.dismiss();
-                            Uri downloadUri = task.getResult();
-                            photoURL = downloadUri.toString();
-                            mOnFragmentInteractionListener.sendURL(photoURL);
-
-
-                            Log.d("Download URL", photoURL);
-
-
-                        } else {
-                            // Handle failures
-                            Log.e("Download URL", "Failed to get download URL");
-                        }
-                    }
-                });
-
+                else {
+                    Toast
+                            .makeText(getActivity(),
+                                    "Failed: Couldn't get file path.",
+                                    Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+            else if (getFragmentManager().findFragmentByTag("ADD_SERIAL_NUMBER") == this) {
+                Log.d("ADDING SERIAL", "You are indeed ADDING SERIAL NUMBER");
                 mOnFragmentInteractionListener.sendURI(filePath);
-                Log.d("File URI", filePath.toString());
             }
-            else {
-                Toast
-                    .makeText(getActivity(),
-                            "Failed: Couldn't get file path.",
-                            Toast.LENGTH_SHORT)
-                    .show();
-            }
+            // TODO: add 'else if' for barcode
+
         }
     }
 
@@ -271,6 +277,7 @@ public class AddPhotoFragment extends DialogFragment {
     public interface OnFragmentInteractionListener {
         void onOKPressed(/*City city*/);
         void sendURL(String URL);
+        //TODO: send bitmap not URI
         void sendURI(Uri URI);
         abstract void onSerialNumberRecognized(String serialNumber);
     }

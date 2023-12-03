@@ -95,6 +95,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
         if( item.getTags() != null ){
             holder.setItemTags(item.getTagsAsChips(context));
         }
+
+        if (item.getPhotosURL().size() > 0) {
+            // Just sets to first image in list.
+            holder.setItemImage(item.getPhotosURL().get(0));
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package com.cmput301f23t28.casacatalog.helpers;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -75,7 +77,25 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
      * @param imageURL
      */
     public void setItemImage(String imageURL) {
-        
+        /*
+        Picasso picasso = new Picasso.Builder(context)
+                .listener((picasso1, uri, exception) -> {
+                    Log.i("Picasso", "uri: " + uri);
+                    Log.i("Picasso", "Exception: " + exception);
+                })
+                .build();
+
+         */
+
+        if (imageURL != "") {
+            Picasso.get()
+                    .load(imageURL)
+                    //.placeholder(context.getResources().getDrawable(R.drawable.ic_launcher_foreground))//it will show placeholder image when url is not valid.
+                    .into(ItemImage);
+        }
+        else {
+            // Load placeholder instead
+        }
     }
 
     /**
