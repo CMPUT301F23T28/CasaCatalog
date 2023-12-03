@@ -79,6 +79,12 @@ public class ItemDatabase {
                 for (QueryDocumentSnapshot doc : value) {
                     String itemID = doc.getId();
                     Log.d("ITEM ID QUERY", itemID);
+
+                    // Only items the client owns are added to local copy
+                    // An item with no owner will always be visible (failsafe)
+                    String ownerId = doc.getString("owner");
+                    if( ownerId != null && !ownerId.equals(MainActivity.deviceId) ) continue;
+
                     String itemName = doc.getString(NAME_KEY);
                     Double itemPrice = doc.getDouble(PRICE_KEY);
 
