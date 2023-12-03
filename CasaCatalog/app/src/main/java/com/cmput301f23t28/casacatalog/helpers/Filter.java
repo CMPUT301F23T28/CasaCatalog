@@ -1,5 +1,7 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.cmput301f23t28.casacatalog.models.Item;
@@ -9,14 +11,50 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class Filter {
+public class Filter implements Parcelable {
     public enum Type { date, description, make, value, tag }
     public enum FilterType {equals, notequals, contains, notcontains, lessthan, greaterthan,
         between, notbetween}
     private Filter.Type currentType;
     private Filter.FilterType currentFilterType;
-    String val1;
-    String val2;
+    private String val1;
+    private String val2;
+
+    public Type getCurrentType() {
+        return currentType;
+    }
+
+    public void setCurrentType(String type) {
+        for(Filter.Type t : Filter.Type.values()){
+            if( type.equalsIgnoreCase(t.name()) ) this.currentType = t;
+        }
+    }
+
+    public FilterType getCurrentFilterType() {
+        return currentFilterType;
+    }
+
+    public void setCurrentFilterType(String filterType) {
+        for(Filter.FilterType o : Filter.FilterType.values()){
+            if( filterType.equalsIgnoreCase(o.name()) ) currentFilterType = o;
+        }
+    }
+
+    public String getVal1() {
+        return val1;
+    }
+
+    public void setVal1(String val1) {
+        this.val1 = val1;
+    }
+
+    public String getVal2() {
+        return val2;
+    }
+
+    public void setVal2(String val2) {
+        this.val2 = val2;
+    }
 
     /**
      * Given strings for what to sort by and in what order,
@@ -97,4 +135,43 @@ public class Filter {
             return Predicate.isEqual(0);
     }
 
+    @Override
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int arg1) {
+        // TODO Auto-generated method stub
+        dest.writeString(val1);
+        dest.writeString(val2);
+        dest.writeString(currentType.name());
+        dest.writeString(currentFilterType.name());
+
+    }
+
+    public Filter(Parcel in) {
+        val1 = in.readString();
+        val2 = in.readString();
+
+        String strcurrentType = in.readString();
+        String strcurrentFilterType = in.readString();
+        for(Filter.Type t : Filter.Type.values()){
+            if( strcurrentType.equalsIgnoreCase(t.name()) ) currentType = t;
+        }
+        for(Filter.FilterType o : Filter.FilterType.values()){
+            if( strcurrentFilterType.equalsIgnoreCase(o.name()) ) currentFilterType = o;
+        }
+    }
+
+    public static final Parcelable.Creator<Filter> CREATOR = new Parcelable.Creator<Filter>() {
+        public Filter createFromParcel(Parcel in) {
+            return new Filter(in);
+        }
+
+        public Filter[] newArray(int size) {
+            return new Filter[size];
+        }
+    };
 }
