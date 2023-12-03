@@ -100,6 +100,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
             // Just sets to first image in list.
             holder.setItemImage(item.getPhotosURL().get(0));
         }
+        else {
+
+        }
     }
 
     /**

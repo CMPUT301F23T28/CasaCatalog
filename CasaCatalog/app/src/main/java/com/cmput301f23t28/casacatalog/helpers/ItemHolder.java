@@ -93,9 +93,6 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
                     //.placeholder(context.getResources().getDrawable(R.drawable.ic_launcher_foreground))//it will show placeholder image when url is not valid.
                     .into(ItemImage);
         }
-        else {
-            // Load placeholder instead
-        }
     }
 
     /**
