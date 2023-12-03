@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
+import com.cmput301f23t28.casacatalog.helpers.BarcodeCallback;
+import com.cmput301f23t28.casacatalog.models.Item;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +28,7 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * An AppCompatActivity class for recognizing barcodes in images.
@@ -33,14 +37,17 @@ public class BarcodeRecognition extends AppCompatActivity {
 
     private Context context;
     private String barcodeNumber;
+    private BarcodeCallback callback;
+
 
     /**
      * Constructor for BarcodeRecognition.
      *
      * @param context The context where this class is being used.
      */
-    public BarcodeRecognition(Context context) {
+    public BarcodeRecognition(Context context, BarcodeCallback callback) {
         this.context = context;
+        this.callback = callback;
     }
 
     /**
@@ -71,7 +78,8 @@ public class BarcodeRecognition extends AppCompatActivity {
      *
      * @param image The InputImage to scan barcodes from.
      */
-    public void scanBarcodes(InputImage image) {
+    public Item scanBarcodes(InputImage image) {
+        Item newItem = new Item();
         BarcodeScannerOptions options =
                 new BarcodeScannerOptions.Builder()
                         .setBarcodeFormats(
@@ -95,7 +103,22 @@ public class BarcodeRecognition extends AppCompatActivity {
                             // Optionally update the UI, such as displaying the barcode value in a TextView
                             // textView.setText(rawValue);
                         }
-                        new FetchProductDetails(barcodeNumber).execute();
+
+                        // Inside the onSuccess method of scanBarcodes
+                        new FetchProductDetails(barcodeNumber, newItem, new FetchProductDetails.FetchProductDetailsCallback() {
+                            @Override
+                            public void onDetailsFetched(Item newItem) {
+                                // Handle the fetched details
+                                // You can update UI or do any other processing here
+                                callback.onBarcodeScanned(newItem);
+                            }
+                            @Override
+                            public void onDetailsFetchFailed(String errorMessage) {
+                                // Handle the case where fetching details failed
+                                Log.e("FetchProductDetails", "Failed: " + errorMessage);
+                            }
+                        }).execute();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -103,7 +126,9 @@ public class BarcodeRecognition extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         // Task failed with an exception
                         Log.e("Barcode Scanning", "Error scanning barcodes", e);
+                        callback.onBarcodeScanFailed("Failed to scan barcode.");
                     }
                 });
+        return newItem;
     }
 }
