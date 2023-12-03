@@ -42,6 +42,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
     private Item editingItem;
     private Bitmap photoBitmap;
+    private boolean isBarcode; // whether bitmap is barcode or not
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
     private FloatingActionButton changeDefaultButton;
@@ -209,10 +210,11 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
      * @param bitmap the bitmap of the photo.
      */
     @Override
-    public void sendBitmap(Bitmap bitmap) {
+    public void sendBitmap(Bitmap bitmap, boolean isBarcode) {
         //photoURLs.add(input);
         Log.d("PHOTO BITMAP", "received " + bitmap);
         photoBitmap = bitmap;
+        this.isBarcode = isBarcode;
     }
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");

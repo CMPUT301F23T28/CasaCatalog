@@ -20,6 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="15dp"/>
 
+        <Button
+            android:id="@+id/BarcodeButton"
+            style="?attr/materialButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_weight="1"
+            android:text="Add by Barcode" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/detailsText"
             android:layout_height="wrap_content"
