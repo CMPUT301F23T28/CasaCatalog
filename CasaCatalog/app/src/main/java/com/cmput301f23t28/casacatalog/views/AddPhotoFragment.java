@@ -254,7 +254,6 @@ public class AddPhotoFragment extends DialogFragment {
                 boolean isBarcode = false;
                 mOnFragmentInteractionListener.sendBitmap(bitmap, isBarcode);
             }
-            // TODO: add 'else if' for barcode
             else if (getFragmentManager().findFragmentByTag("ADD_BARCODE") == this) {
                 Log.d("ADDING BARCODE", "You are indeed ADDING BARCODE");
                 Bitmap bitmap = null;

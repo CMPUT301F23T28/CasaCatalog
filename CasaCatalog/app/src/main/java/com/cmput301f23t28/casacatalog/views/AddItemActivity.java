@@ -23,6 +23,7 @@ import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.BarcodeCallback;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Photo;
@@ -215,6 +216,7 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
      * attributes inside of the barcode database
      * @param bitmap photo of the barcode.
      */
+    /*
     private void fillItemFromBarcode(Bitmap bitmap) {
 
         // NOTE: this might not work because of 'scan barcode' logic
@@ -224,15 +226,34 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         // Now call the scanBarcodes method with this image
         newItem = barcodeRecognition.scanBarcodes(image);
+        Log.d("newItem name", newItem.getName());
 
         ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(newItem.getName());
         ((TextInputLayout) findViewById(R.id.itemEstimatedValue)).getEditText().setText(newItem.getPrice().toString());
 
-        // Is this part of it??
-        /*
-        TextRecognitionHelper textHelper = new TextRecognitionHelper(this);
-        textHelper.recognizeTextFromImage();
-        */
+    }
+     */
+    private void fillItemFromBarcode(Bitmap bitmap) {
+        BarcodeRecognition barcodeRecognition = new BarcodeRecognition(this, new BarcodeCallback() {
+            @Override
+            public void onBarcodeScanned(Item newItem) {
+                // Handle the scanned barcode information
+                Log.d("newItem name", newItem.getName());
+                ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(newItem.getName());
+                ((TextInputLayout) findViewById(R.id.itemEstimatedValue)).getEditText().setText(newItem.getPrice().toString());
+                ((TextInputLayout) findViewById(R.id.itemDescription)).getEditText().setText(newItem.getDescription());
+                ((TextInputLayout) findViewById(R.id.itemMake)).getEditText().setText(newItem.getMake());
+                ((TextInputLayout) findViewById(R.id.itemModel)).getEditText().setText(newItem.getModel());
+            }
 
+            @Override
+            public void onBarcodeScanFailed(String errorMessage) {
+                // Handle the case where barcode scanning failed
+                Log.e("Barcode Scanning", "Failed: " + errorMessage);
+            }
+        });
+
+        InputImage image = InputImage.fromBitmap(bitmap, 0);
+        barcodeRecognition.scanBarcodes(image);
     }
 }

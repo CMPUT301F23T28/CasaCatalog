@@ -21,6 +21,7 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
 
     private String barcodeNumber;
     private Item fakeItem;
+    private FetchProductDetailsCallback callback;
 
     /**
      * Constructor for FetchProductDetails.
@@ -28,9 +29,10 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
      * @param barcodeNumber The barcode number to lookup in the UPCitemdb.
      * @param newItem
      */
-    public FetchProductDetails(String barcodeNumber, Item newItem) {
+    public FetchProductDetails(String barcodeNumber, Item newItem, FetchProductDetailsCallback callback) {
         this.barcodeNumber = barcodeNumber;
         this.fakeItem = newItem;
+        this.callback = callback;
     }
 
     /**
@@ -81,18 +83,18 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
     /**
      * Processes the API response after the network request is complete.
      * Parses the JSON response and logs the product name.
-     * @param result The JSON response string from the API.
+     * @param newItem Item filled from JSON response.
      */
-    /*
     @Override
-    protected void onPostExecute(String result) {
-        if (result == null) {
-            Log.e("ProductInfo", "No response from the server or error occurred");
-            return;
+    protected void onPostExecute(Item newItem) {
+        super.onPostExecute(newItem);
+
+        if (newItem != null) {
+            callback.onDetailsFetched(newItem);
+        } else {
+            callback.onDetailsFetchFailed("Failed to fetch details");
         }
-        putResultIntoItem(result);
     }
-     */
 
     private Item putResultIntoItem(String result) {
         try {
@@ -100,13 +102,21 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
             JSONArray items = jsonResponse.getJSONArray("items");
             if (items.length() > 0) {
                 JSONObject item = items.getJSONObject(0);
-                String productName = item.optString("title"); // Assuming the field name is "title"
-                Double productValue = item.optDouble("value"); // Guessing it's called value i have no idea
+                String productName = item.optString("title");
+                Double productValue = Double.valueOf(item.optString("highest_recorded_price"));
+                String productDesc = item.optString("description");
+                String productMake = item.optString("brand");
+                String productModel = item.optString("model");
+                //String product
+                Log.d("FETCH PRODUCT NAME", productName);
+                Log.d("FETCH PRODUCT VALUE", productValue.toString());
                 fakeItem.setName(productName);
                 fakeItem.setPrice(productValue);
-                // TODO: add whatever params this will return
+                fakeItem.setDescription(productDesc);
+                fakeItem.setMake(productMake);
+                fakeItem.setModel(productModel);
+                // Add image too? seems hard though
                 return fakeItem;
-
 
                 //Log.d("ProductInfo", "Product Name: " + productName);
             } else {
@@ -117,5 +127,10 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
             Log.e("ProductInfo", "Error parsing JSON", e);
         }
         return null;
+    }
+
+    public interface FetchProductDetailsCallback {
+        void onDetailsFetched(Item newItem);
+        void onDetailsFetchFailed(String errorMessage);
     }
 }

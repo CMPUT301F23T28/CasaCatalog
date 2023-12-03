@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         BarcodeRecognition barcodeRecognition = new BarcodeRecognition(this);
         // Load the test image from drawable
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.barcode);
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         // Now call the scanBarcodes method with this image
         barcodeRecognition.scanBarcodes(image);
-
+         */
 
         TextRecognitionHelper textHelper = new TextRecognitionHelper(this);
         textHelper.recognizeTextFromImage();
