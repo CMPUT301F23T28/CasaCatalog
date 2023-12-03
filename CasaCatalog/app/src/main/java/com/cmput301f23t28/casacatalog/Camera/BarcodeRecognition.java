@@ -98,6 +98,7 @@ public class BarcodeRecognition extends AppCompatActivity {
                             // Optionally update the UI, such as displaying the barcode value in a TextView
                             // textView.setText(rawValue);
                         }
+
                         new FetchProductDetails(barcodeNumber, newItem).execute();
 
                     }

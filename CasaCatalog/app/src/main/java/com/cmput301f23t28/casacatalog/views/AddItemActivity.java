@@ -210,15 +210,29 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         }
     }
 
+    /**
+     * Gets a barcode image, and fills the item details on the add page according to it's
+     * attributes inside of the barcode database
+     * @param bitmap photo of the barcode.
+     */
     private void fillItemFromBarcode(Bitmap bitmap) {
+
+        // NOTE: this might not work because of 'scan barcode' logic
+        // Not 100% sure how async functions work, or what the JSON it returns looks like
         BarcodeRecognition barcodeRecognition = new BarcodeRecognition(this);
         // Create an InputImage object from the Bitmap
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         // Now call the scanBarcodes method with this image
         newItem = barcodeRecognition.scanBarcodes(image);
 
+        ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(newItem.getName());
+        ((TextInputLayout) findViewById(R.id.itemEstimatedValue)).getEditText().setText(newItem.getPrice().toString());
+
         // Is this part of it??
+        /*
         TextRecognitionHelper textHelper = new TextRecognitionHelper(this);
         textHelper.recognizeTextFromImage();
+        */
+
     }
 }
