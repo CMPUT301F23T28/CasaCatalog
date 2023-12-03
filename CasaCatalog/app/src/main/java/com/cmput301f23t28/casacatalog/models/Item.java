@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.cmput301f23t28.casacatalog.helpers.DateFormatter;
+import com.cmput301f23t28.casacatalog.helpers.PhotoHolder;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.android.material.chip.Chip;
 
@@ -401,6 +402,10 @@ public class Item implements Parcelable {
         dest.writeTypedList(this.photos);
     }
 
+    /**
+     * Takes an array of URLs to set the photo collection
+     * @param itemPhotos a collection of photo urls
+     */
     public void setPhotos(ArrayList<String> itemPhotos) {
         if (itemPhotos != null && itemPhotos.size() > 0) {
             for (String photoURL: itemPhotos) {
@@ -409,9 +414,18 @@ public class Item implements Parcelable {
         }
     }
 
+    /**
+     * Gets all the photos
+     * @return photos
+     */
     public List<Photo> getPhotos() {
         return photos;
     }
+
+    /**
+     * Gets a collection of url strings
+     * @return String url collection
+     */
     public ArrayList<String> getPhotosURL() {
         ArrayList<String> urls = new ArrayList<>();
         for (Photo photo: photos) {
@@ -420,9 +434,28 @@ public class Item implements Parcelable {
         return urls;
     }
 
+    /**
+     * Adds a photo
+     * @param photo the address to the photo
+     */
     public void addPhoto(Photo photo) {
         if (photo != null) {
             this.photos.add(photo);
+        }
+    }
+
+    /**
+     * removes a photo by its URL
+     * @param url the address to the photo
+     */
+    public void removePhoto(String url) {
+        if (photos != null) {
+            for (Photo photo: photos) {
+                if(photo.getUrl() == url) {
+                    photos.remove(photo);
+                    return;
+                }
+            }
         }
     }
 }

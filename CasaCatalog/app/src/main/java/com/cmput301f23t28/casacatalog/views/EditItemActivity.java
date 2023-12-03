@@ -51,7 +51,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     TextInputLayout itemCommentText;
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
-    private FloatingActionButton changeDefaultButton;
     private FloatingActionButton trashButton;
 
     /**
@@ -70,7 +69,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         this.editingItem = getIntent().getParcelableExtra("item");
         ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
         trashButton = findViewById(R.id.delete_pictures_button);
-        changeDefaultButton = findViewById(R.id.change_default_button);
 
 
         // Setting the text of each of the 'EditText's to whatever the item's attributes are
@@ -177,6 +175,34 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             editTagsLauncher.launch(i);
         });
 
+
+        // Handles the deletion of photos
+        trashButton.setOnClickListener(v -> {
+            boolean anySelected = false;
+
+            List<Photo> photosToRemove = new ArrayList<>();
+
+            for(Photo photo: editingItem.getPhotos()) {
+                if (photo.getSelected()) {
+                    anySelected = true;
+                    photosToRemove.add(photo);
+                }
+            }
+
+            for (Photo photo : photosToRemove) {
+                Log.i("CRUD", "Deleted photo. Name: " + photo.getUrl());
+                editingItem.removePhoto(photo.getUrl());
+            }
+
+            if (!anySelected) {
+                String text = "No photos were selected.";
+                Toast.makeText(EditItemActivity.this, text, Toast.LENGTH_LONG).show();
+            }
+            // hide buttons
+            photoListAdapter.setEditingState(false);
+            photoListAdapter.notifyDataSetChanged();
+            toggleVisibility();
+        });
     }
 
     /**
@@ -190,6 +216,9 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         }
     }
 
+    /**
+     * Connected to the listener in the AddPhotoFragment to handle OK being pressed.
+      */
     @Override
     public void onOKPressed() {
         photoListAdapter.notifyDataSetChanged();
@@ -206,17 +235,17 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         editingItem.addPhoto(photo);
     }
 
+    // handles visibility of the delete icon
     @Override
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");
-        if (changeDefaultButton != null && trashButton != null) {
-            if (changeDefaultButton.getVisibility() == View.VISIBLE && trashButton.getVisibility() == View.VISIBLE) {
+        if (trashButton != null) {
+            if (trashButton.getVisibility() == View.VISIBLE) {
                 Log.i("Ryan", "INVisible buttons");
-                changeDefaultButton.setVisibility(View.GONE);
                 trashButton.setVisibility(View.GONE);
+
             } else {
                 Log.i("Ryan", "Visible buttons");
-                changeDefaultButton.setVisibility(View.VISIBLE);
                 trashButton.setVisibility(View.VISIBLE);
             }
         }

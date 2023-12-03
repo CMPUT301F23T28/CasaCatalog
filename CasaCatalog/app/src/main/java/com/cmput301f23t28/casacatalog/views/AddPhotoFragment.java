@@ -41,6 +41,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * A popup to get images from the gallery or camera.
+ */
 public class AddPhotoFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
     private ImageButton cameraButton;
