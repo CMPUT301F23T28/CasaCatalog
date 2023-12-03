@@ -82,12 +82,11 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         ((TextInputLayout) findViewById(R.id.itemComments)).getEditText().setText(editingItem.getComment());
 
         // set up adapter for photos
-        if (editingItem.getPhotos() != null && editingItem.getPhotos().size() > 0) {
-            photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
-            itemPhotoContainer = findViewById(R.id.item_images_container);
-            itemPhotoContainer.setAdapter(photoListAdapter);
-            itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
-        }
+        photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
+        itemPhotoContainer = findViewById(R.id.item_images_container);
+        itemPhotoContainer.setAdapter(photoListAdapter);
+        itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
+
 
         hydrateTagList(editingItem, findViewById(R.id.itemTagsList));
 
@@ -235,7 +234,17 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         editingItem.addPhoto(photo);
     }
 
-    // handles visibility of the delete icon
+    @Override
+    public void onSerialNumberRecognized(String serialNumber) {
+        editingItem.setSerialNumber(serialNumber);
+        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
+        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
+            serialNumberInput.getEditText().setText(serialNumber);
+        }
+    }
+    /**
+     * handles visibility of the delete photo icon
+     */
     @Override
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");
@@ -248,14 +257,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 Log.i("Ryan", "Visible buttons");
                 trashButton.setVisibility(View.VISIBLE);
             }
-        }
-    }
-    @Override
-    public void onSerialNumberRecognized(String serialNumber) {
-        editingItem.setSerialNumber(serialNumber);
-        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
-        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
-            serialNumberInput.getEditText().setText(serialNumber);
         }
     }
 }
