@@ -261,10 +261,10 @@ public class ItemDatabase {
 
         this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
     }
-    public void filter(Filter filter, String val1, String val2){
+    public void filter(Filter filter){
         //TODO: add guards to repull the database before filtering
         List<Item> filteritemlist =
-                this.itemList.stream().filter(filter.getFilterPredicate(val1,val2)).collect(Collectors.toList());
+                this.itemList.stream().filter(filter.getFilterPredicate()).collect(Collectors.toList());
         this.itemList.clear();
         this.itemList.addAll(filteritemlist);
         this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());

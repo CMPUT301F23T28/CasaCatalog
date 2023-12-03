@@ -7,18 +7,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.Filter;
+import com.cmput301f23t28.casacatalog.helpers.FilterAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * The sorting dialog fragment is presented when the user requests to sort the item list
@@ -28,6 +39,10 @@ public class FilterDialog extends DialogFragment {
     public static final String TAG = "DIALOG_FILTER";
     private static String filterByType = ItemSorting.Type.date.name();
     private static String filterCom = ItemSorting.Order.descending.name();
+    FilterAdapter itemAdapter;
+    RecyclerView itemListView;
+    List<Filter> filters;
+
 
     /**
      * Initializes the activity, registers listeners to allow inputting into spinners.
@@ -40,6 +55,16 @@ public class FilterDialog extends DialogFragment {
         // Inflate the layout for this fragment
 //        getDialog().getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, 700);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_filter, null);
+//        View viewItem = LayoutInflater.from(getActivity()).inflate(R.layout.filter_item, null);
+
+
+        ArrayList items = new ArrayList<>();
+        itemAdapter =  new FilterAdapter(filters);
+        itemListView = view.findViewById(R.id.filter_list);
+        itemListView.setAdapter(itemAdapter);
+        itemListView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        itemListView.setItemAnimator(null);     // fixes bug in Android
+//        Database.items.registerListener(itemAdapter, view.findViewById(R.id.InventoryValueNumber));
 
         TextInputLayout inputValue1 = view.findViewById(R.id.filter_value_1);
         TextInputLayout inputValue2 = view.findViewById(R.id.filter_value_2);
@@ -90,7 +115,7 @@ public class FilterDialog extends DialogFragment {
         builder.setPositiveButton(getString(android.R.string.yes), (dialogInterface, i) -> {
             String val1Str = inputValue1.getEditText().getText().toString();
             String val2Str = inputValue2.getEditText().getText().toString();
-            Database.items.filter(new Filter(filterByType, filterCom), val1Str, val2Str);
+            Database.items.filter(new Filter(filterByType, filterCom, val1Str, val2Str));
             Toast.makeText(this.getContext(), "Filtered items.", Toast.LENGTH_SHORT).show();
         });
         return builder.create();
