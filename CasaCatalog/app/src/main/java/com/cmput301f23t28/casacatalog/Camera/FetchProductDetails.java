@@ -96,6 +96,12 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
         }
     }
 
+    /**
+     * Parses the JSON response from the UPCitemdb API and populates an Item object with the retrieved details.
+     *
+     * @param result The JSON response from the UPCitemdb API.
+     * @return The Item object populated with details from the API response.
+     */
     private Item putResultIntoItem(String result) {
         try {
             JSONObject jsonResponse = new JSONObject(result);
@@ -107,15 +113,11 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
                 String productDesc = item.optString("description");
                 String productMake = item.optString("brand");
                 String productModel = item.optString("model");
-                //String product
-                Log.d("FETCH PRODUCT NAME", productName);
-                Log.d("FETCH PRODUCT VALUE", productValue.toString());
                 fakeItem.setName(productName);
                 fakeItem.setPrice(productValue);
                 fakeItem.setDescription(productDesc);
                 fakeItem.setMake(productMake);
                 fakeItem.setModel(productModel);
-                // Add image too? seems hard though
                 return fakeItem;
 
                 //Log.d("ProductInfo", "Product Name: " + productName);
@@ -129,8 +131,22 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
         return null;
     }
 
+    /**
+     * Callback interface for handling the results of the FetchProductDetails AsyncTask.
+     */
     public interface FetchProductDetailsCallback {
+        /**
+         * Called when product details are successfully fetched.
+         *
+         * @param newItem The Item object containing the fetched details.
+         */
         void onDetailsFetched(Item newItem);
+
+        /**
+         * Called when an error occurs while fetching product details.
+         *
+         * @param errorMessage A message describing the error.
+         */
         void onDetailsFetchFailed(String errorMessage);
     }
 }
