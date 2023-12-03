@@ -2,10 +2,14 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,20 +42,12 @@ import java.util.List;
 public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item editingItem;
-    private String stringItemDate;
-
-    TextInputLayout itemNameText;
-    TextInputLayout itemValueText;
-    TextInputLayout itemDateText;
-    TextInputLayout itemTagsText;
-    TextInputLayout itemDescriptionText;
-    TextInputLayout itemMakeText;
-    TextInputLayout itemModelText;
-    TextInputLayout itemSerialNumberText;
-    TextInputLayout itemCommentText;
+    private Bitmap photoBitmap;
+    private boolean isBarcode; // whether bitmap is barcode or not
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
     private FloatingActionButton trashButton;
+    private Button barcodeButton;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -69,6 +65,13 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         this.editingItem = getIntent().getParcelableExtra("item");
         ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
         trashButton = findViewById(R.id.delete_pictures_button);
+        barcodeButton = findViewById(R.id.BarcodeButton);
+
+        // Remove barcode button (only for adding not editing)
+        ViewGroup layout = (ViewGroup) barcodeButton.getParent();
+        if (null != layout) //for safety only  as you are doing onClick
+            layout.removeView(barcodeButton);
+
 
 
         // Setting the text of each of the 'EditText's to whatever the item's attributes are
@@ -93,6 +96,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
         final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
+        final ImageButton addSerialNumberButton = findViewById(R.id.serialNumberButton);
 
         editButton.setText(R.string.item_edit_button_text);
         // Edits item in database, as well as on the item list displayed in MainActivity.
@@ -150,6 +154,10 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         deleteButton.setOnClickListener(view -> {
             Database.items.delete(editingItem.getId());
             finish();
+        });
+
+        addSerialNumberButton.setOnClickListener(view -> {
+            new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_SERIAL_NUMBER");
         });
 
         findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
@@ -245,7 +253,17 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     /**
      * handles visibility of the delete photo icon
      */
+    /**
+     * Receives back the bitmap of the photo in local storage to the activity.
+     * @param bitmap the bitmap of the photo.
+     */
     @Override
+    public void sendBitmap(Bitmap bitmap, boolean isBarcode) {
+        //photoURLs.add(input);
+        Log.d("PHOTO BITMAP", "received " + bitmap);
+        photoBitmap = bitmap;
+        this.isBarcode = isBarcode;
+    }
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");
         if (trashButton != null) {
