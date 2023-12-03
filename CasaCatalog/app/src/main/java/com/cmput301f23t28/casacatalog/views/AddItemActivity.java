@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -66,6 +68,7 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
         final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
         final Button addBarcodeButton = findViewById(R.id.BarcodeButton);
+        final ImageButton addSerialNumberButton = findViewById(R.id.serialNumberButton);
 
         // Set date preview to current date
         ((TextView)findViewById(R.id.purchaseDateText)).setText(newItem.getFormattedDate());
@@ -83,6 +86,10 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
 
         addBarcodeButton.setOnClickListener(view -> {
             new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_BARCODE");
+        });
+
+        addSerialNumberButton.setOnClickListener(view -> {
+            new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_SERIAL_NUMBER");
         });
 
         // Adds item to database, as well as the item list displayed in MainActivity.

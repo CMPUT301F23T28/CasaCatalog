@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     private PhotoListAdapter photoListAdapter;
     private FloatingActionButton changeDefaultButton;
     private FloatingActionButton trashButton;
+    private Button barcodeButton;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -65,6 +67,13 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
         trashButton = findViewById(R.id.delete_pictures_button);
         changeDefaultButton = findViewById(R.id.change_default_button);
+        barcodeButton = findViewById(R.id.BarcodeButton);
+
+        // Remove barcode button (only for adding not editing)
+        ViewGroup layout = (ViewGroup) barcodeButton.getParent();
+        if (null != layout) //for safety only  as you are doing onClick
+            layout.removeView(barcodeButton);
+
 
 
         // Setting the text of each of the 'EditText's to whatever the item's attributes are
