@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +41,7 @@ import java.util.List;
 public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item editingItem;
-    private Uri photoURI;
+    private Bitmap photoBitmap;
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
     private FloatingActionButton changeDefaultButton;
@@ -203,10 +204,15 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         editingItem.addPhoto(photo);
     }
 
+    /**
+     * Receives back the bitmap of the photo in local storage to the activity.
+     * @param bitmap the bitmap of the photo.
+     */
     @Override
-    public void sendURI(Uri URI) {
-        Log.d("PHOTOURI", "Received " + URI);
-        photoURI = URI;
+    public void sendBitmap(Bitmap bitmap) {
+        //photoURLs.add(input);
+        Log.d("PHOTO BITMAP", "received " + bitmap);
+        photoBitmap = bitmap;
     }
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");

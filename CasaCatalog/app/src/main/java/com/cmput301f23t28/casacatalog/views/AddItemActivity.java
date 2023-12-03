@@ -2,6 +2,7 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 public class AddItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
 
     private Item newItem;
-    private Uri photoURI;
+    private Bitmap photoBitmap;
     private ArrayList<Photo> photos = new ArrayList<>();
 
     /**
@@ -176,14 +177,14 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
     }
 
     /**
-     * Receives back the URL of the photo in cloud storage to the activity.
-     * @param URI the URL of the photo.
+     * Receives back the bitmap of the photo in local storage to the activity.
+     * @param bitmap the bitmap of the photo.
      */
     @Override
-    public void sendURI(Uri URI) {
+    public void sendBitmap(Bitmap bitmap) {
         //photoURLs.add(input);
-        Log.d("PHOTOURI", "received " + URI);
-        photoURI = URI;
+        Log.d("PHOTO BITMAP", "received " + bitmap);
+        photoBitmap = bitmap;
     }
     @Override
     public void onSerialNumberRecognized(String serialNumber) {
