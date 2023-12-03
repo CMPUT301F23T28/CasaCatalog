@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,27 +16,36 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
+import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity for adding a new item to the inventory.
  * It allows users to enter item details, save the item to the database, and associate tags with the item.
  */
-public class AddItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
+public class AddItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item newItem;
     private ArrayList<Photo> photos = new ArrayList<>();
+    private RecyclerView itemPhotoContainer;
+    private PhotoListAdapter photoListAdapter;
+    private FloatingActionButton trashButton;
 
     /**
      * Called when the activity is starting. This method is where most initialization should go:
@@ -52,6 +62,7 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         ToolbarBuilder.create(this, getString(R.string.title_add_item));
 
         newItem = new Item();
+        trashButton = findViewById(R.id.delete_pictures_button);
 
         final Button addButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
@@ -59,6 +70,13 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
 
         // Set date preview to current date
         ((TextView)findViewById(R.id.purchaseDateText)).setText(newItem.getFormattedDate());
+
+        // set up adapter for photos
+
+        photoListAdapter = new PhotoListAdapter(this, photos, this);
+        itemPhotoContainer = findViewById(R.id.item_images_container);
+        itemPhotoContainer.setAdapter(photoListAdapter);
+        itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
 
         hydrateTagList(newItem, findViewById(R.id.itemTagsList));
 
@@ -144,6 +162,33 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
             i.putExtra("tags", newItem.getTags());
             editTagsLauncher.launch(i);
         });
+        // Handles the deletion of photos
+        trashButton.setOnClickListener(v -> {
+            boolean anySelected = false;
+
+            List<Photo> photosToRemove = new ArrayList<>();
+
+            for(Photo photo: newItem.getPhotos()) {
+                if (photo.getSelected()) {
+                    anySelected = true;
+                    photosToRemove.add(photo);
+                }
+            }
+
+            for (Photo photo : photosToRemove) {
+                Log.i("CRUD", "Deleted photo. Name: " + photo.getUrl());
+                newItem.removePhoto(photo.getUrl());
+            }
+
+            if (!anySelected) {
+                String text = "No photos were selected.";
+                Toast.makeText(AddItemActivity.this, text, Toast.LENGTH_LONG).show();
+            }
+            // hide buttons
+            photoListAdapter.setEditingState(false);
+            photoListAdapter.notifyDataSetChanged();
+            toggleVisibility();
+        });
     }
 
     /**
@@ -159,9 +204,26 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
 
     @Override
     public void onOKPressed() {
-
+        photoListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * handles visibility of the delete photo icon
+     */
+    @Override
+    public void toggleVisibility() {
+        Log.i("Ryan", "Visibility method");
+        if (trashButton != null) {
+            if (trashButton.getVisibility() == View.VISIBLE) {
+                Log.i("Ryan", "INVisible buttons");
+                trashButton.setVisibility(View.GONE);
+
+            } else {
+                Log.i("Ryan", "Visible buttons");
+                trashButton.setVisibility(View.VISIBLE);
+            }
+        }
+    }
     /**
      * Receives back the URL of the photo in cloud storage to the activity.
      * @param input the URL of the photo.
