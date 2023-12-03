@@ -232,7 +232,7 @@ public class AddPhotoFragment extends DialogFragment {
                         }
                     });
 
-                    mOnFragmentInteractionListener.sendURI(filePath);
+                    //mOnFragmentInteractionListener.sendBitmap(filePath);
                     Log.d("File URI", filePath.toString());
                 }
                 else {
@@ -245,7 +245,13 @@ public class AddPhotoFragment extends DialogFragment {
             }
             else if (getFragmentManager().findFragmentByTag("ADD_SERIAL_NUMBER") == this) {
                 Log.d("ADDING SERIAL", "You are indeed ADDING SERIAL NUMBER");
-                mOnFragmentInteractionListener.sendURI(filePath);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                mOnFragmentInteractionListener.sendBitmap(bitmap);
             }
             // TODO: add 'else if' for barcode
 
@@ -278,7 +284,7 @@ public class AddPhotoFragment extends DialogFragment {
         void onOKPressed(/*City city*/);
         void sendURL(String URL);
         //TODO: send bitmap not URI
-        void sendURI(Uri URI);
+        void sendBitmap(Bitmap bitmap);
         abstract void onSerialNumberRecognized(String serialNumber);
     }
 }
