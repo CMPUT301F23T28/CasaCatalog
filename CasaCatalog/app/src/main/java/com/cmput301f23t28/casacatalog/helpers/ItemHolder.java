@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 /**
  * A RecyclerView ViewHolder that stores all data related to rendering an item in the ItemList
  */
@@ -81,6 +83,9 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
             Picasso.get()
                     .load(imageURL)
                     .placeholder(itemView.getContext().getResources().getDrawable(R.drawable.ic_launcher_foreground))//it will show placeholder image when url is not valid.
+                    .resize(100,100)
+                    .centerCrop()
+                    .transform(new RoundedCornersTransformation(5, 3))
                     .into(ItemImage);
         }
         else {
