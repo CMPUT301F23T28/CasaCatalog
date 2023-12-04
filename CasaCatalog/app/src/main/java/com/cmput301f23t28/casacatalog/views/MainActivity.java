@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
     private ItemListAdapter itemAdapter;
     private FloatingActionButton editTagsButton;
     private FloatingActionButton trashButton;
+//    boolean once = true;
+    ArrayList<Filter> filters;
 
     /**
      * Initializes the activity, sets up the database, and configures the RecyclerView.
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        filters = new ArrayList<>();
 
         TextRecognitionHelper textHelper = new TextRecognitionHelper(this);
         textHelper.recognizeTextFromImage();
@@ -86,13 +90,21 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));
         itemListView.setItemAnimator(null);     // fixes bug in Android
-        Database.items.registerListener(itemAdapter, findViewById(R.id.InventoryValueNumber));
+        Database.items.registerListener(itemAdapter, findViewById(R.id.InventoryValueNumber),
+                filters);
 
         // Sends the user to the 'add item' activity, allowing them to input their item and all of its relevant details.
         final FloatingActionButton addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddItemActivity.class)));
 
-        findViewById(R.id.FilterButton).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, FilterPage.class)));
+        findViewById(R.id.FilterButton).setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("filters", filters);
+            Intent i = new Intent(MainActivity.this, FilterPage.class);
+            i.putExtras(bundle);
+
+            startActivity(i);
+        });
 
         // handles deletion of selection items
         trashButton.setOnClickListener(v -> {
@@ -128,8 +140,13 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             ArrayList<Filter> list =  bundle.getParcelableArrayList("filters");
+            filters.clear();
             // Use the list as needed
-
+            for (int i =0; i < list.size(); i++){
+                Log.d("Filter "+ Integer.toString(i+1),
+                        list.get(i).getVal1() +" " + list.get(i).getVal2() + " " + list.get(i).getCurrentFilterType() + " " + list.get(i).getCurrentType());
+                filters.add(list.get(i));
+            }
         }
     }
 

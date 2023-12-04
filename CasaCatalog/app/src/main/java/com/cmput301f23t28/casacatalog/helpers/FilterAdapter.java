@@ -1,6 +1,8 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.views.AddItemActivity;
+import com.cmput301f23t28.casacatalog.views.FilterPage;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHolder> {
@@ -74,6 +79,11 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filtertype.setAdapter(adapter);
 
+        holder.itemView.findViewById(R.id.delete_filter_button).setOnClickListener(view -> {
+            dataList.remove(position);
+            adapter.notifyDataSetChanged();
+        });
+
         filtertype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -81,6 +91,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 String strfiltertype = parent.getItemAtPosition(position).toString();
                 // Do something with the selected item
                 dataObject.setCurrentType(strfiltertype);
+                Log.e("DATE", strfiltertype.toLowerCase() + (strfiltertype.toLowerCase() != "date"));
+                if (!strfiltertype.toLowerCase().equals("date")){
+                    ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_2)).setVisibility(View.GONE);
+                } else{
+                    ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_2)).setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -89,6 +105,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
             }
         });
+
 
 
         filtercomp = holder.itemView.findViewById(R.id.spinner_filter_comp);
@@ -113,6 +130,34 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
             }
         });
+
+
+        ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_1)).getEditText().setText(dataObject.getVal1());
+        ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_2)).getEditText().setText(dataObject.getVal2());
+
+
+        String[] typeChoices =
+                holder.itemView.getResources().getStringArray(R.array.type_choices);
+        String[] compChoices =
+                holder.itemView.getResources().getStringArray(R.array.filter_comp_choices);
+
+
+        int pos = -1;
+        for (int i = 0; i < typeChoices.length; i++) {
+            if (typeChoices[i].toLowerCase().equals(dataObject.getCurrentType().toString())) {
+                pos = i;
+                break;
+            }
+        }
+        ((Spinner) holder.itemView.findViewById(R.id.spinner_filter_type)).setSelection(pos);
+        pos = -1;
+        for (int i = 0; i < compChoices.length; i++) {
+            if (compChoices[i].toLowerCase().equals(dataObject.getCurrentFilterType().toString())) {
+                pos = i;
+                break;
+            }
+        }
+
         holder.bindData(dataObject);
     }
 

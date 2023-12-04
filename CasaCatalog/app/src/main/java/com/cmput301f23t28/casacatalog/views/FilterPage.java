@@ -13,6 +13,7 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.FilterAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,8 +34,17 @@ public class FilterPage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_filter);
         filters = new ArrayList<Filter>();
-        filters.add(new Filter());
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            ArrayList<Filter> list = bundle.getParcelableArrayList("filters");
+            filters.clear();
+            // Use the list as needed
+            for (int i =0; i < list.size(); i++){
+                filters.add(list.get(i));
+            }
+        }
+//        filters.add(new Filter());
 
         filterListAdapter = new FilterAdapter(filters);
         filterListView = findViewById(R.id.filter_list);
@@ -46,8 +56,7 @@ public class FilterPage extends AppCompatActivity{
         final FloatingActionButton addButton = findViewById(R.id.add_filter_button);
         addButton.setOnClickListener(v -> {
             filters.add(new Filter());
-            filterListAdapter.notifyDataSetChanged();
-
+            filterListAdapter.notifyItemInserted(filters.size()-1);
             Log.e("Filter","adding a new item " + filterListAdapter.getItemCount());
         });
 
@@ -60,14 +69,13 @@ public class FilterPage extends AppCompatActivity{
                 if (holder != null) {
                     Filter dataItem = holder.getFilter();
                     filterList.add(dataItem);
-                    // Now you have the data item associated with this ViewHolder
-                    // Do something with dataItem
+
                 }
             }
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("filters", filterList);
+            Bundle bundle_send = new Bundle();
+            bundle_send.putParcelableArrayList("filters", filterList);
             Intent i = new Intent(FilterPage.this, MainActivity.class);
-            i.putExtras(bundle);
+            i.putExtras(bundle_send);
             startActivity(i);
         });
     }
