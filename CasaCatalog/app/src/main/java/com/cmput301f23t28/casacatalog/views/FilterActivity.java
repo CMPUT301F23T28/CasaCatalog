@@ -1,5 +1,6 @@
 package com.cmput301f23t28.casacatalog.views;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
-import com.cmput301f23t28.casacatalog.helpers.Filter;
+import com.cmput301f23t28.casacatalog.models.Filter;
 import com.cmput301f23t28.casacatalog.helpers.FilterAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
+import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -21,11 +23,10 @@ import java.util.ArrayList;
 
 
 /**
- * The main activity that starts when the application is launched.
- * It initializes the database, item handler, and sets up the main user interface,
- * including the RecyclerView for items and listeners for UI elements.
+ * The filter activity is presented when the user requests to filter the item list
+ * It allows adding multiple filters and adjusting their options.
  */
-public class FilterPage extends AppCompatActivity{
+public class FilterActivity extends AppCompatActivity{
     ArrayList<Filter> filters;
     FilterAdapter filterListAdapter;
     RecyclerView filterListView;
@@ -35,15 +36,7 @@ public class FilterPage extends AppCompatActivity{
         setContentView(R.layout.dialog_filter);
         filters = new ArrayList<>();
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            ArrayList<Filter> list = bundle.getParcelableArrayList("filters");
-            filters.clear();
-            // Use the list as needed
-            for (int i =0; i < list.size(); i++){
-                filters.add(list.get(i));
-            }
-        }
+        ArrayList<Filter> filters = getIntent().getParcelableArrayListExtra("filters");
 
         filterListAdapter = new FilterAdapter(filters);
         filterListView = findViewById(R.id.filter_list);
@@ -68,17 +61,17 @@ public class FilterPage extends AppCompatActivity{
                 if (holder != null) {
                     Filter dataItem = holder.getFilter();
                     if (dataItem.getVal1().equals("")) {
-                        Toast.makeText(FilterPage.this, "value 1 can not be empty",
+                        Toast.makeText(FilterActivity.this, "value 1 can not be empty",
                                 Toast.LENGTH_LONG).show();
                         error_recieved = true;
                     } else if (dataItem.getCurrentType().toString().toLowerCase().equals("date") &&
                             dataItem.getCurrentFilterType().toString().toLowerCase().equals(
                                     "between") && dataItem.getVal2().equals("")) {
-                        Toast.makeText(FilterPage.this, "value 2 can not be empty", Toast.LENGTH_LONG).show();
+                        Toast.makeText(FilterActivity.this, "value 2 can not be empty", Toast.LENGTH_LONG).show();
                         error_recieved = true;
                     } else if(dataItem.getCurrentType().toString().toLowerCase().equals("value")
                             && !dataItem.getVal1().matches("[-+]?\\d*\\.?\\d+")){
-                        Toast.makeText(FilterPage.this, "value 1 is not numeric",
+                        Toast.makeText(FilterActivity.this, "value 1 is not numeric",
                                 Toast.LENGTH_LONG).show();
                         error_recieved = true;
                     } else if(dataItem.getCurrentType().toString().toLowerCase().equals("date")){
@@ -90,7 +83,7 @@ public class FilterPage extends AppCompatActivity{
                             error_recieved = true;
                         }
                         if (error_recieved){
-                            Toast.makeText(FilterPage.this, "value 1 is not date in format dd/MM/yyyy",
+                            Toast.makeText(FilterActivity.this, "value 1 is not date in format dd/MM/yyyy",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
@@ -101,14 +94,14 @@ public class FilterPage extends AppCompatActivity{
                         try {
                             LocalDate startDate = LocalDate.parse(dataItem.getVal1(), formatter);
                         }catch (Exception e){
-                            Toast.makeText(FilterPage.this, "value 1 is not date in format dd/MM/yyyy",
+                            Toast.makeText(FilterActivity.this, "value 1 is not date in format dd/MM/yyyy",
                                     Toast.LENGTH_LONG).show();
                             error_recieved = true;
                         }
                         try {
                             LocalDate startDate = LocalDate.parse(dataItem.getVal2(), formatter);
                         }catch (Exception e){
-                            Toast.makeText(FilterPage.this, "value 2 is not date in format " +
+                            Toast.makeText(FilterActivity.this, "value 2 is not date in format " +
                                             "dd/MM/yyyy",
                                     Toast.LENGTH_LONG).show();
                             error_recieved = true;
@@ -122,11 +115,12 @@ public class FilterPage extends AppCompatActivity{
                 }
             }
             if (!error_recieved){
-                Bundle bundle_send = new Bundle();
-                bundle_send.putParcelableArrayList("filters", filterList);
-                Intent i = new Intent(FilterPage.this, MainActivity.class);
-                i.putExtras(bundle_send);
-                startActivity(i);
+                // Send new filter copy back
+                Intent ret = new Intent();
+                ret.putExtra("filters", filterList);
+                setResult(Activity.RESULT_OK, ret);
+
+                finish();
             }
         });
     }
