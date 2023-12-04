@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.database.UserDatabase;
+import com.cmput301f23t28.casacatalog.helpers.NonEmptyInputWatcher;
 
 /**
  * The new user activity that starts when the application is launched for the first time.
@@ -28,38 +29,37 @@ public class NewUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user);
 
+        registerInputValidators();
+
+        findViewById(R.id.addUserButton).setOnClickListener(view -> {
+            String name = ((EditText)findViewById(R.id.editNewName)).getText().toString();
+            Database.users.createUser(name);
+            finish();
+        });
+    }
+
+    /**
+     * Registers input listeners for relevant inputs to ensure their validity.
+     */
+    private void registerInputValidators(){
         EditText input = findViewById(R.id.editNewName);
         Button button = findViewById(R.id.addUserButton);
-
-        // Input validation
-        input.addTextChangedListener(new TextWatcher() {
+        input.addTextChangedListener(new NonEmptyInputWatcher(input, button) {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                button.setEnabled(false);
-
-                // Non-empty input
-                if( s.toString().isEmpty() ){
-                    input.setError("Please decide a username.");
-                    return;
-                }
+                super.onTextChanged(s, start, before, count);
 
                 // Unique username
                 if( UserDatabase.isNameUnique(s.toString()) ){
                     button.setEnabled(true);
                 }else{
                     input.setError("Username is taken!");
+                    button.setEnabled(false);
                 }
             }
 
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
-        });
-
-        findViewById(R.id.addUserButton).setOnClickListener(view -> {
-            String name = input.getText().toString();
-
-            Database.users.createUser(name);
-            finish();
         });
     }
 }
