@@ -1,6 +1,5 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
-import com.cmput301f23t28.casacatalog.models.Filter;
 import com.cmput301f23t28.casacatalog.models.Item;
 
 import junit.framework.TestCase;
