@@ -1,6 +1,5 @@
 package com.cmput301f23t28.casacatalog.views;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
@@ -15,11 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.core.AllOf.allOf;
 
-import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -28,10 +23,6 @@ import androidx.test.filters.LargeTest;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.util.EspressoUtils;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

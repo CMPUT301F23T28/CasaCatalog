@@ -74,10 +74,9 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoHolder> implemen
     /**
      * Handles single click behaviour during photo selection for deletion
      * @param position the position in the adapter
-     * @param holder the view holder (PhotoHolder)
      */
     @Override
-    public void onItemClick(int position, PhotoHolder holder) {
+    public void onItemClick(int position) {
         // behaviour if following a long click event.
         if (isEditingState) {
             Photo photo = photos.get(position);
@@ -90,10 +89,9 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoHolder> implemen
     /**
      * Handles the long click for the photo list
      * @param position location within the adapter
-     * @param holder the PhotoHolder
      */
     @Override
-    public void onItemLongClick(int position, PhotoHolder holder) {
+    public void onItemLongClick(int position) {
         // cancel editing state
         if(isEditingState) {
             mVisibilityCallback.toggleVisibility();

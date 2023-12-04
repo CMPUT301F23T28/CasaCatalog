@@ -27,7 +27,7 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
      * Constructor for FetchProductDetails.
      *
      * @param barcodeNumber The barcode number to lookup in the UPCitemdb.
-     * @param newItem
+     * @param newItem The new item
      */
     public FetchProductDetails(String barcodeNumber, Item newItem, FetchProductDetailsCallback callback) {
         this.barcodeNumber = barcodeNumber;
@@ -42,7 +42,6 @@ public class FetchProductDetails extends AsyncTask<String, Void, Item> {
      */
     @Override
     protected Item doInBackground(String... params) {
-        String apiKey = "YOUR_UPCITEMDB_API_KEY"; // Replace with your actual API key
         String requestUrl = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + barcodeNumber;
 
         HttpURLConnection conn = null;

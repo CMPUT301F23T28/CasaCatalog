@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.Tag;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
-import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 
@@ -113,7 +111,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
      * Also intercepts and handles single clicks for editing and deleting.
      */
     @Override
-    public void onItemClick(int position, ItemHolder holder) {
+    public void onItemClick(int position) {
         Item item = itemList.get(position);
 
         // behaviour if following a long click event.
@@ -131,10 +129,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
     /**
      * initiates process for deleting and editing items from main screen
      * @param position the index of the data to affect
-     * @param holder the ItemHolder being affected
      */
     @Override
-    public void onItemLongClick(int position, ItemHolder holder) {
+    public void onItemLongClick(int position) {
         isEditingState = !isEditingState;
         if (isEditingState) {
             if (mVisibilityCallback != null) {

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,11 +24,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
-import com.cmput301f23t28.casacatalog.database.Database;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -170,13 +166,6 @@ public class AddPhotoFragment extends DialogFragment {
                 Log.d("ADDING PHOTO", "You are indeed adding a photo");
 
                 if (filePath != null) {
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-
                     Log.d("FILE_PATH", filePath.toString());
                     // Code for showing progressDialog while uploading
                     ProgressDialog progressDialog
@@ -277,7 +266,7 @@ public class AddPhotoFragment extends DialogFragment {
      * Creates an image file after taking a picture, and stores the image capture in the location
      * created.
      * @return File of image captured.
-     * @throws IOException
+     * @throws IOException IOException
      */
     private File createImageFile() throws IOException {
         // Create an image file name
