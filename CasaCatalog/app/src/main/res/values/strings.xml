@@ -8,7 +8,7 @@
     <string name="title_edit_tags">Edit tags</string>
     <string name="title_profile">Your profile</string>
 
-    <string name="item_details_text">Details</string>
+    <string name="item_basics_title_text">Basics</string>
     <string name="item_name_label">Item Name</string>
     <string name="item_value_label">Estimated Value</string>
     <string name="item_purchase_date_label">Purchase Date</string>
