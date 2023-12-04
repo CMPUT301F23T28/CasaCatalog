@@ -45,8 +45,20 @@ public class EditTagsActivity extends AppCompatActivity {
 
         // Create new tag when add button is pressed
         findViewById(R.id.createTagButton).setOnClickListener(view -> {
-            EditText nameInput = findViewById(R.id.newTagName);
-            Database.tags.createTag(nameInput.getText().toString());
+            EditText newTagNameInput = findViewById(R.id.newTagName);
+            String newTagName = newTagNameInput.getText().toString().trim();
+
+            // Input validation
+            if( newTagName.isEmpty() ) {
+                newTagNameInput.setError(getString(R.string.input_required));
+                return;
+            }
+            if( Database.tags.findTagByName(newTagName) != null ){
+                newTagNameInput.setError("A tag with this name already exists.");
+                return;
+            }
+
+            Database.tags.createTag(newTagName);
             tagAdapter.notifyDataSetChanged();
         });
 
