@@ -116,11 +116,11 @@ public class FilterActivity extends AppCompatActivity{
             }
             if (!error_recieved){
                 // Send new filter copy back
-                Intent ret = new Intent();
-                ret.putExtra("filters", filterList);
-                setResult(Activity.RESULT_OK, ret);
-
-                finish();
+                Bundle bundle_send = new Bundle();
+                bundle_send.putParcelableArrayList("filters", filterList);
+                Intent i = new Intent(FilterActivity.this, MainActivity.class);
+                i.putExtras(bundle_send);
+                startActivity(i);
             }
         });
     }
