@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,7 +14,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editNewName"
-        android:drawableLeft="@drawable/person_add"/>
+        android:drawableLeft="@drawable/person_add"
+        android:enabled="false"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editNewName"
@@ -25,7 +25,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileImage"
-        android:hint="Enter a username" />
+        android:hint="Enter a username"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:maxLength="24" />
 
     <TextView
         android:id="@+id/textIntro"

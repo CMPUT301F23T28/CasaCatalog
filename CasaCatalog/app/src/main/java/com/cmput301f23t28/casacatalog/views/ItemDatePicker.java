@@ -2,16 +2,13 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.util.Log;
-import android.view.ContentInfo;
 import android.view.View;
 import android.widget.TextView;
 
-import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class ItemDatePicker implements View.OnClickListener {
 
@@ -28,10 +25,11 @@ public class ItemDatePicker implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         LocalDate selectedDate = newItem.getDate();
-        DatePickerDialog dialog = new DatePickerDialog(context, android.R.style.Theme_Material_Dialog_Alert, (picker, year, month, dayOfMonth) -> {
+        DatePickerDialog dialog = new DatePickerDialog(context, android.R.style.Theme_DeviceDefault_Dialog_Alert, (picker, year, month, dayOfMonth) -> {
             newItem.setDate(LocalDate.of(year, month+1, dayOfMonth));
             dateText.setText(newItem.getFormattedDate());
         }, selectedDate.getYear(), selectedDate.getMonth().getValue()-1, selectedDate.getDayOfMonth());
+        dialog.getDatePicker().setMaxDate(new Date().getTime());
         dialog.show();
     }
 }
