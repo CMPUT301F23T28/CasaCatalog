@@ -1,9 +1,5 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,8 +29,6 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     private ChipGroup ItemTags;
     private ListClickListener mListener;
     private ConstraintLayout ItemContainer;
-    private int backgroundColor = Color.WHITE;
-    private Context context;
     /**
      * Constructor for ItemHolder. Basically connects the UI elements to an in code reference.
      * @param itemView The item view.
@@ -50,7 +44,6 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         ItemPrice = itemView.findViewById(R.id.ItemPrice);
         ItemTags = itemView.findViewById(R.id.ItemTags);
         ItemImage = itemView.findViewById(R.id.ItemImage);
-        context = itemView.getContext();
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
@@ -78,7 +71,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
 
     /**
      * Sets the image in the list of items based off the first URL in the item database
-     * @param imageURL
+     * @param imageURL A String URL to an image
      */
     public void setItemImage(String imageURL) {
         Log.d("SETTING ITEM IMAGE", imageURL);
@@ -134,7 +127,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     @Override
     public boolean onLongClick(View v) {
         if (mListener != null) {
-            mListener.onItemLongClick(getAdapterPosition(), this);
+            mListener.onItemLongClick(getAdapterPosition());
             return true;
         }
         return false;
@@ -148,19 +141,8 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     @Override
     public void onClick(View v) {
         if (mListener != null) {
-            mListener.onItemClick(getAdapterPosition(), this);
+            mListener.onItemClick(getAdapterPosition());
         }
     }
 
-    /**
-     * Gets the selected style color as an int.
-     * @return
-     */
-    public int getSelectedStyle() {
-        Drawable background = ItemContainer.getBackground();
-        if (background instanceof ColorDrawable) {
-            return ((ColorDrawable) background).getColor();
-        }
-        return 0;
-    }
 }

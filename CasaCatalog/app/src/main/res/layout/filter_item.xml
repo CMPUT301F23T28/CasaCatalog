@@ -78,7 +78,8 @@
         android:src="@drawable/baseline_delete_24"
         android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/filter_value_2"
-        app:layout_constraintTop_toBottomOf="@+id/section_filter_1" />
+        app:layout_constraintTop_toBottomOf="@+id/section_filter_1"
+        android:contentDescription="Delete Filter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
