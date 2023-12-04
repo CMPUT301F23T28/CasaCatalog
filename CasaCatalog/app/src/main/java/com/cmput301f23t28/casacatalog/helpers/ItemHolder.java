@@ -1,5 +1,6 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -31,7 +32,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
     private ListClickListener mListener;
     private ConstraintLayout ItemContainer;
     private int backgroundColor = Color.WHITE;
-
+    private Context context;
     /**
      * Constructor for ItemHolder. Basically connects the UI elements to an in code reference.
      * @param itemView The item view.
@@ -47,6 +48,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         ItemPrice = itemView.findViewById(R.id.ItemPrice);
         ItemTags = itemView.findViewById(R.id.ItemTags);
         ItemImage = itemView.findViewById(R.id.ItemImage);
+        context = itemView.getContext();
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
@@ -77,21 +79,15 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
      * @param imageURL
      */
     public void setItemImage(String imageURL) {
-        /*
-        Picasso picasso = new Picasso.Builder(context)
-                .listener((picasso1, uri, exception) -> {
-                    Log.i("Picasso", "uri: " + uri);
-                    Log.i("Picasso", "Exception: " + exception);
-                })
-                .build();
-
-         */
-
+        Log.d("SETTING ITEM IMAGE", imageURL);
         if (imageURL != "") {
             Picasso.get()
                     .load(imageURL)
-                    //.placeholder(context.getResources().getDrawable(R.drawable.ic_launcher_foreground))//it will show placeholder image when url is not valid.
+                    .placeholder(itemView.getContext().getResources().getDrawable(R.drawable.ic_launcher_foreground))//it will show placeholder image when url is not valid.
                     .into(ItemImage);
+        }
+        else {
+            ItemImage.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.profile));
         }
     }
 
