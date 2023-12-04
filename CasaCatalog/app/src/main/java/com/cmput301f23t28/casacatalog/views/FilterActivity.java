@@ -1,5 +1,6 @@
 package com.cmput301f23t28.casacatalog.views;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
-import com.cmput301f23t28.casacatalog.helpers.Filter;
+import com.cmput301f23t28.casacatalog.models.Filter;
 import com.cmput301f23t28.casacatalog.helpers.FilterAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,9 +22,8 @@ import java.util.ArrayList;
 
 
 /**
- * The main activity that starts when the application is launched.
- * It initializes the database, item handler, and sets up the main user interface,
- * including the RecyclerView for items and listeners for UI elements.
+ * The filter activity is presented when the user requests to filter the item list
+ * It allows adding multiple filters and adjusting their options.
  */
 public class FilterActivity extends AppCompatActivity{
     ArrayList<Filter> filters;
@@ -122,11 +122,12 @@ public class FilterActivity extends AppCompatActivity{
                 }
             }
             if (!error_recieved){
-                Bundle bundle_send = new Bundle();
-                bundle_send.putParcelableArrayList("filters", filterList);
-                Intent i = new Intent(FilterActivity.this, MainActivity.class);
-                i.putExtras(bundle_send);
-                startActivity(i);
+                // Send new filter copy back
+                Intent ret = new Intent();
+                ret.putExtra("filters", filterList);
+                setResult(Activity.RESULT_OK, ret);
+
+                finish();
             }
         });
     }
