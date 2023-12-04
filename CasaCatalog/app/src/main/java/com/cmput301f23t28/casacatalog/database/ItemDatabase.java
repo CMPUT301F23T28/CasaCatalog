@@ -64,7 +64,8 @@ public class ItemDatabase {
      *
      * @param adapter The ItemListAdapter currently associated with the ItemList view
      */
-    public void registerListener(ItemListAdapter adapter, TextView totalValueText) {
+    public void registerListener(ItemListAdapter adapter, TextView totalValueText,
+                                 ArrayList<Filter> filters) {
         this.adapter = adapter;
 
         // Read item from database into itemList
@@ -127,6 +128,7 @@ public class ItemDatabase {
                 // Sort item list by default settings
                 // (this also updates adapter)
                 this.sort(new ItemSorting());
+                this.filterall(filters);
             }
         });
     }
@@ -268,6 +270,13 @@ public class ItemDatabase {
         this.itemList.clear();
         this.itemList.addAll(filteritemlist);
         this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
+    }
+
+    public void filterall(List<Filter> filters){
+        //TODO: add guards to repull the database before filtering
+        for (int i =0; i < filters.size(); i++){
+           Database.items.filter(filters.get(i));
+        }
     }
 
     /**
