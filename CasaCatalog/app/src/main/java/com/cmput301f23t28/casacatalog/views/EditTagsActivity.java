@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
 import com.cmput301f23t28.casacatalog.helpers.TagsListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.cmput301f23t28.casacatalog.models.Tag;
 
 import java.util.ArrayList;
@@ -44,14 +45,26 @@ public class EditTagsActivity extends AppCompatActivity {
 
         // Create new tag when add button is pressed
         findViewById(R.id.createTagButton).setOnClickListener(view -> {
-            EditText nameInput = findViewById(R.id.newTagName);
-            Database.tags.createTag(nameInput.getText().toString());
+            EditText newTagNameInput = findViewById(R.id.newTagName);
+            String newTagName = newTagNameInput.getText().toString().trim();
+
+            // Input validation
+            if( newTagName.isEmpty() ) {
+                newTagNameInput.setError(getString(R.string.input_required));
+                return;
+            }
+            if( Database.tags.findTagByName(newTagName) != null ){
+                newTagNameInput.setError("A tag with this name already exists.");
+                return;
+            }
+
+            Database.tags.createTag(newTagName);
             tagAdapter.notifyDataSetChanged();
         });
 
         // Capture all selected tags from list and add to item's tag list
         // when the back button is pressed
-        findViewById(R.id.backButtonFromEditTags).setOnClickListener(view -> {
+        ToolbarBuilder.create(this, getString(R.string.title_edit_tags), view -> {
             // Delete any tags with no uses
             for (Tag tag : Database.tags.getTags()) {
                 if (tag.getUses() <= 0) Database.tags.deleteTag(tag.getName());

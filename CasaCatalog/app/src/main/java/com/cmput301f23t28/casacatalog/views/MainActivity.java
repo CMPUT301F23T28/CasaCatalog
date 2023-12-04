@@ -2,6 +2,8 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -14,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
+import com.cmput301f23t28.casacatalog.Camera.FetchProductDetails;
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
@@ -21,7 +25,14 @@ import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.mlkit.vision.common.InputImage;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
     private FloatingActionButton trashButton;
 //    boolean once = true;
     ArrayList<Filter> filters;
+
+    private ArrayList<Item> items;
 
     /**
      * Initializes the activity, sets up the database, and configures the RecyclerView.
@@ -63,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
 
         // Initialize all databases
         Database.initialize();
+        items = Database.items.getItems();
 
         // If first time using app, start create user activity
         Database.users.getCollection().document(deviceId).get().addOnCompleteListener(task -> {
@@ -85,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
                 }
         );
 
-        itemAdapter = new ItemListAdapter(this, Database.items.getItems(), editItemLauncher, this);
+        itemAdapter = new ItemListAdapter(this, items, editItemLauncher, this);
         itemListView = findViewById(R.id.items_list);
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));
@@ -106,10 +120,71 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
             startActivity(i);
         });
 
+        ArrayList<Item> selectedItems = new ArrayList<>();
+        ActivityResultLauncher<Intent> editTagsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == Activity.RESULT_OK){
+                        if(result.getData() != null) {
+                            ArrayList<Tag> newTags = result.getData().getParcelableArrayListExtra("tags");
+                            // loop through all selected items
+                            for (Item selectedItem : selectedItems) {
+                                // loop through all items and if they match the selected items then set their tags
+                                for (Item item : items) {
+                                    if (item == selectedItem) {
+                                        item.setTags(newTags);
+                                        Database.items.update(item.getId(), item);
+                                    }
+                                }
+                            }
+                            itemAdapter.notifyDataSetChanged();
+
+                        }
+                    }
+                }
+        );
+
+        editTagsButton.setOnClickListener(v -> {
+            // Receives result from EditTagsActivity
+            Set<Tag> tags = new LinkedHashSet<>();
+            boolean anySelected = false;
+            selectedItems.clear();
+            for (Item item: items) {
+
+                if (item.getSelected()) {
+                    anySelected = true;
+                    selectedItems.add(item);
+                    for (Tag tag : item.getTags()) {
+                        tags.add(tag);
+                    }
+                }
+            }
+
+            if (anySelected && selectedItems.size() > 0) {
+                itemAdapter.setEditingState(false);
+                Intent i = new Intent(this, EditTagsActivity.class);
+                i.putExtra("tags", new ArrayList(tags));
+                editTagsLauncher.launch(i);
+            }
+
+            if (!anySelected) {
+                String text = "No items were selected.";
+                Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
+            }
+
+            // clear selection status
+            for (Item item : items) {
+                item.setSelected(false);
+            }
+
+            // hide buttons
+            toggleVisibility();
+        });
+
         // handles deletion of selection items
         trashButton.setOnClickListener(v -> {
             boolean anySelected = false;
-            for (Item item: Database.items.getItems()) {
+            for (Item item: items) {
 
                 if (item.getSelected()) {
                     anySelected = true;

@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="AddItemActivity">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="AddItemActivity">
+
+        <include layout="@layout/layout_toolbar"/>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="15dp"/>
 
+        <Button
+            android:id="@+id/BarcodeButton"
+            style="?attr/materialButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_weight="1"
+            android:text="Add by Barcode" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/detailsText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:layout_marginStart="15dp"
             android:text="@string/item_details_text" />
 
@@ -33,7 +47,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/itemNameInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,7 +61,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/itemEstimatedValueInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:inputType="numberDecimal"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -85,7 +101,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/itemDescriptionInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp" />
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -110,7 +127,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/itemMakeInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:inputType="textCapWords"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -123,7 +141,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/itemModelInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:inputType="textCapWords"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -136,11 +155,12 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/itemSerialNumberInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
-            android:id="@id/backButton"
+            android:id="@+id/serialNumberButton"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="20dp"
@@ -160,7 +180,7 @@
             android:id="@+id/extrasText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:layout_marginStart="15dp"
             android:text="@string/item_extras_text" />
 
@@ -174,8 +194,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/itemCommentsInput"
                 android:layout_width="250dp"
-                android:layout_height="50dp" />
-
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -188,7 +208,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:text="Tags"
-            android:textSize="30dp" />
+            android:textSize="30sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemTags"
@@ -223,13 +243,18 @@
             android:id="@+id/photosText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:layout_marginStart="15dp"
             android:text="@string/item_photos_text" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="40dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/item_images_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
 
         <Button
             android:id="@+id/addPhotoToItem"
@@ -239,14 +264,14 @@
             android:layout_marginStart="20dp"
             android:text="Add photo" />
 
-        <Button
-            android:id="@+id/addItemToListBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add item"
-            android:layout_marginStart="20dp"
-            style="?attr/materialButtonOutlinedStyle"
-            />
+            <Button
+                android:id="@+id/addItemToListBtn"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:enabled="false"
+                android:text="Add item" />
 
         <Button
             android:id="@+id/deleteItemFromListBtn"
@@ -258,6 +283,19 @@
             />
 
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_pictures_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:enabled="true"
+        android:src="@drawable/baseline_delete_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

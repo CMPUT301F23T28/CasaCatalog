@@ -2,5 +2,5 @@
 <resources>
     <item name="userProfileImage" type="id" />
     <item name="backButton" type="id" />
-    <item name="usernameTextView" type="id" />
+    <item name="userNameTextView" type="id" />
 </resources>

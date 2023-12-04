@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Represents a tag that can be associated with an item. This class implements Serializable,
@@ -23,7 +24,7 @@ public class Tag implements Comparable<Tag>, Parcelable {
      */
     public Tag(String name) {
         this.name = name;
-        this.uses = 1;
+        this.uses = 0;
     }
 
     /**
@@ -106,5 +107,27 @@ public class Tag implements Comparable<Tag>, Parcelable {
     @Override
     public int compareTo(Tag a) {
         return Integer.compare(a.getUses(), this.getUses());
+    }
+
+    /**
+     * Overrides the equal method so that we can compare Tags by name.
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag that = (Tag) o;
+        return Objects.equals(name, that.name);
+    }
+
+    /**
+     * Overrides the hashcode so that it bases it off of the Tag name.
+     * @return an int hashcode
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

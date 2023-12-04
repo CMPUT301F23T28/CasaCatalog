@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * A RecyclerView adapter linking ItemHolder's data to the ItemList
  */
-public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements ItemListClickListener {
+public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements ListClickListener<ItemHolder> {
     private final Context context;
     private final ArrayList<Item> itemList;
 
@@ -95,45 +95,61 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
         if( item.getTags() != null ){
             holder.setItemTags(item.getTagsAsChips(context));
         }
+
+        if (item.getPhotosURL().size() > 0) {
+            // Just sets to first image in list.
+            holder.setItemImage(item.getPhotosURL().get(0));
+        }
+        else {
+
+        }
     }
 
     /**
-     * Goes to 'edit item' page when an item is clicked.
+     * Sends the user to the 'edit item' activity, allowing them to edit their current
+     * item and all of its relevant details.
+     * Also intercepts and handles single clicks for editing and deleting.
      */
     @Override
     public void onItemClick(int position, ItemHolder holder) {
-        /**
-         * Sends the user to the 'edit item' activity, allowing them to edit their current
-         * item and all of its relevant details.
-         */
         Item item = itemList.get(position);
 
         // behaviour if following a long click event.
         if (isEditingState) {
-//            holder.toggleSelected();
             item.toggleSelected();
             notifyDataSetChanged();
             return;
         }
-
-        // Pressing an item triggers edit item activity populated with item data
 
         Intent i = new Intent(context, EditItemActivity.class);
         i.putExtra("item", item);
         this.editItemLauncher.launch(i);
     }
 
+    /**
+     * initiates process for deleting and editing items from main screen
+     * @param position the index of the data to affect
+     * @param holder the ItemHolder being affected
+     */
     @Override
     public void onItemLongClick(int position, ItemHolder holder) {
-
-        isEditingState = true;
-        if (mVisibilityCallback != null) {
-//            holder.toggleSelected();
-            Item item = itemList.get(position);
-            item.setSelected(true);
+        isEditingState = !isEditingState;
+        if (isEditingState) {
+            if (mVisibilityCallback != null) {
+                Item item = itemList.get(position);
+                item.setSelected(true);
+                mVisibilityCallback.toggleVisibility();
+            }
+        } else {
+            // remove all selections
+            int totalItems = itemList.size();
+            for (int i = 0; i < totalItems; i++) {
+                Item item = itemList.get(i);
+                item.setSelected(false);
+            }
             mVisibilityCallback.toggleVisibility();
-            notifyDataSetChanged();
         }
+        notifyDataSetChanged();
     }
 
     /**

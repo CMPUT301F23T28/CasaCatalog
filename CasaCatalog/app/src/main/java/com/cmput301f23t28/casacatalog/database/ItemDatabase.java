@@ -7,7 +7,9 @@ import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
+import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +42,8 @@ public class ItemDatabase {
     public static final String COMMENT_KEY = "comments";
     public static final String SERIAL_KEY = "serialNumber";
     public static final String TAGS_KEY = "tags";
+    public static final String OWNER_KEY = "owner";
+    public static final String PHOTOS_KEY = "photoURLs";
 
     /**
      * Constructs a ItemDatabase and initializes the connection to Firestore's itemList collection, setting up real-time data synchronization.
@@ -79,6 +83,12 @@ public class ItemDatabase {
                 for (QueryDocumentSnapshot doc : value) {
                     String itemID = doc.getId();
                     Log.d("ITEM ID QUERY", itemID);
+
+                    // Only items the client owns are added to local copy
+                    // An item with no owner will always be visible (failsafe)
+                    String ownerId = doc.getString("owner");
+                    if( ownerId != null && !ownerId.equals(MainActivity.deviceId) ) continue;
+
                     String itemName = doc.getString(NAME_KEY);
                     Double itemPrice = doc.getDouble(PRICE_KEY);
 
@@ -100,7 +110,7 @@ public class ItemDatabase {
                             itemTags.add(new Tag(t));
                         }
                     }
-
+                    ArrayList<String> itemPhotos = (ArrayList<String>) doc.get(PHOTOS_KEY);
                     Log.i("Firestore", String.format("Item(%s,%s) fetched", itemName, itemPrice));
                     Item addItem = new Item();
                     addItem.setId(itemID);
@@ -108,6 +118,7 @@ public class ItemDatabase {
                     addItem.setPrice(itemPrice);
                     addItem.setTags(itemTags);
                     addItem.setDate(itemDate);
+                    addItem.setPhotos(itemPhotos);
                     addItem.setMake(itemMake);
                     addItem.setModel(itemModel);
                     addItem.setDescription(itemDescription);
@@ -117,6 +128,7 @@ public class ItemDatabase {
                     }
 
                     addItem.setSerialNumber(itemSerialNumber);
+                    addItem.setOwner(doc.getString("owner"));
 
                     this.itemList.add(addItem);
                 }
@@ -152,6 +164,8 @@ public class ItemDatabase {
         data.put(COMMENT_KEY, item.getComment());
         data.put(SERIAL_KEY, item.getSerialNumber());
         data.put(TAGS_KEY, item.getTagsAsStrings());
+        data.put(OWNER_KEY, item.getOwner());
+        data.put(PHOTOS_KEY, item.getPhotosURL());
         return data;
     }
 
@@ -183,6 +197,11 @@ public class ItemDatabase {
 
                     item.setId(generatedDocumentId);
                     data.put("Id", item.getId());
+
+                    // Set owner to current user
+                    item.setOwner(MainActivity.deviceId);
+                    data.put("owner", MainActivity.deviceId);
+
                     documentReference.set(data)
                             .addOnSuccessListener(aVoid -> {
                                 Log.i("Firestore", "ID field updated in Firestore document");
@@ -228,6 +247,7 @@ public class ItemDatabase {
      */
     public double getTotalValue() {
         double totalValue = 0;
+        // TODO: use itemlist of only items user owns
         for (Item item : this.itemList) {
             if (item.getPrice() != null) {
                 totalValue += item.getPrice();
@@ -238,8 +258,7 @@ public class ItemDatabase {
 
     /**
      * Retrieves a reference to the item list
-     *
-     * @return the itemList arraylist
+     * @return A ArrayList of Items
      */
     public ArrayList<Item> getItems() {
         return this.itemList;
