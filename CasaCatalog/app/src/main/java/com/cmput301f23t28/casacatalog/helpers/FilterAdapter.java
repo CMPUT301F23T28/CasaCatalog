@@ -84,6 +84,40 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
             adapter.notifyDataSetChanged();
         });
 
+
+        List<String> compChoices = new ArrayList<>();
+        filtercomp = holder.itemView.findViewById(R.id.spinner_filter_comp);
+        ArrayAdapter<String> comp_adapter = new ArrayAdapter<>(this.filtercomp.getContext(),
+                        android.R.layout.simple_spinner_item,compChoices);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filtercomp.setAdapter(comp_adapter);
+
+        filtercomp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // An item was selected. Retrieve the selected item using parent.getItemAtPosition(pos)
+                String strfiltercomp = parent.getItemAtPosition(position).toString();
+                // Do something with the selected item
+                dataObject.setCurrentFilterType(strfiltercomp);
+
+                comp_adapter.notifyDataSetChanged();
+
+                if (filtertype.getSelectedItem().toString().toLowerCase().equals("date")
+                    && strfiltercomp.equals("between")){
+                    ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_2)).setVisibility(View.VISIBLE);
+                } else{
+                    ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_2)).setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+
+            }
+        });
+
         filtertype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -92,6 +126,30 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 // Do something with the selected item
                 dataObject.setCurrentType(strfiltertype);
                 Log.e("DATE", strfiltertype.toLowerCase() + (strfiltertype.toLowerCase() != "date"));
+
+                switch (dataObject.getCurrentType().toString().toLowerCase()){
+                    case ("date"):
+                        comp_adapter.clear();
+                        comp_adapter.add("between");
+                        comp_adapter.add("equals");
+                        break;
+                    case ("make"):
+                        comp_adapter.clear();
+                        comp_adapter.add("contains");
+                        comp_adapter.add("notcontains");
+                        break;
+                    case ("tags"):
+                        comp_adapter.clear();
+                        comp_adapter.add("contains");
+                        comp_adapter.add("notcontains");
+                        break;
+                    case("description"):
+                        comp_adapter.clear();
+                        comp_adapter.add("contains");
+                        comp_adapter.add("notcontains");
+                        break;
+                }
+                comp_adapter.notifyDataSetChanged();
                 if (!strfiltertype.toLowerCase().equals("date")){
                     ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_2)).setVisibility(View.GONE);
                 } else{
@@ -108,38 +166,13 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
 
 
-        filtercomp = holder.itemView.findViewById(R.id.spinner_filter_comp);
-        ArrayAdapter<CharSequence> comp_adapter =
-                ArrayAdapter.createFromResource(this.filtercomp.getContext(),
-                R.array.filter_comp_choices, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filtercomp.setAdapter(comp_adapter);
-
-        filtercomp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // An item was selected. Retrieve the selected item using parent.getItemAtPosition(pos)
-                String strfiltercomp = parent.getItemAtPosition(position).toString();
-                // Do something with the selected item
-                dataObject.setCurrentFilterType(strfiltercomp);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback
-
-            }
-        });
-
-
         ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_1)).getEditText().setText(dataObject.getVal1());
         ((TextInputLayout) holder.itemView.findViewById(R.id.filter_value_2)).getEditText().setText(dataObject.getVal2());
 
 
         String[] typeChoices =
                 holder.itemView.getResources().getStringArray(R.array.type_choices);
-        String[] compChoices =
-                holder.itemView.getResources().getStringArray(R.array.filter_comp_choices);
+
 
 
         int pos = -1;
@@ -151,8 +184,8 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         }
         ((Spinner) holder.itemView.findViewById(R.id.spinner_filter_type)).setSelection(pos);
         pos = -1;
-        for (int i = 0; i < compChoices.length; i++) {
-            if (compChoices[i].toLowerCase().equals(dataObject.getCurrentFilterType().toString())) {
+        for (int i = 0; i < compChoices.size(); i++) {
+            if (compChoices.get(i).toLowerCase().equals(dataObject.getCurrentFilterType().toString())) {
                 pos = i;
                 break;
             }
