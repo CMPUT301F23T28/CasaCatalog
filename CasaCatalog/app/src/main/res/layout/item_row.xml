@@ -8,19 +8,14 @@
     android:background="@color/white">
 
     <View
-        android:id="@+id/TopDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="100dp" />
-
-    <View
         android:id="@+id/BottomDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ItemImage" />
 
     <TextView
@@ -62,7 +57,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ItemName"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:scrollHorizontally="false" />
 
         <TextView
             android:id="@+id/ItemPurchaseDate"
