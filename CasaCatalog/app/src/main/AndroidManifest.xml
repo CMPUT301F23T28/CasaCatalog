@@ -62,7 +62,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.FilterPage"
+            android:name=".views.FilterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.FILTER" />
