@@ -42,7 +42,7 @@ public class NonEmptyInputWatcher implements TextWatcher {
         button.setEnabled(false);
 
         if( s.toString().trim().isEmpty() ){
-            input.setError("This field is required.");
+            input.setError(Resources.getSystem().getString(R.string.input_required));
         }else{
             button.setEnabled(true);
         }

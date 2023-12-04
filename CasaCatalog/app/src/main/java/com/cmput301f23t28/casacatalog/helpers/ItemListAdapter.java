@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Tag;
 import com.cmput301f23t28.casacatalog.views.EditItemActivity;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * A RecyclerView adapter linking ItemHolder's data to the ItemList
@@ -57,6 +58,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_row, parent, false);
+//        Log.e();
         return new ItemHolder(view, this);
     }
 
@@ -81,13 +83,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
         }
 
         if (item.getPrice() != null){
-            holder.setItemPrice(String.format(Locale.CANADA, "$%.2f",item.getPrice()));
+            holder.setItemPrice(String.format("%.2f",item.getPrice()));
         }
         if (item.getDate() != null){
             holder.setItemPurchaseDate(item.getFormattedDate());
         }
 
-        Log.i("Shown", "Item" + item.getName());
+        Log.e("Shown", "Item" + item.getName());
+//        holder.setItemPurchaseDate(item.getDate().toString());
 
         if( item.getTags() != null ){
             holder.setItemTags(item.getTagsAsChips(context));
