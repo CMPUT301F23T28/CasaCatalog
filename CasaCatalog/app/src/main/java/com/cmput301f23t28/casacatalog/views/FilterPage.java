@@ -3,7 +3,6 @@ package com.cmput301f23t28.casacatalog.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,14 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.FilterAdapter;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -36,7 +33,7 @@ public class FilterPage extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_filter);
-        filters = new ArrayList<Filter>();
+        filters = new ArrayList<>();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -47,7 +44,6 @@ public class FilterPage extends AppCompatActivity{
                 filters.add(list.get(i));
             }
         }
-//        filters.add(new Filter());
 
         filterListAdapter = new FilterAdapter(filters);
         filterListView = findViewById(R.id.filter_list);
@@ -63,8 +59,7 @@ public class FilterPage extends AppCompatActivity{
             Log.e("Filter","adding a new item " + filterListAdapter.getItemCount());
         });
 
-        final Button backButton = findViewById(R.id.filter_back_button);
-        backButton.setOnClickListener(view -> {
+        ToolbarBuilder.create(this, "Filter", view -> {
             boolean error_recieved = false;
             ArrayList<Filter> filterList= new ArrayList<>();
             for (int i = 0; i < filterListAdapter.getItemCount(); i++) {
