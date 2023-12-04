@@ -3,31 +3,29 @@ package com.cmput301f23t28.casacatalog.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
-import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.database.UserDatabase;
+import com.cmput301f23t28.casacatalog.helpers.NonEmptyInputWatcher;
 import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.BarcodeCallback;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
@@ -80,6 +78,8 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
         final Button addBarcodeButton = findViewById(R.id.BarcodeButton);
         final ImageButton addSerialNumberButton = findViewById(R.id.serialNumberButton);
+
+        registerInputValidators();
 
         // Set date preview to current date
         ((TextView)findViewById(R.id.purchaseDateText)).setText(newItem.getFormattedDate());
@@ -308,5 +308,14 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
 
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         barcodeRecognition.scanBarcodes(image);
+    }
+
+    /**
+     * Registers input listeners for relevant inputs to ensure their validity.
+     */
+    private void registerInputValidators(){
+        Button button = findViewById(R.id.addItemToListBtn);
+        EditText nameInput = findViewById(R.id.itemNameInput);
+        nameInput.addTextChangedListener(new NonEmptyInputWatcher(nameInput, button));
     }
 }
