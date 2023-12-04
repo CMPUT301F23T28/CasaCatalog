@@ -3,12 +3,12 @@ package com.cmput301f23t28.casacatalog.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,15 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
-import com.cmput301f23t28.casacatalog.helpers.NonEmptyInputWatcher;
-import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
+import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -68,8 +68,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         addPhotoButton = findViewById(R.id.addPhotoToItem);
         trashButton = findViewById(R.id.delete_pictures_button);
         barcodeButton = findViewById(R.id.BarcodeButton);
-
-        registerInputValidators();
 
         // Remove barcode button (only for adding not editing)
         ViewGroup layout = (ViewGroup) barcodeButton.getParent();
@@ -282,14 +280,5 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
                 addPhotoButton.setVisibility(View.GONE);
             }
         }
-    }
-
-    /**
-     * Registers input listeners for relevant inputs to ensure their validity.
-     */
-    private void registerInputValidators(){
-        Button button = findViewById(R.id.addItemToListBtn);
-        EditText nameInput = findViewById(R.id.itemNameInput);
-        nameInput.addTextChangedListener(new NonEmptyInputWatcher(nameInput, button));
     }
 }

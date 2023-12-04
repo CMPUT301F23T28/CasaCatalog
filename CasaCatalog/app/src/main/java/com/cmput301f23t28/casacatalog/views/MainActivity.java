@@ -2,6 +2,8 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -14,19 +16,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
+import com.cmput301f23t28.casacatalog.Camera.FetchProductDetails;
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
-import com.cmput301f23t28.casacatalog.models.Filter;
+import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.mlkit.vision.common.InputImage;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -102,28 +111,13 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         final FloatingActionButton addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddItemActivity.class)));
 
-        ActivityResultLauncher<Intent> editFilterLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if(result.getResultCode() == Activity.RESULT_OK){
-                        if(result.getData() != null) {
-                            ArrayList<Filter> list = result.getData().getParcelableArrayListExtra("filters");
-                            filters.clear();
-                            // Use the list as needed
-                            for (int i =0; i < list.size(); i++){
-                                Log.d("Filter "+ Integer.toString(i+1),
-                                        list.get(i).getVal1() +" " + list.get(i).getVal2() + " " + list.get(i).getCurrentFilterType() + " " + list.get(i).getCurrentType());
-                                filters.add(list.get(i));
-                            }
-                        }
-                    }
-                }
-        );
-
         findViewById(R.id.FilterButton).setOnClickListener(view -> {
-            Intent i = new Intent(this, FilterActivity.class);
-            i.putExtra("filters", filters);
-            editFilterLauncher.launch(i);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("filters", filters);
+            Intent i = new Intent(MainActivity.this, FilterPage.class);
+            i.putExtras(bundle);
+
+            startActivity(i);
         });
 
         ArrayList<Item> selectedItems = new ArrayList<>();
@@ -220,7 +214,14 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-
+            ArrayList<Filter> list =  bundle.getParcelableArrayList("filters");
+            filters.clear();
+            // Use the list as needed
+            for (int i =0; i < list.size(); i++){
+                Log.d("Filter "+ Integer.toString(i+1),
+                        list.get(i).getVal1() +" " + list.get(i).getVal2() + " " + list.get(i).getCurrentFilterType() + " " + list.get(i).getCurrentType());
+                filters.add(list.get(i));
+            }
         }
     }
 
