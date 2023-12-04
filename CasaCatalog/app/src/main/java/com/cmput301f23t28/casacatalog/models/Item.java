@@ -12,7 +12,9 @@ import com.google.android.material.chip.Chip;
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -186,6 +188,19 @@ public class Item implements Parcelable {
      */
     public void setTags(ArrayList<Tag> tags) {
         this.tags = tags;
+    }
+
+    public void setWithExistingTags(ArrayList<Tag> tags) {
+        Set<Tag> uniqueTags = new LinkedHashSet<>();
+        for (Tag tag: tags) {
+            uniqueTags.add(tag);
+        }
+
+        for (Tag tag: this.tags) {
+            uniqueTags.add(tag);
+        }
+
+        this.tags = new ArrayList<>(uniqueTags);
     }
 
     /**
