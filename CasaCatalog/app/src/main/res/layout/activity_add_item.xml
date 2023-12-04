@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/item_photos_title"
+                android:id="@+id/item_basics_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -332,6 +332,15 @@
                 android:layout_marginStart="20dp"
                 android:text="Add photo" />
 
+            <Button
+                android:id="@+id/delete_pictures_button"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Delete photo(s)"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
@@ -377,19 +386,6 @@
                 android:text="Delete item" />
 
         </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/delete_pictures_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:src="@drawable/baseline_delete_24"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
 </ScrollView>
