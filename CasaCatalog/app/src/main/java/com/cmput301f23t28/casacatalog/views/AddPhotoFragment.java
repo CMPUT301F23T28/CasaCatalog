@@ -177,15 +177,6 @@ public class AddPhotoFragment extends DialogFragment {
                         throw new RuntimeException(e);
                     }
 
-                    // Initialize TextRecognitionHelper and perform text recognition
-                    TextRecognitionHelper textHelper = new TextRecognitionHelper(getContext());
-                    textHelper.recognizeTextFromBitmap(bitmap, recognizedText -> {
-                        // Use recognized text
-                        if (!recognizedText.isEmpty()) {
-                            // Send recognized text to the activity, handle accordingly
-                            listener.onSerialNumberRecognized(recognizedText);
-                        }
-                    });
                     Log.d("FILE_PATH", filePath.toString());
                     // Code for showing progressDialog while uploading
                     ProgressDialog progressDialog
@@ -254,6 +245,16 @@ public class AddPhotoFragment extends DialogFragment {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
+                // Initialize TextRecognitionHelper and perform text recognition
+                TextRecognitionHelper textHelper = new TextRecognitionHelper(getContext());
+                textHelper.recognizeTextFromBitmap(bitmap, recognizedText -> {
+                    // Use recognized text
+                    if (!recognizedText.isEmpty()) {
+                        // Send recognized text to the activity, handle accordingly
+                        listener.onSerialNumberRecognized(recognizedText);
+                    }
+                });
                 boolean isBarcode = false;
                 mOnFragmentInteractionListener.sendBitmap(bitmap, isBarcode);
             }
