@@ -62,6 +62,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".views.FilterPage"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.FILTER" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".views.UserActivity"
             android:exported="true">
             <intent-filter>
