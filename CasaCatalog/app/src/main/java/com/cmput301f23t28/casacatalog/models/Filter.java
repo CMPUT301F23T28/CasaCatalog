@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
 
+/**
+ * Represents a filter object used for filtering items.
+ */
 public class Filter implements Parcelable {
     public enum Type { date, description, make, value, tag }
     public enum FilterType {equals, notequals, contains, notcontains, lessthan, greaterthan,
@@ -17,47 +20,81 @@ public class Filter implements Parcelable {
     private String val1;
     private String val2;
 
+    /**
+     *
+     * @return returns the current type of filter
+     */
     public Type getCurrentType() {
         return currentType;
     }
 
+    /**
+     * Sets the current type of filter
+     * @param type an enum of filter
+     */
     public void setCurrentType(String type) {
         for(Filter.Type t : Filter.Type.values()){
             if( type.equalsIgnoreCase(t.name()) ) this.currentType = t;
         }
     }
 
+    /**
+     *
+     * @return Gets the type of operation the filter is performing
+     */
     public FilterType getCurrentFilterType() {
         return currentFilterType;
     }
 
+    /**
+     * Sets the type of operation for the filter
+     * @param filterType type of operation enum
+     */
     public void setCurrentFilterType(String filterType) {
         for(Filter.FilterType o : Filter.FilterType.values()){
             if( filterType.equalsIgnoreCase(o.name()) ) currentFilterType = o;
         }
     }
 
+    /**
+     *
+     * @return val of first operand
+     */
     public String getVal1() {
         return val1;
     }
 
+    /**
+     * Sets the value of the first operand
+     * @param val1 the value to set
+     */
     public void setVal1(String val1) {
         this.val1 = val1;
     }
 
+    /**
+     *
+     * @return gets the value of the second operand
+     */
     public String getVal2() {
         return val2;
     }
 
+    /**
+     * sets the value of the second operand
+     * @param val2 the value to set
+     */
     public void setVal2(String val2) {
         this.val2 = val2;
     }
 
     /**
-     * Given strings for what to sort by and in what order,
-     * prepares an item sorting.
-     * @param type A String name for the item property to sort by
-     * @param order A String sorting order, either "ascending" or "descending"
+     * Given strings for what to filter by and in what way,
+     * prepares an item filtering.
+     * @param type A String name for the item property to filter by
+     * @param order A String for the operation to be done
+     * @param val1 the first operand
+     * @param val2 the second operand
      */
     public Filter(String type, String order, String val1, String val2){
         this.val1 = val1;
@@ -71,8 +108,8 @@ public class Filter implements Parcelable {
     }
 
     /**
-     * Prepares an item sorting that, by default,
-     * sorts by date in descending order.
+     * Prepares an item filtering that, by default,
+     * filters between two dates
      */
     public Filter(){
         this.val1 = "";
@@ -80,6 +117,11 @@ public class Filter implements Parcelable {
         this.currentType = Type.date;
         this.currentFilterType = FilterType.between;
     }
+
+    /**
+     * Gets a predicate to filter items based on the current filter settings.
+     * @return A predicate for filtering items.
+     */
     public Predicate<Item> getFilterPredicate(){
                 Item item = new Item();
                 switch (this.currentType) {
@@ -132,12 +174,22 @@ public class Filter implements Parcelable {
             return Predicate.isEqual(0);
     }
 
+    /**
+     * override function for parcelable
+     * @return
+     */
     @Override
     public int describeContents() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    /**
+     * override function for parcelable
+     * @param dest The Parcel in which the object should be written.
+     * @param arg1 Additional flags about how the object should be written.
+     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
     @Override
     public void writeToParcel(Parcel dest, int arg1) {
         // TODO Auto-generated method stub
@@ -148,6 +200,10 @@ public class Filter implements Parcelable {
 
     }
 
+    /**
+     * override function for parcelable
+     * @param in
+     */
     public Filter(Parcel in) {
         val1 = in.readString();
         val2 = in.readString();
@@ -162,6 +218,9 @@ public class Filter implements Parcelable {
         }
     }
 
+    /**
+     * override function for parcelable
+     */
     public static final Parcelable.Creator<Filter> CREATOR = new Parcelable.Creator<Filter>() {
         public Filter createFromParcel(Parcel in) {
             return new Filter(in);
