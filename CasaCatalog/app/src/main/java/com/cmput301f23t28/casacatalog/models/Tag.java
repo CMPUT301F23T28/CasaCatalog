@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.Objects;
 
 /**
- * Represents a tag that can be associated with an item. This class implements Parcelable,
+ * Represents a tag that can be associated with an item. This class implements Serializable,
  * allowing tag objects to be serialized for easy storage and transmission.
  */
 public class Tag implements Comparable<Tag>, Parcelable {
