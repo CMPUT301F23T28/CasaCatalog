@@ -23,7 +23,9 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
     Spinner filtertype;
     Spinner filtercomp;
 
-
+    /**
+     * ViewHolder class representing each item view in the RecyclerView.
+     */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 //        public Spinner spinner;
 //        public TextInputEditText textInput;
@@ -31,6 +33,10 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         TextInputLayout val2_input;
         Filter filter;
 
+        /**
+         * Constructor for MyViewHolder.
+         * @param v The view representing the item in the RecyclerView.
+         */
         public MyViewHolder(View v) {
             super(v);
 //            spinner = v.findViewById(v.R.id.spinner);
@@ -39,21 +45,39 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
         }
 
+        /**
+         * Gets the Filter object associated with this ViewHolder.
+         * @return The Filter object containing filter values.
+         */
         public Filter getFilter() {
             filter.setVal1(val1_input.getEditText().getText().toString());
             filter.setVal2(val2_input.getEditText().getText().toString());
             return filter;
         }
 
+        /**
+         * Binds data to the ViewHolder.
+         * @param fil The Filter object containing data to bind.
+         */
         public void bindData(Filter fil){
             filter = fil;
         }
     }
 
+    /**
+     * Constructor for the FilterAdapter.
+     * @param dataList The list of Filter objects to be managed by the adapter.
+     */
     public FilterAdapter(List<Filter> dataList) {
         this.dataList = dataList;
     }
 
+    /**
+     * Creates a new ViewHolder for an item view in the RecyclerView.
+     * @param parent The ViewGroup into which the new View will be added.
+     * @param viewType The type of the new View.
+     * @return A new ViewHolder that holds a View of the given viewType.
+     */
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v =
@@ -62,6 +86,11 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         return new MyViewHolder(v);
     }
 
+    /**
+     * Binds filter to the View based on the filter type.
+     * @param holder The ViewHolder to bind data to.
+     * @param position The position of the item in the dataset.
+     */
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Filter dataObject = dataList.get(position);
@@ -87,6 +116,14 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         filtercomp.setAdapter(comp_adapter);
 
         filtercomp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Called to change UI on filter based on selected parameters.
+             *
+             * @param parent The AdapterView where the selection happened.
+             * @param view The view within the AdapterView that was clicked.
+             * @param position The position of the view in the adapter.
+             * @param id The row id of the item that is selected.
+             */
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // An item was selected. Retrieve the selected item using parent.getItemAtPosition(pos)
@@ -112,6 +149,14 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         });
 
         filtertype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Called to changed UI for filter based on selected parameters.
+             *
+             * @param parent The AdapterView where the selection happened.
+             * @param view The view within the AdapterView that was clicked.
+             * @param position The position of the view in the adapter.
+             * @param id The row id of the item that is selected.
+             */
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // An item was selected. Retrieve the selected item using parent.getItemAtPosition(pos)
@@ -197,6 +242,10 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         holder.bindData(dataObject);
     }
 
+    /**
+     * Returns the total number of items in the dataset.
+     * @return The total number of items in the dataset.
+     */
     @Override
     public int getItemCount() {
         return dataList.size();
