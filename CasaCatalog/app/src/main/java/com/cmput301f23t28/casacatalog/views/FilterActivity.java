@@ -13,6 +13,7 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Filter;
 import com.cmput301f23t28.casacatalog.helpers.FilterAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -51,7 +52,7 @@ public class FilterActivity extends AppCompatActivity{
         filterListView.setItemAnimator(null);     // fixes bug in Android
 
 
-        final FloatingActionButton addButton = findViewById(R.id.add_filter_button);
+        final ExtendedFloatingActionButton addButton = findViewById(R.id.add_filter_button);
         addButton.setOnClickListener(v -> {
             filters.add(new Filter());
             filterListAdapter.notifyItemInserted(filters.size()-1);
