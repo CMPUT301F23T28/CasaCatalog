@@ -1,7 +1,6 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

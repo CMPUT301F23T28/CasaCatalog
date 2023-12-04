@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Filter;
-import com.cmput301f23t28.casacatalog.views.FilterActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
