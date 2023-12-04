@@ -1,5 +1,7 @@
 com.cmput301f23t28.casacatalog
+com.cmput301f23t28.casacatalog.Camera
 com.cmput301f23t28.casacatalog.database
 com.cmput301f23t28.casacatalog.helpers
 com.cmput301f23t28.casacatalog.models
+com.cmput301f23t28.casacatalog.util
 com.cmput301f23t28.casacatalog.views
