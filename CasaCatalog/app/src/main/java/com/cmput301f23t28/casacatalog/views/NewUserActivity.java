@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.database.UserDatabase;
 
 /**
  * The new user activity that starts when the application is launched for the first time.
@@ -26,11 +27,12 @@ public class NewUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_user);
 
         findViewById(R.id.addUserButton).setOnClickListener(view -> {
-            EditText nameInput = findViewById(R.id.editNewName);
+            String name = ((EditText)findViewById(R.id.editNewName)).getText().toString();
 
-            // TODO: validate input
-            Database.users.createUser(nameInput.getText().toString());
-            finish();
+            if(UserDatabase.isNameUnique(name)) {
+                Database.users.createUser(name);
+                finish();
+            }
         });
     }
 }

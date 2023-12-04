@@ -10,15 +10,17 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Manages the operations related to User storage and retrieval in Firestore.
  */
 public class UserDatabase {
-    private final CollectionReference collection;
+    private static CollectionReference collection;
+    private static HashSet<String> takenNames;
 
-    private final String NAME_KEY = "name";
-    private final String CREATED_KEY = "created";
+    private static final String NAME_KEY = "name";
+    private static final String CREATED_KEY = "created";
 
     private static String userName;
     private static Date created;
@@ -29,19 +31,25 @@ public class UserDatabase {
      */
     public UserDatabase(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        this.collection = db.collection("users");
+        collection = db.collection("users");
+        takenNames = new HashSet<>();
 
         // Read users from database, hydrate static fields with correct user info
         collection.addSnapshotListener((value, error) -> {
             if (error != null) { Log.e("Firestore", error.toString()); return; }
             if (value != null) {
+                takenNames.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     if (doc != null) {
+                        // Retrieve current user information
                         if(doc.getId().equals(MainActivity.deviceId)){
                             userName = doc.getString(NAME_KEY);
                             created = doc.getDate(CREATED_KEY);
                             Log.i("Firestore", "Updated current user data");
                         }
+
+                        // Keep record of all used names
+                        takenNames.add(doc.getString(NAME_KEY));
                     }
                 }
             }
@@ -52,7 +60,7 @@ public class UserDatabase {
      * Retrieves a reference to the users collection in Firestore
      * @return A CollectionReference to users in Firestore
      */
-    public CollectionReference getCollection(){ return this.collection; }
+    public static CollectionReference getCollection(){ return collection; }
 
     /**
      * Retrieves the current user's name
@@ -68,6 +76,15 @@ public class UserDatabase {
      */
     public static String getCreated(){
         return DateFormatter.getFormattedDate(created);
+    }
+
+    /**
+     * Tests if a username is already taken by another user.
+     * @param name The String name to test.
+     * @return true if the username is unique in the database, otherwise false.
+     */
+    public static boolean isNameUnique(String name){
+        return !takenNames.contains(name);
     }
 
     /**
