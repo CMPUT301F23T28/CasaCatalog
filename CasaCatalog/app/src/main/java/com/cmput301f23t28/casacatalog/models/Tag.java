@@ -23,7 +23,7 @@ public class Tag implements Comparable<Tag>, Parcelable {
      */
     public Tag(String name) {
         this.name = name;
-        this.uses = 1;
+        this.uses = 0;
     }
 
     /**
