@@ -45,8 +45,6 @@ import java.util.List;
 public class AddItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item newItem;
-    private Bitmap photoBitmap;
-    private boolean isBarcode;
     private ArrayList<Photo> photos = new ArrayList<>();
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
@@ -264,8 +262,6 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
     public void sendBitmap(Bitmap bitmap, boolean isBarcode) {
         //photoURLs.add(input);
         Log.d("PHOTO BITMAP", "received " + bitmap);
-        photoBitmap = bitmap;
-        this.isBarcode = isBarcode;
         if (isBarcode) {
             fillItemFromBarcode(bitmap);
         }

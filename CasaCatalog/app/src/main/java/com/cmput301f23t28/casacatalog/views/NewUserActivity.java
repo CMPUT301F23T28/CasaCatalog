@@ -2,7 +2,6 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 

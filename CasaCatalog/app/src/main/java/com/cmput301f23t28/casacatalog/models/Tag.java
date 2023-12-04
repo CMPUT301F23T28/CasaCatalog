@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -111,8 +110,8 @@ public class Tag implements Comparable<Tag>, Parcelable {
 
     /**
      * Overrides the equal method so that we can compare Tags by name.
-     * @param o
-     * @return
+     * @param o An object to compare with
+     * @return A boolean whether the two objects are equal.
      */
     @Override
     public boolean equals(Object o) {
