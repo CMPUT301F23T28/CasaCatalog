@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
-import com.cmput301f23t28.casacatalog.database.UserDatabase;
 import com.cmput301f23t28.casacatalog.helpers.NonEmptyInputWatcher;
 import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.BarcodeCallback;
@@ -35,7 +32,6 @@ import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.mlkit.vision.common.InputImage;
 
@@ -54,7 +50,8 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
     private ArrayList<Photo> photos = new ArrayList<>();
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
-    private FloatingActionButton trashButton;
+    private Button addPhotoButton;
+    private Button deletePhotoButton;
 
     /**
      * Called when the activity is starting. This method is where most initialization should go:
@@ -71,7 +68,8 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
         ToolbarBuilder.create(this, getString(R.string.title_add_item));
 
         newItem = new Item();
-        trashButton = findViewById(R.id.delete_pictures_button);
+        addPhotoButton = findViewById(R.id.addPhotoToItem);
+        deletePhotoButton = findViewById(R.id.delete_pictures_button);
 
         final Button addButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
@@ -184,7 +182,7 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
             editTagsLauncher.launch(i);
         });
         // Handles the deletion of photos
-        trashButton.setOnClickListener(v -> {
+        deletePhotoButton.setOnClickListener(v -> {
             boolean anySelected = false;
 
             List<Photo> photosToRemove = new ArrayList<>();
@@ -229,19 +227,21 @@ public class AddItemActivity extends AppCompatActivity implements AddPhotoFragme
     }
 
     /**
-     * handles visibility of the delete photo icon
+     * Handles visibility of the add and delete photo icon
      */
     @Override
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");
-        if (trashButton != null) {
-            if (trashButton.getVisibility() == View.VISIBLE) {
+        if (deletePhotoButton != null) {
+            if (deletePhotoButton.getVisibility() == View.VISIBLE) {
                 Log.i("Ryan", "INVisible buttons");
-                trashButton.setVisibility(View.GONE);
+                deletePhotoButton.setVisibility(View.GONE);
+                addPhotoButton.setVisibility(View.VISIBLE);
 
             } else {
                 Log.i("Ryan", "Visible buttons");
-                trashButton.setVisibility(View.VISIBLE);
+                deletePhotoButton.setVisibility(View.VISIBLE);
+                addPhotoButton.setVisibility(View.GONE);
             }
         }
     }
