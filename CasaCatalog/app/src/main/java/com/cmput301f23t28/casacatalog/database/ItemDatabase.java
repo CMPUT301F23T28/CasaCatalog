@@ -3,6 +3,7 @@ package com.cmput301f23t28.casacatalog.database;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
@@ -19,7 +20,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * Manages the operations related to Item storage and retrieval in Firestore.
@@ -65,7 +68,8 @@ public class ItemDatabase {
      *
      * @param adapter The ItemListAdapter currently associated with the ItemList view
      */
-    public void registerListener(ItemListAdapter adapter, TextView totalValueText) {
+    public void registerListener(ItemListAdapter adapter, TextView totalValueText,
+                                 ArrayList<Filter> filters) {
         this.adapter = adapter;
 
         // Read item from database into itemList
@@ -136,6 +140,7 @@ public class ItemDatabase {
                 // Sort item list by default settings
                 // (this also updates adapter)
                 this.sort(new ItemSorting());
+                this.filterall(filters);
             }
         });
     }
@@ -274,7 +279,23 @@ public class ItemDatabase {
      */
     public void sort(ItemSorting sorting){
         this.itemList.sort(sorting.getComparator());
+
         this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
+    }
+    public void filter(Filter filter){
+        //TODO: add guards to repull the database before filtering
+        List<Item> filteritemlist =
+                this.itemList.stream().filter(filter.getFilterPredicate()).collect(Collectors.toList());
+        this.itemList.clear();
+        this.itemList.addAll(filteritemlist);
+        this.adapter.notifyItemRangeChanged(0, this.adapter.getItemCount());
+    }
+
+    public void filterall(List<Filter> filters){
+        //TODO: add guards to repull the database before filtering
+        for (int i =0; i < filters.size(); i++){
+           Database.items.filter(filters.get(i));
+        }
     }
 
     /**
