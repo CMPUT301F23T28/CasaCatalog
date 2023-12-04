@@ -24,7 +24,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
     Spinner filtercomp;
 
     /**
-     * ViewHolder class representing each item view in the RecyclerView.
+     * ViewHolder class representing each filter in the RecyclerView.
      */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 //        public Spinner spinner;
@@ -73,7 +73,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
     }
 
     /**
-     * Creates a new ViewHolder for an item view in the RecyclerView.
+     * Creates a new filter UI object.
      * @param parent The ViewGroup into which the new View will be added.
      * @param viewType The type of the new View.
      * @return A new ViewHolder that holds a View of the given viewType.
