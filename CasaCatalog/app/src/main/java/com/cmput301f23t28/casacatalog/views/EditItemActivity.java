@@ -2,32 +2,52 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
+import com.cmput301f23t28.casacatalog.helpers.PhotoListAdapter;
+import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
+import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity for editing an existing item. Inherits functionality from AddItemActivity
  * and repurposes it for editing items.
  */
-public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener {
+public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item editingItem;
+    private Bitmap photoBitmap;
+    private boolean isBarcode; // whether bitmap is barcode or not
+    private RecyclerView itemPhotoContainer;
+    private PhotoListAdapter photoListAdapter;
+    private FloatingActionButton trashButton;
+    private Button barcodeButton;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -43,6 +63,16 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         setContentView(R.layout.activity_add_item);
 
         this.editingItem = getIntent().getParcelableExtra("item");
+        ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
+        trashButton = findViewById(R.id.delete_pictures_button);
+        barcodeButton = findViewById(R.id.BarcodeButton);
+
+        // Remove barcode button (only for adding not editing)
+        ViewGroup layout = (ViewGroup) barcodeButton.getParent();
+        if (null != layout) //for safety only  as you are doing onClick
+            layout.removeView(barcodeButton);
+
+
 
         // Setting the text of each of the 'EditText's to whatever the item's attributes are
         ((TextInputLayout) findViewById(R.id.itemName)).getEditText().setText(editingItem.getName());
@@ -54,11 +84,19 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         ((TextInputLayout) findViewById(R.id.itemSerialNumber)).getEditText().setText(editingItem.getSerialNumber());
         ((TextInputLayout) findViewById(R.id.itemComments)).getEditText().setText(editingItem.getComment());
 
+        // set up adapter for photos
+        photoListAdapter = new PhotoListAdapter(this, editingItem.getPhotos(), this);
+        itemPhotoContainer = findViewById(R.id.item_images_container);
+        itemPhotoContainer.setAdapter(photoListAdapter);
+        itemPhotoContainer.setLayoutManager(new GridLayoutManager(this, 3));
+
+
         hydrateTagList(editingItem, findViewById(R.id.itemTagsList));
 
         final Button editButton = findViewById(R.id.addItemToListBtn);
         final Button deleteButton = findViewById(R.id.deleteItemFromListBtn);
         final Button addPhotoButton = findViewById(R.id.addPhotoToItem);
+        final ImageButton addSerialNumberButton = findViewById(R.id.serialNumberButton);
 
         editButton.setText(R.string.item_edit_button_text);
         // Edits item in database, as well as on the item list displayed in MainActivity.
@@ -118,6 +156,10 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             finish();
         });
 
+        addSerialNumberButton.setOnClickListener(view -> {
+            new AddPhotoFragment().show(getSupportFragmentManager(), "ADD_SERIAL_NUMBER");
+        });
+
         findViewById(R.id.setDateButton).setOnClickListener(new ItemDatePicker(this, editingItem, findViewById(R.id.purchaseDateText)));
 
         // Receives result from EditTagsActivity
@@ -140,6 +182,34 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             editTagsLauncher.launch(i);
         });
 
+
+        // Handles the deletion of photos
+        trashButton.setOnClickListener(v -> {
+            boolean anySelected = false;
+
+            List<Photo> photosToRemove = new ArrayList<>();
+
+            for(Photo photo: editingItem.getPhotos()) {
+                if (photo.getSelected()) {
+                    anySelected = true;
+                    photosToRemove.add(photo);
+                }
+            }
+
+            for (Photo photo : photosToRemove) {
+                Log.i("CRUD", "Deleted photo. Name: " + photo.getUrl());
+                editingItem.removePhoto(photo.getUrl());
+            }
+
+            if (!anySelected) {
+                String text = "No photos were selected.";
+                Toast.makeText(EditItemActivity.this, text, Toast.LENGTH_LONG).show();
+            }
+            // hide buttons
+            photoListAdapter.setEditingState(false);
+            photoListAdapter.notifyDataSetChanged();
+            toggleVisibility();
+        });
     }
 
     /**
@@ -153,8 +223,58 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         }
     }
 
+    /**
+     * Connected to the listener in the AddPhotoFragment to handle OK being pressed.
+      */
     @Override
     public void onOKPressed() {
-        Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_LONG);
+        photoListAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Sends back the URL of the photo in cloud storage to the activity.
+     * @param input the URL of the photo.
+     */
+    @Override
+    public void sendURL(String input) {
+        Log.d("PHOTOURL", "Received " + input);
+        Photo photo = new Photo(input);
+        editingItem.addPhoto(photo);
+    }
+
+    @Override
+    public void onSerialNumberRecognized(String serialNumber) {
+        editingItem.setSerialNumber(serialNumber);
+        TextInputLayout serialNumberInput = findViewById(R.id.itemSerialNumber);
+        if (serialNumberInput != null && serialNumberInput.getEditText() != null) {
+            serialNumberInput.getEditText().setText(serialNumber);
+        }
+    }
+    /**
+     * handles visibility of the delete photo icon
+     */
+    /**
+     * Receives back the bitmap of the photo in local storage to the activity.
+     * @param bitmap the bitmap of the photo.
+     */
+    @Override
+    public void sendBitmap(Bitmap bitmap, boolean isBarcode) {
+        //photoURLs.add(input);
+        Log.d("PHOTO BITMAP", "received " + bitmap);
+        photoBitmap = bitmap;
+        this.isBarcode = isBarcode;
+    }
+    public void toggleVisibility() {
+        Log.i("Ryan", "Visibility method");
+        if (trashButton != null) {
+            if (trashButton.getVisibility() == View.VISIBLE) {
+                Log.i("Ryan", "INVisible buttons");
+                trashButton.setVisibility(View.GONE);
+
+            } else {
+                Log.i("Ryan", "Visible buttons");
+                trashButton.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

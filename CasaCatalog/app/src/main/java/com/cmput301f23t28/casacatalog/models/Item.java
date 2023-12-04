@@ -4,13 +4,17 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.cmput301f23t28.casacatalog.helpers.DateFormatter;
+import com.cmput301f23t28.casacatalog.helpers.PhotoHolder;
+import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.android.material.chip.Chip;
 
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +28,7 @@ public class Item implements Parcelable {
     private Double price;
     private LocalDate date;
     private ByteBuffer photo;
+    private List<Photo> photos; // used for cloud storage reference
     private ArrayList<Tag> tags;
     private String make;
     private String model;
@@ -31,6 +36,7 @@ public class Item implements Parcelable {
     private String comment;
     private String serialNumber;
     private Boolean selected = false;
+    private String owner;
 
     /**
      * Default constructor initializing the tags list.
@@ -38,12 +44,14 @@ public class Item implements Parcelable {
     public Item(){
         // Defaults
         this.tags = new ArrayList<>();
+        this.photos = new ArrayList<>();
         this.date = LocalDate.now();
         this.price = 0.0;
         this.make = "";
         this.model = "";
         this.description = "";
         this.comment = "";
+        this.owner = MainActivity.deviceId;
     }
 
     /**
@@ -93,8 +101,7 @@ public class Item implements Parcelable {
      * @return A String representing a formatted date of when the item was acquired.
      */
     public String getFormattedDate() {
-        // TODO: probably define this format in an xml
-        return this.date.format(DateTimeFormatter.ofPattern("MMM. d, yyyy"));
+        return DateFormatter.getFormattedDate(this.date);
     }
 
 
@@ -174,12 +181,26 @@ public class Item implements Parcelable {
         return tags != null ? tags.stream().map(Tag::getName).sorted().collect(Collectors.toList()) : new ArrayList<>();
     }
 
+
     /**
      * Sets the list of tags associated with the item.
      * @param tags An ArrayList of Tag objects to associate with the item.
      */
     public void setTags(ArrayList<Tag> tags) {
         this.tags = tags;
+    }
+
+    public void setWithExistingTags(ArrayList<Tag> tags) {
+        Set<Tag> uniqueTags = new LinkedHashSet<>();
+        for (Tag tag: tags) {
+            uniqueTags.add(tag);
+        }
+
+        for (Tag tag: this.tags) {
+            uniqueTags.add(tag);
+        }
+
+        this.tags = new ArrayList<>(uniqueTags);
     }
 
     /**
@@ -198,6 +219,14 @@ public class Item implements Parcelable {
         this.tags.remove(tag);
     }
 
+
+    /**
+     * Sets photo URL list to specified list.
+     * @param photoURL An ArrayList of photo URLs in cloud storage for the item.
+     */
+    public void setPhotoURLs(List<Photo> photoURL) {
+        this.photos = photoURL;
+    }
     /**
      * Gets the make of the item.
      * Returns empty string if there is none set.
@@ -305,6 +334,23 @@ public class Item implements Parcelable {
         this.selected = !this.selected;
     }
 
+
+    /**
+     * Retrieves the owner of this item.
+     * @return A device ID unique to the creator of the item.
+     */
+    public String getOwner(){
+        return this.owner;
+    }
+
+    /**
+     * Sets the owner of this item.
+     * @return A device ID unique to the creator of the item.
+     */
+    public void setOwner(String owner){
+        this.owner = owner;
+    }
+
     // Parcelable implementations
 
     /**
@@ -346,7 +392,8 @@ public class Item implements Parcelable {
         comment = in.readString();
         serialNumber = in.readString();
         tags = in.createTypedArrayList(Tag.CREATOR);
-        //photo = in.readByte();
+        photos = in.createTypedArrayList(Photo.CREATOR);
+
     }
 
     /**
@@ -367,6 +414,63 @@ public class Item implements Parcelable {
         dest.writeString(this.comment);
         dest.writeString(this.serialNumber);
         dest.writeTypedList(this.tags);
-        //dest.writeValue(this.photo);  // TODO: fix (also 'writeValue' probably won't work)
+        dest.writeTypedList(this.photos);
+    }
+
+    /**
+     * Takes an array of URLs to set the photo collection
+     * @param itemPhotos a collection of photo urls
+     */
+    public void setPhotos(ArrayList<String> itemPhotos) {
+        if (itemPhotos != null && itemPhotos.size() > 0) {
+            for (String photoURL: itemPhotos) {
+                photos.add(new Photo(photoURL));
+            }
+        }
+    }
+
+    /**
+     * Gets all the photos
+     * @return photos
+     */
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    /**
+     * Gets a collection of url strings
+     * @return String url collection
+     */
+    public ArrayList<String> getPhotosURL() {
+        ArrayList<String> urls = new ArrayList<>();
+        for (Photo photo: photos) {
+            urls.add(photo.getUrl());
+        }
+        return urls;
+    }
+
+    /**
+     * Adds a photo
+     * @param photo the address to the photo
+     */
+    public void addPhoto(Photo photo) {
+        if (photo != null) {
+            this.photos.add(photo);
+        }
+    }
+
+    /**
+     * removes a photo by its URL
+     * @param url the address to the photo
+     */
+    public void removePhoto(String url) {
+        if (photos != null) {
+            for (Photo photo: photos) {
+                if(photo.getUrl() == url) {
+                    photos.remove(photo);
+                    return;
+                }
+            }
+        }
     }
 }

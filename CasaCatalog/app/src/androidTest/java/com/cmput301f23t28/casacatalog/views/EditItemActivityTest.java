@@ -89,7 +89,7 @@ public class EditItemActivityTest {
         EspressoUtils.waitUntilVisible(onView(withId(R.id.itemNameInput)), 5000)
                 .perform(typeText("AddItemTest" + rand));
         onView(withId(R.id.itemEstimatedValueInput)).perform(typeText("123.99"));
-        onView(withId(R.id.itemPurchaseDateInput)).perform(typeText("12-12-2012"));
+        onView(withId(R.id.itemPurchaseDate)).perform(typeText("12-12-2012"));
         onView(withId(R.id.itemDescriptionInput)).perform(typeText("Super dope toaster"));
         onView(withId(R.id.addItemToListBtn)).perform(ViewActions.scrollTo());
         onView(withId(R.id.addItemToListBtn)).perform(click());
@@ -132,7 +132,7 @@ public class EditItemActivityTest {
         int rand = new Random().nextInt(99);
         onView(withId(R.id.itemNameInput)).perform(clearText(), typeText("editTest" + rand));
         onView(withId(R.id.itemEstimatedValueInput)).perform(clearText(), typeText("100.10"));
-        onView(withId(R.id.itemPurchaseDateInput)).perform(clearText(), typeText("11-11-2012"));
+        onView(withId(R.id.itemPurchaseDate)).perform(clearText(), typeText("11-11-2012"));
         onView(withId(R.id.itemDescriptionInput)).perform(clearText(), typeText("Super duper dope toaster"), closeSoftKeyboard());
         onView(withId(R.id.addItemToListBtn)).perform(ViewActions.scrollTo());
         onView(withId(R.id.addItemToListBtn)).perform(click());
@@ -166,6 +166,20 @@ public class EditItemActivityTest {
                 .perform(typeText(itemName));
         onView(withId(R.id.addItemToListBtn)).perform(ViewActions.scrollTo());
         onView(withId(R.id.addItemToListBtn)).perform(click());
+    }
+
+    @Test
+    public void navigateToGalleryCameraPicker() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.items_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
+        onView(withId(R.id.addPhotoToItem)).perform(ViewActions.scrollTo());
+        onView(withId(R.id.addPhotoToItem)).perform(click());
+        onView(withText("Add photo")).check(matches(isDisplayed()));
+        onView(withText("Cancel")).check(matches(isDisplayed()));
     }
 
 }
