@@ -2,8 +2,6 @@ package com.cmput301f23t28.casacatalog.views;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -16,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cmput301f23t28.casacatalog.Camera.BarcodeRecognition;
-import com.cmput301f23t28.casacatalog.Camera.FetchProductDetails;
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
@@ -27,15 +23,10 @@ import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.mlkit.vision.common.InputImage;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -114,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         findViewById(R.id.FilterButton).setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList("filters", filters);
-            Intent i = new Intent(MainActivity.this, FilterPage.class);
+            Intent i = new Intent(this, FilterActivity.class);
             i.putExtras(bundle);
 
             startActivity(i);
