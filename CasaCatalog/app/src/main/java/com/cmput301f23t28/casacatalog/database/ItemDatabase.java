@@ -3,11 +3,10 @@ package com.cmput301f23t28.casacatalog.database;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.cmput301f23t28.casacatalog.helpers.Filter;
+import com.cmput301f23t28.casacatalog.models.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ItemSorting;
 import com.cmput301f23t28.casacatalog.models.Item;
-import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.firebase.firestore.CollectionReference;
