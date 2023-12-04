@@ -97,11 +97,13 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
         }
 
         if (item.getPhotosURL().size() > 0) {
+            Log.d("ITEM NAME", item.getName());
+            Log.d("SET IMAGE", item.getPhotosURL().get(0));
             // Just sets to first image in list.
             holder.setItemImage(item.getPhotosURL().get(0));
         }
         else {
-
+            holder.setItemImage("");
         }
     }
 
