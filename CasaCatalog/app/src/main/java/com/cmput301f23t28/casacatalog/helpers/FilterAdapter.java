@@ -1,7 +1,5 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +11,11 @@ import android.widget.Spinner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cmput301f23t28.casacatalog.R;
-import com.cmput301f23t28.casacatalog.helpers.Filter;
-import com.cmput301f23t28.casacatalog.views.AddItemActivity;
-import com.cmput301f23t28.casacatalog.views.FilterPage;
-import com.cmput301f23t28.casacatalog.views.MainActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
+import com.cmput301f23t28.casacatalog.models.Filter;
+import com.cmput301f23t28.casacatalog.views.FilterActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHolder> {
