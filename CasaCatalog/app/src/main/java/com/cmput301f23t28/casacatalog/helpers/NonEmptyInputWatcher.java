@@ -1,10 +1,13 @@
 package com.cmput301f23t28.casacatalog.helpers;
 
+import android.content.res.Resources;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.cmput301f23t28.casacatalog.R;
 
 public class NonEmptyInputWatcher implements TextWatcher {
 
@@ -39,7 +42,7 @@ public class NonEmptyInputWatcher implements TextWatcher {
         button.setEnabled(false);
 
         if( s.toString().trim().isEmpty() ){
-            input.setError("This input is required.");
+            input.setError(Resources.getSystem().getString(R.string.input_required));
         }else{
             button.setEnabled(true);
         }
