@@ -50,7 +50,7 @@ public class EditTagsActivity extends AppCompatActivity {
 
             // Input validation
             if( newTagName.isEmpty() ) {
-                newTagNameInput.setError(getString(R.string.input_required));
+                newTagNameInput.setError("This field is required.");
                 return;
             }
             if( Database.tags.findTagByName(newTagName) != null ){
