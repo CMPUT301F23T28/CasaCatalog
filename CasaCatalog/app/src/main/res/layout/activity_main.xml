@@ -16,7 +16,8 @@
         android:focusable="true"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="Add Item Button" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/TopBar"
@@ -120,7 +121,8 @@
         android:src="@drawable/baseline_edit_24"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="Add Tag Items Button" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/delete_items_button"
@@ -133,5 +135,6 @@
         android:src="@drawable/baseline_delete_24"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="Delete Items Button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

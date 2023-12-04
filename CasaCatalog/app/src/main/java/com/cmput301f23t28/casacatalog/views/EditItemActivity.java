@@ -3,7 +3,6 @@ package com.cmput301f23t28.casacatalog.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.cmput301f23t28.casacatalog.models.Photo;
 import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -42,8 +40,6 @@ import java.util.List;
 public class EditItemActivity extends AppCompatActivity implements AddPhotoFragment.OnFragmentInteractionListener, VisibilityCallback {
 
     private Item editingItem;
-    private Bitmap photoBitmap;
-    private boolean isBarcode; // whether bitmap is barcode or not
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
     private Button addPhotoButton;
@@ -253,9 +249,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
         }
     }
     /**
-     * handles visibility of the delete photo icon
-     */
-    /**
      * Receives back the bitmap of the photo in local storage to the activity.
      * @param bitmap the bitmap of the photo.
      */
@@ -263,8 +256,6 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     public void sendBitmap(Bitmap bitmap, boolean isBarcode) {
         //photoURLs.add(input);
         Log.d("PHOTO BITMAP", "received " + bitmap);
-        photoBitmap = bitmap;
-        this.isBarcode = isBarcode;
     }
     public void toggleVisibility() {
         Log.i("Ryan", "Visibility method");
