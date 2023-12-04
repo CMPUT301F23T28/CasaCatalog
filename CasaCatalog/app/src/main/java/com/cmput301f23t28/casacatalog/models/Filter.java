@@ -78,7 +78,7 @@ public class Filter implements Parcelable {
         this.val1 = "";
         this.val2 = "";
         this.currentType = Type.date;
-        this.currentFilterType = FilterType.equals;
+        this.currentFilterType = FilterType.between;
     }
     public Predicate<Item> getFilterPredicate(){
                 Item item = new Item();
@@ -121,9 +121,9 @@ public class Filter implements Parcelable {
                         }
                     case tag:
                         Log.i("PREDICATE","Tag is equal to " + val1);
-                        if (this.currentFilterType == FilterType.equals){
+                        if (this.currentFilterType == FilterType.contains){
                             return x -> x.getTagsAsStrings().contains(val1);
-                        } else if (this.currentFilterType == FilterType.notequals){
+                        } else if (this.currentFilterType == FilterType.notcontains){
                             return x -> !x.getTagsAsStrings().contains(val1);
                         }
 
