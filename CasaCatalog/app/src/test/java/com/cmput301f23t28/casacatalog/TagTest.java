@@ -17,7 +17,7 @@ public class TagTest {
     @Test
     public void testInitialUseCount() {
         Tag tag = new Tag("Test");
-        assertEquals("Initial use count should be 1.", 1, tag.getUses());
+        assertEquals("Initial use count should be 0.", 0, tag.getUses());
     }
 
     @Test
