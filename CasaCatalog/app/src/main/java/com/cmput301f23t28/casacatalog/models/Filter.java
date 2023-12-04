@@ -8,10 +8,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
 
-/**
- * Represents a filter that can be used to filter the item list. This class implements Parcelable,
- * allowing tag objects to be serialized for easy storage and transmission.
- */
 public class Filter implements Parcelable {
     public enum Type { date, description, make, value, tag }
     public enum FilterType {equals, notequals, contains, notcontains, lessthan, greaterthan,

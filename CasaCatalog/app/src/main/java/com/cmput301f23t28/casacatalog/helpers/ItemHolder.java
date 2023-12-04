@@ -20,22 +20,26 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 /**
  * A RecyclerView ViewHolder that stores all data related to rendering an item in the ItemList
  */
 public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
-    private final TextView ItemName;
-    private final TextView ItemPurchaseDate;
-    private final TextView ItemPrice;
-    private final ImageView ItemImage;
-    private final ChipGroup ItemTags;
-    private final ListClickListener<ItemHolder> mListener;
-    private final ConstraintLayout ItemContainer;
+    private TextView ItemName;
+    private TextView ItemPurchaseDate;
+    private TextView ItemPrice;
+    private ImageView ItemImage;
+    private ChipGroup ItemTags;
+    private ListClickListener mListener;
+    private ConstraintLayout ItemContainer;
+    private int backgroundColor = Color.WHITE;
+    private Context context;
     /**
      * Constructor for ItemHolder. Basically connects the UI elements to an in code reference.
      * @param itemView The item view.
      */
-    public ItemHolder(@NonNull View itemView, ListClickListener<ItemHolder> listener) {
+    public ItemHolder(@NonNull View itemView, ListClickListener listener) {
         super(itemView);
 
         this.mListener = listener;
@@ -46,6 +50,7 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         ItemPrice = itemView.findViewById(R.id.ItemPrice);
         ItemTags = itemView.findViewById(R.id.ItemTags);
         ItemImage = itemView.findViewById(R.id.ItemImage);
+        context = itemView.getContext();
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
@@ -77,10 +82,13 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
      */
     public void setItemImage(String imageURL) {
         Log.d("SETTING ITEM IMAGE", imageURL);
-        if (!imageURL.trim().isEmpty()) {
+        if (imageURL != "") {
             Picasso.get()
                     .load(imageURL)
                     .placeholder(itemView.getContext().getResources().getDrawable(R.drawable.ic_launcher_foreground))//it will show placeholder image when url is not valid.
+                    .resize(100,100)
+                    .centerCrop()
+                    .transform(new RoundedCornersTransformation(5, 3))
                     .into(ItemImage);
         }
         else {
@@ -144,4 +152,15 @@ public class ItemHolder extends RecyclerView.ViewHolder implements View.OnLongCl
         }
     }
 
+    /**
+     * Gets the selected style color as an int.
+     * @return
+     */
+    public int getSelectedStyle() {
+        Drawable background = ItemContainer.getBackground();
+        if (background instanceof ColorDrawable) {
+            return ((ColorDrawable) background).getColor();
+        }
+        return 0;
+    }
 }
