@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * It initializes the database, item handler, and sets up the main user interface,
  * including the RecyclerView for items and listeners for UI elements.
  */
-public class FilterPage extends AppCompatActivity{
+public class FilterActivity extends AppCompatActivity{
     ArrayList<Filter> filters;
     FilterAdapter filterListAdapter;
     RecyclerView filterListView;
@@ -68,17 +68,17 @@ public class FilterPage extends AppCompatActivity{
                 if (holder != null) {
                     Filter dataItem = holder.getFilter();
                     if (dataItem.getVal1().equals("")) {
-                        Toast.makeText(FilterPage.this, "value 1 can not be empty",
+                        Toast.makeText(FilterActivity.this, "value 1 can not be empty",
                                 Toast.LENGTH_LONG).show();
                         error_recieved = true;
                     } else if (dataItem.getCurrentType().toString().toLowerCase().equals("date") &&
                             dataItem.getCurrentFilterType().toString().toLowerCase().equals(
                                     "between") && dataItem.getVal2().equals("")) {
-                        Toast.makeText(FilterPage.this, "value 2 can not be empty", Toast.LENGTH_LONG).show();
+                        Toast.makeText(FilterActivity.this, "value 2 can not be empty", Toast.LENGTH_LONG).show();
                         error_recieved = true;
                     } else if(dataItem.getCurrentType().toString().toLowerCase().equals("value")
                             && !dataItem.getVal1().matches("[-+]?\\d*\\.?\\d+")){
-                        Toast.makeText(FilterPage.this, "value 1 is not numeric",
+                        Toast.makeText(FilterActivity.this, "value 1 is not numeric",
                                 Toast.LENGTH_LONG).show();
                         error_recieved = true;
                     } else if(dataItem.getCurrentType().toString().toLowerCase().equals("date")){
@@ -90,7 +90,7 @@ public class FilterPage extends AppCompatActivity{
                             error_recieved = true;
                         }
                         if (error_recieved){
-                            Toast.makeText(FilterPage.this, "value 1 is not date in format dd/MM/yyyy",
+                            Toast.makeText(FilterActivity.this, "value 1 is not date in format dd/MM/yyyy",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
@@ -101,14 +101,14 @@ public class FilterPage extends AppCompatActivity{
                         try {
                             LocalDate startDate = LocalDate.parse(dataItem.getVal1(), formatter);
                         }catch (Exception e){
-                            Toast.makeText(FilterPage.this, "value 1 is not date in format dd/MM/yyyy",
+                            Toast.makeText(FilterActivity.this, "value 1 is not date in format dd/MM/yyyy",
                                     Toast.LENGTH_LONG).show();
                             error_recieved = true;
                         }
                         try {
                             LocalDate startDate = LocalDate.parse(dataItem.getVal2(), formatter);
                         }catch (Exception e){
-                            Toast.makeText(FilterPage.this, "value 2 is not date in format " +
+                            Toast.makeText(FilterActivity.this, "value 2 is not date in format " +
                                             "dd/MM/yyyy",
                                     Toast.LENGTH_LONG).show();
                             error_recieved = true;
@@ -124,7 +124,7 @@ public class FilterPage extends AppCompatActivity{
             if (!error_recieved){
                 Bundle bundle_send = new Bundle();
                 bundle_send.putParcelableArrayList("filters", filterList);
-                Intent i = new Intent(FilterPage.this, MainActivity.class);
+                Intent i = new Intent(FilterActivity.this, MainActivity.class);
                 i.putExtras(bundle_send);
                 startActivity(i);
             }
