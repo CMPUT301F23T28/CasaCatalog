@@ -120,27 +120,37 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
                 dataObject.setCurrentType(strfiltertype);
                 Log.e("DATE", strfiltertype.toLowerCase() + (strfiltertype.toLowerCase() != "date"));
 
-                switch (dataObject.getCurrentType().toString().toLowerCase()){
+                String filterType = dataObject.getCurrentType().toString().toLowerCase();
+                switch (filterType){
                     case ("date"):
                         comp_adapter.clear();
+                        dataObject.setCurrentFilterType("between");
                         comp_adapter.add("between");
                         comp_adapter.add("equals");
                         break;
                     case ("make"):
                         comp_adapter.clear();
+                        dataObject.setCurrentFilterType("contains");
                         comp_adapter.add("contains");
                         comp_adapter.add("notcontains");
                         break;
-                    case ("tags"):
+                    case ("tag"):
                         comp_adapter.clear();
+                        dataObject.setCurrentFilterType("contains");
                         comp_adapter.add("contains");
                         comp_adapter.add("notcontains");
                         break;
                     case("description"):
                         comp_adapter.clear();
+                        dataObject.setCurrentFilterType("contains");
                         comp_adapter.add("contains");
                         comp_adapter.add("notcontains");
                         break;
+                    case("value"):
+                        comp_adapter.clear();
+                        dataObject.setCurrentFilterType("equals");
+                        comp_adapter.add("equals");
+                        comp_adapter.add("notequals");
                 }
                 comp_adapter.notifyDataSetChanged();
                 if (!strfiltertype.toLowerCase().equals("date")){
