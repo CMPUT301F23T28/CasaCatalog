@@ -150,7 +150,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
             mVisibilityCallback.toggleVisibility();
         }
         notifyDataSetChanged();
-
     }
 
     /**
