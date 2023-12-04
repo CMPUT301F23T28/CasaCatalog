@@ -264,15 +264,6 @@ public class ItemDatabase {
     }
 
     /**
-     * Retrieves a reference to the Firestore collection representing the item list
-     *
-     * @return a CollectionReference to Firestore's itemList collection
-     */
-    public CollectionReference getCollection() {
-        return this.itemRef;
-    }
-
-    /**
      * Given an ItemSorting, sorts the item list based on it
      * @param sorting An instance of ItemSorting
      */

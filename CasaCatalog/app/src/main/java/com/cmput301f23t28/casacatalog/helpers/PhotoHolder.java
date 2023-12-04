@@ -30,7 +30,7 @@ public class PhotoHolder extends RecyclerView.ViewHolder implements View.OnLongC
     @Override
     public void onClick(View v) {
         if (mListener != null) {
-            mListener.onItemClick(getAdapterPosition(), this);
+            mListener.onItemClick(getAdapterPosition());
         }
     }
 
@@ -43,7 +43,7 @@ public class PhotoHolder extends RecyclerView.ViewHolder implements View.OnLongC
     @Override
     public boolean onLongClick(View v) {
         if (mListener != null) {
-            mListener.onItemLongClick(getAdapterPosition(), this);
+            mListener.onItemLongClick(getAdapterPosition());
             return true;
         }
         return false;

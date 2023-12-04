@@ -5,16 +5,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.cmput301f23t28.casacatalog.helpers.DateFormatter;
-import com.cmput301f23t28.casacatalog.helpers.PhotoHolder;
 import com.cmput301f23t28.casacatalog.views.MainActivity;
 import com.google.android.material.chip.Chip;
 
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -190,19 +187,6 @@ public class Item implements Parcelable {
         this.tags = tags;
     }
 
-    public void setWithExistingTags(ArrayList<Tag> tags) {
-        Set<Tag> uniqueTags = new LinkedHashSet<>();
-        for (Tag tag: tags) {
-            uniqueTags.add(tag);
-        }
-
-        for (Tag tag: this.tags) {
-            uniqueTags.add(tag);
-        }
-
-        this.tags = new ArrayList<>(uniqueTags);
-    }
-
     /**
      * Adds a tag to the item, if it is not already present.
      * @param tag A Tag object to add to the item.
@@ -344,8 +328,7 @@ public class Item implements Parcelable {
     }
 
     /**
-     * Sets the owner of this item.
-     * @return A device ID unique to the creator of the item.
+     * Sets the owner of this item to a given device Id.
      */
     public void setOwner(String owner){
         this.owner = owner;
