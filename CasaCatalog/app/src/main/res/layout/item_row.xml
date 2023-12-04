@@ -69,35 +69,22 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <HorizontalScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:id="@+id/ItemTagsContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/itemImageBarrier"
         app:layout_constraintTop_toBottomOf="@id/ItemPurchaseDate"
-        android:minHeight="40dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:minHeight="40dp"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/ItemTags"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </HorizontalScrollView>
 
-    <LinearLayout
-        android:id="@+id/NameDateContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:gravity="top|start"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/ItemImage"
-        app:layout_constraintStart_toEndOf="@id/ItemImage"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-    </LinearLayout>
 
     <ImageView
         android:id="@+id/ItemImage"
