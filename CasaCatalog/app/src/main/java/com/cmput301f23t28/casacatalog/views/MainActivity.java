@@ -21,6 +21,7 @@ import com.cmput301f23t28.casacatalog.Camera.FetchProductDetails;
 import com.cmput301f23t28.casacatalog.Camera.TextRecognitionHelper;
 import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.database.Database;
+import com.cmput301f23t28.casacatalog.helpers.Filter;
 import com.cmput301f23t28.casacatalog.helpers.ItemListAdapter;
 import com.cmput301f23t28.casacatalog.helpers.VisibilityCallback;
 import com.cmput301f23t28.casacatalog.models.Item;
@@ -32,6 +33,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
     private ItemListAdapter itemAdapter;
     private FloatingActionButton editTagsButton;
     private FloatingActionButton trashButton;
+//    boolean once = true;
+    ArrayList<Filter> filters;
 
     private ArrayList<Item> items;
 
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        filters = new ArrayList<>();
 
         TextRecognitionHelper textHelper = new TextRecognitionHelper(this);
         textHelper.recognizeTextFromImage();
@@ -96,11 +104,21 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         itemListView.setAdapter(itemAdapter);
         itemListView.setLayoutManager(new LinearLayoutManager(this));
         itemListView.setItemAnimator(null);     // fixes bug in Android
-        Database.items.registerListener(itemAdapter, findViewById(R.id.InventoryValueNumber));
+        Database.items.registerListener(itemAdapter, findViewById(R.id.InventoryValueNumber),
+                filters);
 
         // Sends the user to the 'add item' activity, allowing them to input their item and all of its relevant details.
         final FloatingActionButton addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddItemActivity.class)));
+
+        findViewById(R.id.FilterButton).setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("filters", filters);
+            Intent i = new Intent(MainActivity.this, FilterPage.class);
+            i.putExtras(bundle);
+
+            startActivity(i);
+        });
 
         ArrayList<Item> selectedItems = new ArrayList<>();
         ActivityResultLauncher<Intent> editTagsLauncher = registerForActivityResult(
@@ -191,6 +209,20 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         // Register sort button to open sorting dialog
         findViewById(R.id.SortButton).setOnClickListener(v -> new SortDialog().show(getSupportFragmentManager(), SortDialog.TAG));
 
+        
+//        findViewById(R.id.FilterButton).setOnClickListener(v -> new FilterDialog().show(getSupportFragmentManager(), FilterDialog.TAG));
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            ArrayList<Filter> list =  bundle.getParcelableArrayList("filters");
+            filters.clear();
+            // Use the list as needed
+            for (int i =0; i < list.size(); i++){
+                Log.d("Filter "+ Integer.toString(i+1),
+                        list.get(i).getVal1() +" " + list.get(i).getVal2() + " " + list.get(i).getCurrentFilterType() + " " + list.get(i).getCurrentType());
+                filters.add(list.get(i));
+            }
+        }
     }
 
     /**
