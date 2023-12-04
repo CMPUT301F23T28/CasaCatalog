@@ -1,6 +1,5 @@
 package com.cmput301f23t28.casacatalog.views;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,6 @@ import com.cmput301f23t28.casacatalog.R;
 import com.cmput301f23t28.casacatalog.models.Filter;
 import com.cmput301f23t28.casacatalog.helpers.FilterAdapter;
 import com.cmput301f23t28.casacatalog.helpers.ToolbarBuilder;
-import com.cmput301f23t28.casacatalog.models.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -36,7 +34,15 @@ public class FilterActivity extends AppCompatActivity{
         setContentView(R.layout.dialog_filter);
         filters = new ArrayList<>();
 
-        ArrayList<Filter> filters = getIntent().getParcelableArrayListExtra("filters");
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            ArrayList<Filter> list = bundle.getParcelableArrayList("filters");
+            filters.clear();
+            // Use the list as needed
+            for (int i =0; i < list.size(); i++){
+                filters.add(list.get(i));
+            }
+        }
 
         filterListAdapter = new FilterAdapter(filters);
         filterListView = findViewById(R.id.filter_list);
