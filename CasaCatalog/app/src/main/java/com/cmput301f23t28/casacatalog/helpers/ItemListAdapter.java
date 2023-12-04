@@ -83,7 +83,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemHolder> implements
         }
 
         if (item.getPrice() != null){
-            holder.setItemPrice(item.getPrice().toString());
+            holder.setItemPrice(String.format("%.2f",item.getPrice()));
         }
         if (item.getDate() != null){
             holder.setItemPurchaseDate(item.getFormattedDate());
