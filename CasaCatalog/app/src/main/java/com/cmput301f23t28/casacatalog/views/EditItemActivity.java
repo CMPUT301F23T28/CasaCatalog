@@ -46,7 +46,8 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
     private boolean isBarcode; // whether bitmap is barcode or not
     private RecyclerView itemPhotoContainer;
     private PhotoListAdapter photoListAdapter;
-    private FloatingActionButton trashButton;
+    private Button addPhotoButton;
+    private Button trashButton;
     private Button barcodeButton;
 
     /**
@@ -64,6 +65,7 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
 
         this.editingItem = getIntent().getParcelableExtra("item");
         ToolbarBuilder.create(this, getString(R.string.title_edit_item, editingItem.getName()));
+        addPhotoButton = findViewById(R.id.addPhotoToItem);
         trashButton = findViewById(R.id.delete_pictures_button);
         barcodeButton = findViewById(R.id.BarcodeButton);
 
@@ -270,10 +272,12 @@ public class EditItemActivity extends AppCompatActivity implements AddPhotoFragm
             if (trashButton.getVisibility() == View.VISIBLE) {
                 Log.i("Ryan", "INVisible buttons");
                 trashButton.setVisibility(View.GONE);
+                addPhotoButton.setVisibility(View.VISIBLE);
 
             } else {
                 Log.i("Ryan", "Visible buttons");
                 trashButton.setVisibility(View.VISIBLE);
+                addPhotoButton.setVisibility(View.GONE);
             }
         }
     }
