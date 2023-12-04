@@ -102,28 +102,14 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
         final FloatingActionButton addButton = findViewById(R.id.add_item_button);
         addButton.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddItemActivity.class)));
 
-        ActivityResultLauncher<Intent> editFilterLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if(result.getResultCode() == Activity.RESULT_OK){
-                        if(result.getData() != null) {
-                            ArrayList<Filter> list = result.getData().getParcelableArrayListExtra("filters");
-                            filters.clear();
-                            // Use the list as needed
-                            for (int i =0; i < list.size(); i++){
-                                Log.d("Filter "+ Integer.toString(i+1),
-                                        list.get(i).getVal1() +" " + list.get(i).getVal2() + " " + list.get(i).getCurrentFilterType() + " " + list.get(i).getCurrentType());
-                                filters.add(list.get(i));
-                            }
-                        }
-                    }
-                }
-        );
-
         findViewById(R.id.FilterButton).setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("filters", filters);
             Intent i = new Intent(this, FilterActivity.class);
-            i.putExtra("filters", filters);
-            editFilterLauncher.launch(i);
+            i.putExtras(bundle);
+
+            startActivity(i);
+
         });
 
         ArrayList<Item> selectedItems = new ArrayList<>();
@@ -220,7 +206,14 @@ public class MainActivity extends AppCompatActivity implements VisibilityCallbac
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-
+            ArrayList<Filter> list =  bundle.getParcelableArrayList("filters");
+            filters.clear();
+            // Use the list as needed
+            for (int i =0; i < list.size(); i++){
+                Log.d("Filter "+ Integer.toString(i+1),
+                        list.get(i).getVal1() +" " + list.get(i).getVal2() + " " + list.get(i).getCurrentFilterType() + " " + list.get(i).getCurrentType());
+                filters.add(list.get(i));
+            }
         }
     }
 
